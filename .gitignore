@@ -11,3 +11,20 @@
 *.lai
 *.la
 *.a
+
+# Custom Ignores - Extensions
+*.user
+*.opensdf
+*.sdf
+*.suo
+*.exe
+*.ilk
+*.pdb
+
+# Custom Ignores - Folders
+/build-x64/log
+/ipch
+/samael/intermediate-x64
+/samael/GeneratedFiles
+
+# Custom Ignores - Files
