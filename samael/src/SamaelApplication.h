@@ -17,9 +17,6 @@ public:
 private:
     std::unique_ptr<SamaelMainWindow> m_MainWindow;
     QLog::Logger& m_Logger;
-
-    std::unique_ptr<QLog::LogDestination> m_CommandLineLogDestination;
-    std::unique_ptr<QLog::LogDestination> m_MainFileLogDestination;
 };
 
 inline SamaelApplication* GetApp()

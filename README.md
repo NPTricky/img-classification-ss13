@@ -17,7 +17,7 @@
 * **Download Library (Developer Package)** [lib_pkg_project.7z (264.6 MB)](https://mega.co.nz/#!U9dhUCja!U727Q2ON86R-w5ywwoJD9A38fWtwRaEwCZpGIMyeEK0)
 * **Download Library (User Package)** [TO BE ANNOUNCED]()
 
-#### Content (From Source)
+#### Content
 
 * (From Source) OpenCV 2.4.5 (19.04.2013)
   * (From Source) FFMPEG 1.2 (18.04.2013)

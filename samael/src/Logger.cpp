@@ -128,7 +128,7 @@ namespace QLog
 
         Logger& logger = Logger::Instance();
 
-        QMutexLocker lock(&logger.pImpl->myMutex); ///< &pImpl = memory location of pointee
+        QMutexLocker lock(&logger.pImpl->myMutex); ///< &pImpl = memory location of pointee (myMutex)
         logger.write(message, myMessageLevel, logger.pImpl->myLoggerDestinationGroup);
     }
 
