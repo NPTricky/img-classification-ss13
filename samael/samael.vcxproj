@@ -111,6 +111,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\SamaelApplication.cpp" />
     <ClCompile Include="src\SamaelMainWindow.cpp" />
+    <ClCompile Include="src\SamaelUtility.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -128,6 +129,7 @@
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\LoggerImplementation.h" />
     <ClInclude Include="src\LogLevel.h" />
+    <ClInclude Include="src\SamaelUtility.h" />
     <ClInclude Include="src\stdafx.h" />
     <CustomBuild Include="src\SamaelMainWindow.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

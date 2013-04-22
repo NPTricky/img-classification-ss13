@@ -30,7 +30,7 @@ void SamaelMainWindow::initialize()
     createLayouts();   ///< arrange QWidgets into different layout groups to keep them in order
     createStatusBar(); ///< create and configure the QStatusBar at the bottom of the window
 
-    QLOG_INFO() << "SamaelMainWindow - Reporting For Duty!";
+    QLOG_INFO() << "SamaelMainWindow - Ready!";
 }
 
 void SamaelMainWindow::createActions()

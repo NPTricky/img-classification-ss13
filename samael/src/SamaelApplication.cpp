@@ -21,7 +21,7 @@ void SamaelApplication::initialize()
     m_Logger.RegisterCreator("CommandLineLogDestination",new QLog::LogDestinationCreator<QLog::CommandLineLogDestination>);
     m_Logger.RegisterCreator("FileLogDestination",new QLog::LogDestinationCreator<QLog::FileLogDestination>);
 
-    // create the first log group (default name = "Default")
+    // create the first log group (no group name given = default name = "Default")
     m_Logger.Create("CommandLineLogDestination");
     m_Logger.Create("FileLogDestination");
 
@@ -46,7 +46,7 @@ void SamaelApplication::initialize()
     QLOG_INFO()  << "Check Done!" << "\n";
 
     QLOG_INFO() << "Application Properties...";
-    QLOG_INFO() << "QT_VERSION_STR:" << QT_VERSION_STR << "[ Q_VERSION:" << qVersion() << "]";
+    QLOG_INFO() << "Q_VERSION:" << qVersion();
     QLOG_INFO() << "Application Directory Path:" << GetApp()->applicationDirPath();
     QLOG_INFO() << "Application Name:          " << GetApp()->applicationName();
     QLOG_INFO() << "Application Version:       " << GetApp()->applicationVersion();
