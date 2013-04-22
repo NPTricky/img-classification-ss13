@@ -32,7 +32,7 @@ void SamaelApplication::initialize()
                 << "\n" 
                 << "      As-Salamu Alaykum!" << "\n"
                 << "      Excelling In Image Classification Since 2013." << "\n"
-                << "      Copyright: Christoph Laemmerhirt, Tim Benedict Jagla" << "\n";
+                << "      Copyright: Sarah Pauksch, Christoph Laemmerhirt, Tim Benedict Jagla" << "\n";
 
     QLOG_INFO()  << "Check Logger Functionality...";
     QLOG_TRACE() << "LevelToText(0) >" << QLog::LevelToText(QLog::TraceLevel) << "| ID:" << static_cast<int>(QLog::TraceLevel);

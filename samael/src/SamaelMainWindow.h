@@ -44,7 +44,7 @@ private:
 
 public slots:
     void open();
-    void close();
+    void exit();
     void about();
 };
 

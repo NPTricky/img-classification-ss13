@@ -7,12 +7,13 @@
 
 ## Team
 
+* Sarah P.
 * Christoph L.
 * Tim J.
 
 ## Library Configuration
 
-**Platform** Windows 7 - X64 ● **Supported IDE** Visual Studio 2012 (MSVC 2010 Compiler)
+**Platform** Windows 7 - X64 ● **Supported IDE** Visual Studio 2010 & 2012 (MSVC 2010 Compiler)
 
 * **Download Library (Developer Package)** [lib_pkg_project.7z (240.5 MB)](https://mega.co.nz/#!Q5tlWKQC!S7q32E5mK_Pkv72AqTrnbk0CgABqZ_FmgS96eeYeqBA)
 * **Download Library (User Package)** [LATER...]()

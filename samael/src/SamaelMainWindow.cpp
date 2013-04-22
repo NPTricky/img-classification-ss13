@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SamaelMainWindow.h"
+#include "SamaelApplication.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -47,7 +48,7 @@ void SamaelMainWindow::createActions()
     m_ExitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     m_ExitAction->setToolTip(tr("Exit Application"));
     m_ExitAction->setStatusTip(tr("Exit Application"));
-    connect(m_ExitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_ExitAction, SIGNAL(triggered()), this, SLOT(exit()));
 
     // "About" Action
     m_AboutAction = new QAction(tr("&About"), this);
@@ -120,9 +121,9 @@ void SamaelMainWindow::createStatusBar()
     m_StatusBarLabel = new QLabel(this);
     m_StatusBarLabel->setText("[QSTATUSBAR-LABEL-1]");
 
-    statusBar()->addPermanentWidget(m_StatusBarLabel); // attach label to QStatusBar
+    this->statusBar()->addPermanentWidget(m_StatusBarLabel); // attach label to QStatusBar
 
-    statusBar()->showMessage(tr("Ready"));
+    this->statusBar()->showMessage(tr("Ready"));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,19 +137,19 @@ void SamaelMainWindow::open()
     QString	currentFileType;
     QFileInfo currentFileInfo;
 
-    statusBar()->showMessage(tr("Invoked - File >> Open"));
+    this->statusBar()->showMessage(tr("Invoked - File >> Open"));
 
     files = QFileDialog::getOpenFileNames(
         this,
         tr("Open File(s)"),
         QDir::currentPath(),
-        tr( "Image Types (*.bmp *.dib *.jpeg *.jpg *.jpe *.jp2 *.png *.pbm *.pgm *.ppm *.tiff *.tif);;" \
-            "Bitmap (*.bmp *.dib);;" \
-            "JPEG (*.jpeg *.jpg *.jpe *.jp2);;" \
-            "Portable Network Graphics (*.png);;" \
-            "Portable Image Format (*.pbm *.pgm *.ppm);;" \
-            "TIFF (*.tiff *.tif);;" \
-            "All Types (*.*)")
+        tr("Image Types (*.bmp *.dib *.jpeg *.jpg *.jpe *.jp2 *.png *.pbm *.pgm *.ppm *.tiff *.tif);;" \
+           "Bitmap (*.bmp *.dib);;" \
+           "JPEG (*.jpeg *.jpg *.jpe *.jp2);;" \
+           "Portable Network Graphics (*.png);;" \
+           "Portable Image Format (*.pbm *.pgm *.ppm);;" \
+           "TIFF (*.tiff *.tif);;" \
+           "All Types (*.*)")
     );
  
     if (files.isEmpty()) return;
@@ -163,10 +164,10 @@ void SamaelMainWindow::open()
             .arg(currentFileInfo.suffix())
             .arg(currentFileInfo.size())
             .toStdString().c_str();
-        QLOG_INFO() << QString("PATH: %1\n")
+        QLOG_INFO() << QString("PATH: %1")
             .arg(currentFileInfo.absolutePath())
             .toStdString().c_str();
-        QLOG_INFO() << QString("READ: %1 - WRITE: %2")
+        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
             .arg(currentFileInfo.isReadable())
             .arg(currentFileInfo.isWritable())
             .toStdString().c_str();
@@ -175,9 +176,20 @@ void SamaelMainWindow::open()
     }
 }
 
-void SamaelMainWindow::close()
+void SamaelMainWindow::exit()
 {
-
+    auto input = QMessageBox::Yes; ///< shortcut until more security is required
+    //auto input = QMessageBox::question(
+    //    this,
+    //    tr("Samael Image Classification"),
+    //    tr("Do you really want to quit "Samael"?\nAll unsaved process will be lost."),
+    //    QMessageBox::Yes | QMessageBox::No,
+    //    QMessageBox::No
+    //    );
+    if (input == QMessageBox::Yes)
+    {
+        GetApp()->quit();
+    }
 }
 
 void SamaelMainWindow::about()
