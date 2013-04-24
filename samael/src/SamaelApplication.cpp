@@ -18,12 +18,14 @@ SamaelApplication::~SamaelApplication()
 void SamaelApplication::initialize()
 {
     // fill the logger creator registry with the available LogDestinationCreators
-    m_Logger.RegisterCreator("CommandLineLogDestination",new QLog::LogDestinationCreator<QLog::CommandLineLogDestination>);
-    m_Logger.RegisterCreator("FileLogDestination",new QLog::LogDestinationCreator<QLog::FileLogDestination>);
-
+    m_Logger.registerCreator("CommandLineLogDestination",new QLog::LogDestinationCreator<QLog::CommandLineLogDestination>);
+    m_Logger.registerCreator("FileLogDestination",new QLog::LogDestinationCreator<QLog::FileLogDestination>);
+    m_Logger.registerCreator("TerminalWidgetLogDestination",new QLog::LogDestinationCreator<QLog::TerminalWidgetLogDestination>);
+    
     // create the first log group (no group name given = default name = "Default")
-    m_Logger.Create("CommandLineLogDestination");
-    m_Logger.Create("FileLogDestination");
+    m_Logger.create("CommandLineLogDestination");
+    m_Logger.create("FileLogDestination");
+    // m_Logger.create("TerminalWidgetLogDestination"); // will be called later
 
     m_Logger.setLogLevel(QLog::TraceLevel);
 

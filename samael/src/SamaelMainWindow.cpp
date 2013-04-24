@@ -2,6 +2,10 @@
 #include "SamaelMainWindow.h"
 #include "SamaelApplication.h"
 
+#include "Logger.h"
+#include "TerminalWidget.h"
+#include "TerminalWidgetLogDestination.h"
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,11 +96,20 @@ void SamaelMainWindow::createWidgets()
     m_DockBetaContent = new QWidget();
     m_DockBetaContent->setObjectName(QStringLiteral("m_DockBetaContent"));
     m_DockBeta->setWidget(m_DockBetaContent);
+
+    m_TerminalWidget = new TerminalWidget(this);
+
+    // total hack... damn microsoft compiler
+    auto & logger = QLog::Logger::Instance();
+    auto group = logger.getDestinationGroup();
+    group->push_back(std::unique_ptr<QLog::TerminalWidgetLogDestination>(new QLog::TerminalWidgetLogDestination(m_TerminalWidget)));
+
+    connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
 }
 
 void SamaelMainWindow::createLayouts()
 {
-    //this->setCentralWidget(widget0);
+    this->setCentralWidget(m_TerminalWidget);
 
     this->addDockWidget(Qt::LeftDockWidgetArea,m_DockAlpha);
     this->addDockWidget(Qt::RightDockWidgetArea,m_DockBeta);

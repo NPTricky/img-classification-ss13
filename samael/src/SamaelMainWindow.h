@@ -1,7 +1,7 @@
 #ifndef SAMAELMAINWINDOW_H
 #define SAMAELMAINWINDOW_H
 
-#include "Logger.h"
+class TerminalWidget;
 
 class SamaelMainWindow : public QMainWindow
 {
@@ -37,6 +37,7 @@ private:
     QDockWidget *m_DockBeta;
     QWidget *m_DockBetaContent;
     QLabel *m_StatusBarLabel;
+    TerminalWidget *m_TerminalWidget;
 
     // QLayouts
     QVBoxLayout *m_DockAlphaVBoxLayout;

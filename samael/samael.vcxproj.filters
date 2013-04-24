@@ -54,6 +54,12 @@
     <Filter Include="Source Files\gui">
       <UniqueIdentifier>{9ec45175-3d4b-4fbf-a247-2fb3bfc70ca9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\mvc">
+      <UniqueIdentifier>{3e7472ee-e6d6-42ff-9e71-8a5e82737579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mvc">
+      <UniqueIdentifier>{f24b15c2-e522-4b32-8242-c74a319e36ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_samael.cpp">
@@ -94,6 +100,30 @@
     </ClCompile>
     <ClCompile Include="src\SamaelUtility.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamaelItemModel.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SamaelItemModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SamaelItemModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamaelItem.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerminalWidget.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TerminalWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TerminalWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerminalWidgetLogDestination.cpp">
+      <Filter>Source Files\log\destination</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +166,12 @@
     <ClInclude Include="src\SamaelUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\SamaelItem.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerminalWidgetLogDestination.h">
+      <Filter>Header Files\log\destination</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">
@@ -148,6 +184,12 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="src\SamaelMainWindow.h">
+      <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\SamaelItemModel.h">
+      <Filter>Header Files\mvc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\TerminalWidget.h">
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
   </ItemGroup>

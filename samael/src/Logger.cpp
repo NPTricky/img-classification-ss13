@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Logger.h"
 #include "Factory.h"
-#include "LoggerImplementation.h"
 
 namespace QLog
 {
@@ -24,12 +23,12 @@ namespace QLog
     // Functions (Factory)
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    void Logger::RegisterCreator(const QString& key, Creator<LogDestination>* creator)
+    void Logger::registerCreator(const QString& key, Creator<LogDestination>* creator)
     {
         pImpl->myFactory.RegisterCreator(key,creator);
     }
 
-    void Logger::Create(const QString& key, const QString& groupName)
+    void Logger::create(const QString& key, const QString& groupName)
     {
         DestinationMap::iterator iterMap = pImpl->myDestinationMap.find(groupName);
 
@@ -93,6 +92,16 @@ namespace QLog
     QString Logger::getDestinationGroupName()
     {
         return pImpl->myLoggerDestinationGroup;
+    }
+
+    DestinationGroup* Logger::getDestinationGroup(const QString& groupName)
+    {
+        DestinationMap::iterator iterMap = pImpl->myDestinationMap.find(groupName);
+
+        if (iterMap != pImpl->myDestinationMap.end())
+            return &iterMap->second;
+
+        return nullptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////

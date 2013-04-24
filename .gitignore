@@ -20,9 +20,9 @@
 *.exe
 *.ilk
 *.pdb
+/build-x64/log/*.txt
 
 # Custom Ignores - Folders
-/build-x64/log
 /ipch
 /samael/intermediate-x64
 /samael/GeneratedFiles

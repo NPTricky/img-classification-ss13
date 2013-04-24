@@ -5,19 +5,19 @@
 #include "LogDestination.h"
 #include "FileLogDestination.h"
 #include "CommandLineLogDestination.h"
+#include "TerminalWidgetLogDestination.h"
+#include "TerminalWidget.h"
 
 namespace QLog
 {
 
     template <class DerivedType>
-    class LogDestinationCreator : public DerivedCreator<LogDestination, DerivedType> {};
-
-    template <>
-    class LogDestinationCreator<FileLogDestination> : public DerivedCreator<LogDestination, FileLogDestination>
+    class LogDestinationCreator : public DerivedCreator<LogDestination, DerivedType>
     {
-        std::unique_ptr<LogDestination> Create(const QString& filename) 
+        template <typename T>
+        std::unique_ptr<LogDestination> Create(T& argument) 
         {
-            return std::unique_ptr<LogDestination>(new FileLogDestination(filename));
+            return std::unique_ptr<LogDestination>(new DerivedType(argument));
         }
     };
 

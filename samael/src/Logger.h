@@ -3,12 +3,12 @@
 
 #include "Creator.h"
 #include "LogLevel.h"
+#include "LoggerImplementation.h"
 
 namespace QLog
 {
 
     class LogDestination;
-    class LoggerImplementation;
 
     class Logger
     {
@@ -19,14 +19,19 @@ namespace QLog
             return myInstance;
         }
 
-        void RegisterCreator(const QString& key, Creator<LogDestination>* creator);
-        void Create(const QString& key, const QString& groupName = "Default");
+        void registerCreator(const QString& key, Creator<LogDestination>* creator);
+        void create(const QString& key, const QString& groupName = "Default");
+
+        template <typename T>
+        void create(const QString& key, const QString& groupName, T* destination);
 
         void setLogLevel(Level level);
         Level Logger::getLogLevel();
 
         void setDestinationGroupName(const QString& groupName = "Default");
         QString Logger::getDestinationGroupName();
+
+        DestinationGroup* getDestinationGroup(const QString& groupName = "Default"); ///< hack until variadic templates...
 
         class Helper
         {
