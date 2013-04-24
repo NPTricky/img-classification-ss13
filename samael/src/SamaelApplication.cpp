@@ -12,7 +12,7 @@ SamaelApplication::SamaelApplication(int& argc, char** argv)
 
 SamaelApplication::~SamaelApplication()
 {
-    m_MainWindow.reset();
+    delete m_MainWindow;
 }
 
 void SamaelApplication::initialize()
@@ -25,7 +25,10 @@ void SamaelApplication::initialize()
     // create the first log group (no group name given = default name = "Default")
     m_Logger.create("CommandLineLogDestination");
     m_Logger.create("FileLogDestination");
-    // m_Logger.create("TerminalWidgetLogDestination"); // will be called later
+
+    // advanced creation of a terminal widget to receive the output
+    auto terminal = new TerminalWidget(m_MainWindow);
+    m_Logger.getDestinationGroup()->push_back(std::unique_ptr<QLog::TerminalWidgetLogDestination>(new QLog::TerminalWidgetLogDestination(terminal)));
 
     m_Logger.setLogLevel(QLog::TraceLevel);
 
@@ -55,7 +58,7 @@ void SamaelApplication::initialize()
     QLOG_INFO() << "Application Process ID:    " << GetApp()->applicationPid() << "\n";
 
     QLOG_INFO() << "GUI Initialization...";
-    m_MainWindow->initialize();
+    m_MainWindow->initialize(terminal);
     QLOG_INFO() << "GUI Initialization Done! Awaiting Input..." << "\n";
     m_MainWindow->show();
 }

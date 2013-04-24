@@ -15,7 +15,7 @@ public:
     void initialize();
 
 private:
-    std::unique_ptr<SamaelMainWindow> m_MainWindow;
+    SamaelMainWindow* m_MainWindow;
     QLog::Logger& m_Logger;
 };
 

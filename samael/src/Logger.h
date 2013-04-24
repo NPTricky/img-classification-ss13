@@ -85,20 +85,20 @@ namespace QLog
 
 #define QLOG_TRACE() \
     if( QLog::Logger::Instance().getLogLevel() > QLog::TraceLevel ){} \
-    else  QLog::Logger::Helper(QLog::TraceLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    else  QLog::Logger::Helper(QLog::TraceLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_DEBUG() \
     if( QLog::Logger::Instance().getLogLevel() > QLog::DebugLevel ){} \
-    else QLog::Logger::Helper(QLog::DebugLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    else QLog::Logger::Helper(QLog::DebugLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_INFO()  \
     if( QLog::Logger::Instance().getLogLevel() > QLog::InfoLevel ){} \
-    else QLog::Logger::Helper(QLog::InfoLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    else QLog::Logger::Helper(QLog::InfoLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_WARN()  \
     if( QLog::Logger::Instance().getLogLevel() > QLog::WarnLevel ){} \
-    else QLog::Logger::Helper(QLog::WarnLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    else QLog::Logger::Helper(QLog::WarnLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_ERROR() \
     if( QLog::Logger::Instance().getLogLevel() > QLog::ErrorLevel ){} \
-    else QLog::Logger::Helper(QLog::ErrorLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    else QLog::Logger::Helper(QLog::ErrorLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_FATAL() \
-    QLog::Logger::Helper(QLog::FatalLevel).stream() << __FILE__ << QString("[%1]").arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+    QLog::Logger::Helper(QLog::FatalLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 
 #endif // LOGGER_H

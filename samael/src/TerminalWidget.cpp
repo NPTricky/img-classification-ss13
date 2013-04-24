@@ -8,6 +8,9 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     , m_InputLock(false)
     , m_HistorySkip(false)
 {
+    setFont(QFont("Courier",9));
+
+    clear();
     m_HistoryUp.clear();
     m_HistoryDown.clear();
     setLineWrapMode(NoWrap);
@@ -27,18 +30,19 @@ TerminalWidget::~TerminalWidget()
 * browse the last commands that there launched.
 */
 
-void TerminalWidget::keyPressEvent(QKeyEvent *e)
+void TerminalWidget::keyPressEvent(QKeyEvent *event)
 {
     // locked State: a command has been submitted but no result
     // has been received yet.
     if(m_InputLock) return;
 
-    switch(e->key()) {
+    switch(event->key())
+    {
     case Qt::Key_Return:
         onEnter();
         break;
     case Qt::Key_Backspace:
-        onLeft(e);
+        onLeft(event);
         break;
     case Qt::Key_Up:
         onUp();
@@ -47,13 +51,13 @@ void TerminalWidget::keyPressEvent(QKeyEvent *e)
         onDown();
         break;
     case Qt::Key_Left:
-        onLeft(e);
+        onLeft(event);
         break;
     case Qt::Key_Home:
         onHome();
         break;
     default:
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         break;
     }
 }
@@ -63,8 +67,10 @@ void TerminalWidget::onEnter()
 {
     QString cmd = getCommand();
 
-    if(0 < cmd.length()) {
-        while(m_HistoryDown.count() > 0) {
+    if (0 < cmd.length()) 
+    {
+        while (m_HistoryDown.count() > 0) 
+        {
             m_HistoryUp.push(m_HistoryDown.pop());
         }
 
@@ -73,7 +79,8 @@ void TerminalWidget::onEnter()
 
     moveToEndOfLine();
 
-    if(cmd.length() > 0) {
+    if (cmd.length() > 0)
+    {
         m_InputLock = true;
         setFocus();
         insertPlainText("\n");
@@ -95,10 +102,12 @@ void TerminalWidget::result(QString result)
     m_InputLock = false;
 }
 
-#pragma WARNING("log() method would need to save the current line, delete the current line, print the log and bring back the saved line for clean visuals. for now its ok.")
+#pragma WARNING("log() method would need to save the current line (if it isn't a log), delete the current line, print the log and bring back the saved line for clean visuals. for now its ok.")
 // same as result but without unlocking
 void TerminalWidget::log(QString message)
 {   
+    //auto cmd = getCommand();
+    //clearLine();
     appendPlainText(message);
     ensureCursorVisible();
 }
@@ -114,7 +123,8 @@ void TerminalWidget::append(QString text)
 // Arrow up pressed
 void TerminalWidget::onUp()
 {
-    if(0 < m_HistoryUp.count()) {
+    if(0 < m_HistoryUp.count())
+    {
         QString cmd = m_HistoryUp.pop();
         m_HistoryDown.push(cmd);
 
@@ -128,12 +138,14 @@ void TerminalWidget::onUp()
 // Arrow down pressed
 void TerminalWidget::onDown()
 {
-    if(0 < m_HistoryDown.count() && m_HistorySkip) {
+    if(0 < m_HistoryDown.count() && m_HistorySkip)
+    {
         m_HistoryUp.push(m_HistoryDown.pop());
         m_HistorySkip = false;
     }
 
-    if(0 < m_HistoryDown.count()) {
+    if(0 < m_HistoryDown.count())
+    {
         QString cmd = m_HistoryDown.pop();
         m_HistoryUp.push(cmd);
 

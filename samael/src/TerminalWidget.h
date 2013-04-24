@@ -13,7 +13,7 @@ public:
     void setPrompt(const QString &prompt);
 
 protected:
-    void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *event);
 
     /// disable handling of mouse events
     void mousePressEvent(QMouseEvent *) { /* ignore */ }

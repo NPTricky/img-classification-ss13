@@ -25,8 +25,10 @@ SamaelMainWindow::~SamaelMainWindow()
 // Functions
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SamaelMainWindow::initialize()
+void SamaelMainWindow::initialize(TerminalWidget* terminal)
 {
+    m_TerminalWidget = terminal;
+
     this->setMinimumSize(640,480);
 
     createActions();   ///< creates QActions which represent specific user commands
@@ -97,13 +99,7 @@ void SamaelMainWindow::createWidgets()
     m_DockBetaContent->setObjectName(QStringLiteral("m_DockBetaContent"));
     m_DockBeta->setWidget(m_DockBetaContent);
 
-    m_TerminalWidget = new TerminalWidget(this);
-
-    // total hack... damn microsoft compiler
-    auto & logger = QLog::Logger::Instance();
-    auto group = logger.getDestinationGroup();
-    group->push_back(std::unique_ptr<QLog::TerminalWidgetLogDestination>(new QLog::TerminalWidgetLogDestination(m_TerminalWidget)));
-
+    //m_TerminalWidget = new TerminalWidget(this);
     connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
 }
 

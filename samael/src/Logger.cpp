@@ -130,7 +130,7 @@ namespace QLog
     {
         const QString level = LevelToText(myMessageLevel);
         const QString message(QString("%1 %2 %3")
-            .arg(level, 6)
+            .arg(level,5)
             .arg(QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss.zzz"))
             .arg(myStringBuffer)
             );

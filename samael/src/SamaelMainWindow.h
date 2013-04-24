@@ -11,7 +11,7 @@ public:
     SamaelMainWindow(QWidget *parent = nullptr);
     ~SamaelMainWindow();
 
-    void initialize();
+    void initialize(TerminalWidget* terminal);
 
 private:
     void createActions();
