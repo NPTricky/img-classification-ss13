@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "SamaelItem.h"
 
-SamaelItem::SamaelItem()
+SamaelItem::SamaelItem(QFileInfo& info)
+    : m_FileInfo(info)
 {
 
 }

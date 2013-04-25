@@ -24,16 +24,22 @@ SamaelItemModel::~SamaelItemModel()
 
 QModelIndex SamaelItemModel::index( int row, int column, const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     return hasIndex(row, column, parent) ? createIndex(row, column) : QModelIndex();
 }
 
 QModelIndex SamaelItemModel::parent( const QModelIndex &child ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     return QModelIndex();
 }
 
 QModelIndex SamaelItemModel::sibling( int row, int column, const QModelIndex &idx ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     if (!idx.isValid() || column != 0 || row >= m_Data->size())
         return QModelIndex();
 
@@ -46,16 +52,22 @@ QModelIndex SamaelItemModel::sibling( int row, int column, const QModelIndex &id
 
 bool SamaelItemModel::hasChildren( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     return parent.isValid() ? false : (rowCount() > 0);
 }
 
 int SamaelItemModel::rowCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     return parent.isValid() ? 0 : m_Data->size();
 }
 
 int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
+    throw std::exception("The method or operation is not implemented.");
+
     return parent.isValid() ? 0 : 1;
 }
 

@@ -172,6 +172,9 @@
     <ClInclude Include="src\TerminalWidgetLogDestination.h">
       <Filter>Header Files\log\destination</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">

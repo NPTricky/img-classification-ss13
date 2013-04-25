@@ -138,6 +138,7 @@
     <ClCompile Include="src\TerminalWidgetLogDestination.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Item.h" />
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h" />
     <ClInclude Include="src\CommandLineLogDestination.h" />
     <ClInclude Include="src\Creator.h" />
