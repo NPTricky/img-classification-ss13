@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include "TerminalWidget.h"
 #include "TerminalWidgetLogDestination.h"
+#include "SamaelItemModel.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -34,6 +35,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
     createActions();   ///< creates QActions which represent specific user commands
     createMenus();     ///< populates the MenuBar (File, Edit, Help, ...) with QActions
     createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
+    createViews();     ///< create models and their respective viewers
     createLayouts();   ///< arrange QWidgets into different layout groups to keep them in order
     createStatusBar(); ///< create and configure the QStatusBar at the bottom of the window
 
@@ -103,6 +105,13 @@ void SamaelMainWindow::createWidgets()
     connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
 }
 
+void SamaelMainWindow::createViews()
+{
+    m_SamaelItemModel = new SamaelItemModel(this);
+    m_TreeView = new QTreeView(this);
+    m_TreeView->setModel(m_SamaelItemModel);
+}
+
 void SamaelMainWindow::createLayouts()
 {
     this->setCentralWidget(m_TerminalWidget);
@@ -113,15 +122,13 @@ void SamaelMainWindow::createLayouts()
     m_DockAlphaVBoxLayout = new QVBoxLayout(m_DockAlphaContent);
     m_DockAlphaVBoxLayout->setObjectName(QStringLiteral("m_DockAlphaVBoxLayout"));
     m_DockAlphaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    //dockAlphaVBoxLayout->addWidget(widget1);
-    //dockAlphaVBoxLayout->addWidget(widget2);
+    m_DockAlphaVBoxLayout->addWidget(m_TreeView);
     m_DockAlphaContent->setLayout(m_DockAlphaVBoxLayout);
 
     m_DockBetaVBoxLayout = new QVBoxLayout(m_DockBetaContent);
     m_DockBetaVBoxLayout->setObjectName(QStringLiteral("m_DockBetaVBoxLayout"));
     m_DockBetaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    //dockBetaVBoxLayout->addWidget(widget3);
-    //dockBetaVBoxLayout->addWidget(widget4);
+    //m_DockBetaVBoxLayout->addWidget(widgety);
     m_DockBetaContent->setLayout(m_DockBetaVBoxLayout);
 }
 
@@ -168,7 +175,7 @@ void SamaelMainWindow::open()
         currentFileInfo.setFile(*iter);
 
         // print some general information
-        QLOG_INFO() << QString("NAME: %1 [TYPE: %2] - BYTES: %3")
+        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
             .arg(currentFileInfo.fileName())
             .arg(currentFileInfo.suffix())
             .arg(currentFileInfo.size())

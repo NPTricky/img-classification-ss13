@@ -2,15 +2,15 @@
 #define SAMAELTREEITEMMODEL_H
 
 #include <QAbstractItemModel>
-#include "SamaelItem.h"
 #include <QVector>
+#include "TreeNode.h"
 
 class SamaelItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    SamaelItemModel(QObject *parent);
+    SamaelItemModel(QObject *parent = nullptr);
     ~SamaelItemModel();
 
     /// basic model
@@ -31,7 +31,7 @@ public:
     virtual bool removeRows( int row, int count, const QModelIndex &parent = QModelIndex( ) );
 
 private:
-    QVector<SamaelItem>* m_Data;
+    TreeNode* m_RootNode;
 };
 
 #endif // SAMAELTREEITEMMODEL_H

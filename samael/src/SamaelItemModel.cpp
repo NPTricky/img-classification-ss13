@@ -4,12 +4,15 @@
 SamaelItemModel::SamaelItemModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-
+    #pragma WARNING("das wird später noch besser gehen als so..")
+    QVector<QVariant> vector;
+    vector << "Hallo" << "Tim";
+    m_RootNode = new TreeNode(vector);
 }
 
 SamaelItemModel::~SamaelItemModel()
 {
-
+    delete m_RootNode;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,42 +36,42 @@ QModelIndex SamaelItemModel::parent( const QModelIndex &child ) const
 {
     throw std::exception("The method or operation is not implemented.");
 
-    return QModelIndex();
+    //return QModelIndex();
 }
 
 QModelIndex SamaelItemModel::sibling( int row, int column, const QModelIndex &idx ) const
 {
     throw std::exception("The method or operation is not implemented.");
 
-    if (!idx.isValid() || column != 0 || row >= m_Data->size())
-        return QModelIndex();
+    //if (!idx.isValid() || column != 0 || row >= m_Data->size())
+    //    return QModelIndex();
 
-    return createIndex(row, 0);
+    //return createIndex(row, 0);
 
-    ///  or (???) fo realz? 
+    /////  or (???) fo realz? 
 
-    return hasIndex(row, column, idx) ? createIndex(row, column) : QModelIndex();
+    //return hasIndex(row, column, idx) ? createIndex(row, column) : QModelIndex();
 }
 
 bool SamaelItemModel::hasChildren( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
     throw std::exception("The method or operation is not implemented.");
 
-    return parent.isValid() ? false : (rowCount() > 0);
+    //return parent.isValid() ? false : (rowCount() > 0);
 }
 
 int SamaelItemModel::rowCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
     throw std::exception("The method or operation is not implemented.");
 
-    return parent.isValid() ? 0 : m_Data->size();
+    //return parent.isValid() ? 0 : m_Data->size();
 }
 
 int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
     throw std::exception("The method or operation is not implemented.");
 
-    return parent.isValid() ? 0 : 1;
+    //return parent.isValid() ? 0 : 1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

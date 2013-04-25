@@ -126,8 +126,8 @@
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\SamaelApplication.cpp" />
+    <ClCompile Include="src\SamaelImage.cpp" />
     <ClCompile Include="src\TerminalWidget.cpp" />
-    <ClCompile Include="src\SamaelItem.cpp" />
     <ClCompile Include="src\SamaelMainWindow.cpp" />
     <ClCompile Include="src\SamaelItemModel.cpp" />
     <ClCompile Include="src\SamaelUtility.cpp" />
@@ -151,6 +151,7 @@
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\LoggerImplementation.h" />
     <ClInclude Include="src\LogLevel.h" />
+    <ClInclude Include="src\SamaelImage.h" />
     <ClInclude Include="src\TerminalWidgetLogDestination.h" />
     <ClInclude Include="src\TreeNode.h" />
     <CustomBuild Include="src\SamaelItemModel.h">
@@ -173,7 +174,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp" "-fstdafx.h" "-f../../src/TerminalWidget.h"  -DUNICODE -DWIN32 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\src" "-I$(TBB_DIR)\include" "-I$(OPENCV_DIR)\include" "-I$(NOINHERIT)\."</Command>
     </CustomBuild>
-    <ClInclude Include="src\SamaelItem.h" />
     <ClInclude Include="src\SamaelUtility.h" />
     <ClInclude Include="src\stdafx.h" />
     <CustomBuild Include="src\SamaelMainWindow.h">

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "SamaelApplication.h"
 #include "LogDestinationCreator.h"
+#include "CommandLineLogDestination.h"
+#include "FileLogDestination.h"
+#include "TerminalWidgetLogDestination.h"
 
 SamaelApplication::SamaelApplication(int& argc, char** argv)
     : QApplication(argc, argv)
