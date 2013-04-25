@@ -26,5 +26,7 @@
 /ipch
 /samael/intermediate-x64
 /samael/GeneratedFiles
+/build-x64/data/101_ObjectCategories
+/build-x64/data/Annotations
 
 # Custom Ignores - Files
