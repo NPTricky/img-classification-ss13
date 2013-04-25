@@ -15,6 +15,8 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     m_HistoryDown.clear();
     setLineWrapMode(NoWrap);
     insertPlainText(m_UserPrompt);
+    
+    QLOG_INFO() << "TerminalWidget - Ready!";
 }
 
 TerminalWidget::~TerminalWidget()
