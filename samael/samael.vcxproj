@@ -136,21 +136,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\TerminalWidgetLogDestination.cpp" />
+    <ClCompile Include="src\TreeNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Item.h" />
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h" />
     <ClInclude Include="src\CommandLineLogDestination.h" />
     <ClInclude Include="src\Creator.h" />
     <ClInclude Include="src\DerivedCreator.h" />
     <ClInclude Include="src\Factory.h" />
     <ClInclude Include="src\FileLogDestination.h" />
+    <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\LogDestination.h" />
     <ClInclude Include="src\LogDestinationCreator.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\LoggerImplementation.h" />
     <ClInclude Include="src\LogLevel.h" />
     <ClInclude Include="src\TerminalWidgetLogDestination.h" />
+    <ClInclude Include="src\TreeNode.h" />
     <CustomBuild Include="src\SamaelItemModel.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing SamaelItemModel.h...</Message>

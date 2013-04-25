@@ -125,6 +125,9 @@
     <ClCompile Include="src\TerminalWidgetLogDestination.cpp">
       <Filter>Source Files\log\destination</Filter>
     </ClCompile>
+    <ClCompile Include="src\TreeNode.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -172,7 +175,10 @@
     <ClInclude Include="src\TerminalWidgetLogDestination.h">
       <Filter>Header Files\log\destination</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="src\TreeNode.h">
+      <Filter>Header Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Item.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
   </ItemGroup>
