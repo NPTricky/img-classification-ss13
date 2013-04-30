@@ -6,6 +6,8 @@
 #include "TerminalWidget.h"
 #include "TerminalWidgetLogDestination.h"
 #include "SamaelItemModel.h"
+#include "SamaelImage.h"
+#include "TreeWidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -28,6 +30,8 @@ SamaelMainWindow::~SamaelMainWindow()
 
 void SamaelMainWindow::initialize(TerminalWidget* terminal)
 {
+    qRegisterMetaType<SamaelImage>("SamaelImage");
+
     m_TerminalWidget = terminal;
 
     this->setMinimumSize(640,480);
@@ -35,7 +39,6 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
     createActions();   ///< creates QActions which represent specific user commands
     createMenus();     ///< populates the MenuBar (File, Edit, Help, ...) with QActions
     createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
-    createViews();     ///< create models and their respective viewers
     createLayouts();   ///< arrange QWidgets into different layout groups to keep them in order
     createStatusBar(); ///< create and configure the QStatusBar at the bottom of the window
 
@@ -87,49 +90,46 @@ void SamaelMainWindow::createMenus()
 
 void SamaelMainWindow::createWidgets()
 {
-    m_DockAlpha = new QDockWidget(tr("Dock Alpha"),this);
-    m_DockAlpha->setObjectName(QStringLiteral("m_DockAlpha"));
-    m_DockAlpha->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_DockAlphaContent = new QWidget();
-    m_DockAlphaContent->setObjectName(QStringLiteral("m_DockAlphaContent"));
-    m_DockAlpha->setWidget(m_DockAlphaContent);
+    //m_DockAlpha = new QDockWidget(tr("Dock Alpha"),this);
+    //m_DockAlpha->setObjectName(QStringLiteral("m_DockAlpha"));
+    //m_DockAlpha->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    //m_DockAlphaContent = new QWidget();
+    //m_DockAlphaContent->setObjectName(QStringLiteral("m_DockAlphaContent"));
+    //m_DockAlpha->setWidget(m_DockAlphaContent);
 
-    m_DockBeta = new QDockWidget(tr("Dock Beta"),this);
-    m_DockBeta->setObjectName(QStringLiteral("m_DockBeta"));
-    m_DockBeta->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_DockBetaContent = new QWidget();
-    m_DockBetaContent->setObjectName(QStringLiteral("m_DockBetaContent"));
-    m_DockBeta->setWidget(m_DockBetaContent);
+    //m_DockBeta = new QDockWidget(tr("Dock Beta"),this);
+    //m_DockBeta->setObjectName(QStringLiteral("m_DockBeta"));
+    //m_DockBeta->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    //m_DockBetaContent = new QWidget();
+    //m_DockBetaContent->setObjectName(QStringLiteral("m_DockBetaContent"));
+    //m_DockBeta->setWidget(m_DockBetaContent);
 
-    //m_TerminalWidget = new TerminalWidget(this);
+    // Terminal Widget
     connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
-}
 
-void SamaelMainWindow::createViews()
-{
-    m_SamaelItemModel = new SamaelItemModel(this);
-    m_TreeView = new QTreeView(this);
-    m_TreeView->setModel(m_SamaelItemModel);
+    #pragma WARNING("TODO.")
+    // Tree Widget
+    m_TreeWidget = new TreeWidget(this);
 }
 
 void SamaelMainWindow::createLayouts()
 {
     this->setCentralWidget(m_TerminalWidget);
-
+/*
     this->addDockWidget(Qt::LeftDockWidgetArea,m_DockAlpha);
     this->addDockWidget(Qt::RightDockWidgetArea,m_DockBeta);
+*/
+    //m_DockAlphaVBoxLayout = new QVBoxLayout(m_DockAlphaContent);
+    //m_DockAlphaVBoxLayout->setObjectName(QStringLiteral("m_DockAlphaVBoxLayout"));
+    //m_DockAlphaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
+    //m_DockAlphaVBoxLayout->addWidget(m_TreeWidget);
+    //m_DockAlphaContent->setLayout(m_DockAlphaVBoxLayout);
 
-    m_DockAlphaVBoxLayout = new QVBoxLayout(m_DockAlphaContent);
-    m_DockAlphaVBoxLayout->setObjectName(QStringLiteral("m_DockAlphaVBoxLayout"));
-    m_DockAlphaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    m_DockAlphaVBoxLayout->addWidget(m_TreeView);
-    m_DockAlphaContent->setLayout(m_DockAlphaVBoxLayout);
-
-    m_DockBetaVBoxLayout = new QVBoxLayout(m_DockBetaContent);
-    m_DockBetaVBoxLayout->setObjectName(QStringLiteral("m_DockBetaVBoxLayout"));
-    m_DockBetaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    //m_DockBetaVBoxLayout->addWidget(widgety);
-    m_DockBetaContent->setLayout(m_DockBetaVBoxLayout);
+    //m_DockBetaVBoxLayout = new QVBoxLayout(m_DockBetaContent);
+    //m_DockBetaVBoxLayout->setObjectName(QStringLiteral("m_DockBetaVBoxLayout"));
+    //m_DockBetaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
+    ////m_DockBetaVBoxLayout->addWidget(widgety);
+    //m_DockBetaContent->setLayout(m_DockBetaVBoxLayout);
 }
 
 void SamaelMainWindow::createStatusBar()
@@ -195,6 +195,7 @@ void SamaelMainWindow::open()
 void SamaelMainWindow::exit()
 {
     auto input = QMessageBox::Yes; ///< shortcut until more security is required
+
     //auto input = QMessageBox::question(
     //    this,
     //    tr("Samael Image Classification"),
@@ -202,6 +203,7 @@ void SamaelMainWindow::exit()
     //    QMessageBox::Yes | QMessageBox::No,
     //    QMessageBox::No
     //    );
+
     if (input == QMessageBox::Yes)
     {
         GetApp()->quit();

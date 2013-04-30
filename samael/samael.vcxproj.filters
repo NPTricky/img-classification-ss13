@@ -60,6 +60,18 @@
     <Filter Include="Source Files\mvc">
       <UniqueIdentifier>{f24b15c2-e522-4b32-8242-c74a319e36ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\data">
+      <UniqueIdentifier>{1b5cb49a-4d11-4f38-8b81-cda00487cffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\data">
+      <UniqueIdentifier>{5e146ede-0b0f-48dd-871b-2a50fd929505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\base">
+      <UniqueIdentifier>{60c89bce-4fb1-4d8a-877f-e4eabb1c5774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\base">
+      <UniqueIdentifier>{c35a91aa-18df-43ec-b720-577a1998c3e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_samael.cpp">
@@ -126,7 +138,25 @@
       <Filter>Source Files\mvc</Filter>
     </ClCompile>
     <ClCompile Include="src\SamaelImage.cpp">
-      <Filter>Source Files\mvc</Filter>
+      <Filter>Source Files\data</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TreeWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TreeWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TreeWidget.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SamaelDockWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SamaelDockWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamaelDockWidget.cpp">
+      <Filter>Source Files\gui\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,10 +205,10 @@
     <ClInclude Include="src\TreeNode.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
-    <ClInclude Include="src\Item.h">
-      <Filter>Header Files\mvc</Filter>
-    </ClInclude>
     <ClInclude Include="src\SamaelImage.h">
+      <Filter>Header Files\data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Samael.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
   </ItemGroup>
@@ -200,6 +230,12 @@
     </CustomBuild>
     <CustomBuild Include="src\TerminalWidget.h">
       <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\TreeWidget.h">
+      <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\SamaelDockWidget.h">
+      <Filter>Header Files\gui\base</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

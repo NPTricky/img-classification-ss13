@@ -1,8 +1,11 @@
 #ifndef SAMAELMAINWINDOW_H
 #define SAMAELMAINWINDOW_H
 
+#include <QMainWindow>
+
 class TerminalWidget;
 class SamaelItemModel;
+class TreeWidget;
 
 class SamaelMainWindow : public QMainWindow
 {
@@ -18,7 +21,6 @@ private:
     void createActions();
     void createMenus();
     void createWidgets();
-    void createViews();
     void createLayouts();
     void createStatusBar();
 
@@ -40,10 +42,7 @@ private:
     QWidget *m_DockBetaContent;
     QLabel *m_StatusBarLabel;
     TerminalWidget *m_TerminalWidget;
-
-    // QViews & Models
-    QTreeView *m_TreeView;
-    SamaelItemModel *m_SamaelItemModel;
+    TreeWidget *m_TreeWidget;
 
     // QLayouts
     QVBoxLayout *m_DockAlphaVBoxLayout;

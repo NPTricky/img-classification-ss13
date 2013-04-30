@@ -1,7 +1,7 @@
 #ifndef LOGLEVEL_H
 #define LOGLEVEL_H
 
-class QString;
+#include <QString>
 
 namespace QLog
 {

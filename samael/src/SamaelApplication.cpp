@@ -30,7 +30,7 @@ void SamaelApplication::initialize()
     m_Logger.create("FileLogDestination");
 
     // advanced creation of a terminal widget to receive the output
-    auto terminal = new TerminalWidget(m_MainWindow);
+    TerminalWidget* terminal = new TerminalWidget(m_MainWindow);
     m_Logger.getDestinationGroup()->push_back(std::unique_ptr<QLog::TerminalWidgetLogDestination>(new QLog::TerminalWidgetLogDestination(terminal)));
 
     m_Logger.setLogLevel(QLog::TraceLevel);

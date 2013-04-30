@@ -1,6 +1,8 @@
 #ifndef SAMAELCONSOLEWIDGET_H
 #define SAMAELCONSOLEWIDGET_H
 
+#include <QPlainTextEdit>
+
 class TerminalWidget : public QPlainTextEdit
 {
     Q_OBJECT

@@ -1,10 +1,9 @@
-#include "qstring.h"
 #ifndef ITEM_H
 #define ITEM_H
 
-class QString;
+#include <QString>
 
-namespace Item
+namespace Samael
 {
 
     enum Set

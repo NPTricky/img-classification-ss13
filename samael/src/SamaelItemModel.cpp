@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "SamaelItemModel.h"
+#include "TreeNode.h"
 
 SamaelItemModel::SamaelItemModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
     #pragma WARNING("das wird später noch besser gehen als so..")
     QVector<QVariant> vector;
-    vector << "Hallo" << "Tim";
+    vector << "Hello";
     m_RootNode = new TreeNode(vector);
 }
 
@@ -16,119 +17,105 @@ SamaelItemModel::~SamaelItemModel()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+// Basics
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//bool QAbstractItemModel::hasIndex(int row, int column, const QModelIndex &parent) const
-//{
-//    if (row < 0 || column < 0)
-//        return false;
-//    return row < rowCount(parent) && column < columnCount(parent);
-//}
 
 QModelIndex SamaelItemModel::index( int row, int column, const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (!hasIndex(row,column,parent))
+        return QModelIndex();
 
-    return hasIndex(row, column, parent) ? createIndex(row, column) : QModelIndex();
+    TreeNode* tmpParent;
+    tmpParent = parent.isValid() ? static_cast<TreeNode*>(parent.internalPointer()) : m_RootNode;
+
+    TreeNode* tmpChild = tmpParent->getChild(row);
+    return tmpChild ? createIndex(row, column, tmpChild) : QModelIndex();
 }
 
 QModelIndex SamaelItemModel::parent( const QModelIndex &child ) const
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (!child.isValid())
+        return QModelIndex();
 
-    //return QModelIndex();
-}
+    TreeNode* tmpChild = static_cast<TreeNode*>(child.internalPointer());
+    TreeNode* tmpParent = tmpChild->parent();
 
-QModelIndex SamaelItemModel::sibling( int row, int column, const QModelIndex &idx ) const
-{
-    throw std::exception("The method or operation is not implemented.");
+    if (tmpParent == m_RootNode)
+        return QModelIndex();
 
-    //if (!idx.isValid() || column != 0 || row >= m_Data->size())
-    //    return QModelIndex();
-
-    //return createIndex(row, 0);
-
-    /////  or (???) fo realz? 
-
-    //return hasIndex(row, column, idx) ? createIndex(row, column) : QModelIndex();
+    return createIndex(tmpParent->row(), 0, tmpParent);
 }
 
 bool SamaelItemModel::hasChildren( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
-
-    //return parent.isValid() ? false : (rowCount() > 0);
+    return parent.isValid() ? false : (rowCount() > 0);
 }
 
 int SamaelItemModel::rowCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (parent.column() > 0)
+        return 0;
 
-    //return parent.isValid() ? 0 : m_Data->size();
+    TreeNode* tmpParent;
+    tmpParent = parent.isValid() ? static_cast<TreeNode*>(parent.internalPointer()) : m_RootNode;
+
+    return tmpParent->childCount();
 }
 
 int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
-
-    //return parent.isValid() ? 0 : 1;
+    return parent.isValid() ? static_cast<TreeNode*>(parent.internalPointer())->columnCount() : m_RootNode->columnCount();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//
+// Metadata & Data
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 Qt::ItemFlags SamaelItemModel::flags( const QModelIndex &index ) const
 {
-    throw std::exception("The method or operation is not implemented.");
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    //if (!index.isValid())
+    //    return 0;
+
+    //return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+    return QAbstractItemModel::flags(index);
 }
 
 QVariant SamaelItemModel::data( const QModelIndex &index, int role /*= Qt::DisplayRole */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (!index.isValid())
+        return QVariant();
 
-    /// see Qt::ItemDataRole for different roles
-    switch (role)
-    {
-    case Qt::DisplayRole:
-        break;
-    case Qt::ToolTipRole:
-        break;
-    case Qt::AccessibleTextRole:
-        break;
-    case Qt::AccessibleDescriptionRole:
-        break;
-    default:
-        break;
-    }
+    if (role != Qt::DisplayRole)
+        return QVariant();
 
-    return QVariant();
+    //switch (role)
+    //{
+    //case Qt::DisplayRole:
+    //    break;
+    //case Qt::ToolTipRole:
+    //    break;
+    //case Qt::AccessibleTextRole:
+    //    break;
+    //case Qt::AccessibleDescriptionRole:
+    //    break;
+    //default:
+    //    break;
+    //}
+    
+    return static_cast<TreeNode*>(index.internalPointer())->data(index.column());
 }
 
 QVariant SamaelItemModel::headerData( int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole */ ) const
 {
-    throw std::exception("The method or operation is not implemented.");
-
-    /// see Qt::ItemDataRole for different roles
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole )
-    {
-        switch( section )
-        {
-        case 0:
-            return QString( "Element" );
-        case 1:
-            return QString( "Annotation" );
-        default:
-            break;
-        }
-    }
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        return m_RootNode->data(section);
 
     return QVariant();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//
+// Editability
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool SamaelItemModel::setData( const QModelIndex &index, const QVariant &value, int role /*= Qt::EditRole */ )
