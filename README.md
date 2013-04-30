@@ -13,7 +13,7 @@
 
 ## Library Configuration
 
-**Platform** Windows 7 - X64 ● **Supported IDE** Visual Studio 2010 & 2012 (MSVC 2010 Compiler)
+**Platform** Windows 7 - X64 ● **Supported IDE** Visual Studio 2010 or 2012 (MSVC 2010 Compiler) & Qt Addin
 
 * **Download Library (Developer Package)** [lib_pkg_project.7z (240.5 MB)](https://mega.co.nz/#!Q5tlWKQC!S7q32E5mK_Pkv72AqTrnbk0CgABqZ_FmgS96eeYeqBA)
   * **WARNING** 7-zip REQUIRED! Compression = LZMA2
@@ -31,3 +31,4 @@
 * QTDIR = [...]lib\Qt\5.0.1\msvc2010 (Qt Add-In Style)
 * OPENCV_DIR = [...]lib\opencv
 * TBB_DIR = [...]lib\TBB
+* ICU_DIR = [...]lib\icu
