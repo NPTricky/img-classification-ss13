@@ -3,13 +3,23 @@
 #include "SamaelItemModel.h"
 
 TreeWidget::TreeWidget(QWidget *parent)
-    : SamaelDockWidget(parent, QStringLiteral("Tree Widget Name"), QStringLiteral("Tree Widget Title"))
-    , m_SamaelItemModel(new SamaelItemModel(this))
-    , m_TreeView(new QTreeView(this))
+    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Image Data Tree"))
 {
+    // create the data model
+    m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
+
+    // configure the tree view
+    m_TreeView = new QTreeView(m_ContentWidget);
+    m_TreeView->header()->setSectionsClickable(false);
+    m_TreeView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    m_TreeView->setSelectionMode( QAbstractItemView::SingleSelection ); // for now
     m_TreeView->setModel(m_SamaelItemModel);
-    m_TreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // configure the layout of this widget
+    m_Layout = new QVBoxLayout(m_ContentWidget);
+    m_Layout->setContentsMargins(0,0,0,0);
+    m_Layout->addWidget(m_TreeView);
+    finalise(m_Layout);
 }
 
 TreeWidget::~TreeWidget()

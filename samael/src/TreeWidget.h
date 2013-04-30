@@ -16,6 +16,7 @@ public:
 private:
     SamaelItemModel* m_SamaelItemModel;
     QTreeView* m_TreeView;
+    QVBoxLayout* m_Layout;
 };
 
 #endif // TREEWIDGET_H

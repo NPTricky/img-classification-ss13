@@ -39,7 +39,6 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
     createActions();   ///< creates QActions which represent specific user commands
     createMenus();     ///< populates the MenuBar (File, Edit, Help, ...) with QActions
     createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
-    createLayouts();   ///< arrange QWidgets into different layout groups to keep them in order
     createStatusBar(); ///< create and configure the QStatusBar at the bottom of the window
 
     QLOG_INFO() << "SamaelMainWindow - Ready!";
@@ -90,46 +89,13 @@ void SamaelMainWindow::createMenus()
 
 void SamaelMainWindow::createWidgets()
 {
-    //m_DockAlpha = new QDockWidget(tr("Dock Alpha"),this);
-    //m_DockAlpha->setObjectName(QStringLiteral("m_DockAlpha"));
-    //m_DockAlpha->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    //m_DockAlphaContent = new QWidget();
-    //m_DockAlphaContent->setObjectName(QStringLiteral("m_DockAlphaContent"));
-    //m_DockAlpha->setWidget(m_DockAlphaContent);
-
-    //m_DockBeta = new QDockWidget(tr("Dock Beta"),this);
-    //m_DockBeta->setObjectName(QStringLiteral("m_DockBeta"));
-    //m_DockBeta->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    //m_DockBetaContent = new QWidget();
-    //m_DockBetaContent->setObjectName(QStringLiteral("m_DockBetaContent"));
-    //m_DockBeta->setWidget(m_DockBetaContent);
-
     // Terminal Widget
     connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
+    this->setCentralWidget(m_TerminalWidget);
 
-    #pragma WARNING("TODO.")
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);
-}
-
-void SamaelMainWindow::createLayouts()
-{
-    this->setCentralWidget(m_TerminalWidget);
-/*
-    this->addDockWidget(Qt::LeftDockWidgetArea,m_DockAlpha);
-    this->addDockWidget(Qt::RightDockWidgetArea,m_DockBeta);
-*/
-    //m_DockAlphaVBoxLayout = new QVBoxLayout(m_DockAlphaContent);
-    //m_DockAlphaVBoxLayout->setObjectName(QStringLiteral("m_DockAlphaVBoxLayout"));
-    //m_DockAlphaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    //m_DockAlphaVBoxLayout->addWidget(m_TreeWidget);
-    //m_DockAlphaContent->setLayout(m_DockAlphaVBoxLayout);
-
-    //m_DockBetaVBoxLayout = new QVBoxLayout(m_DockBetaContent);
-    //m_DockBetaVBoxLayout->setObjectName(QStringLiteral("m_DockBetaVBoxLayout"));
-    //m_DockBetaVBoxLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-    ////m_DockBetaVBoxLayout->addWidget(widgety);
-    //m_DockBetaContent->setLayout(m_DockBetaVBoxLayout);
+    this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
 }
 
 void SamaelMainWindow::createStatusBar()

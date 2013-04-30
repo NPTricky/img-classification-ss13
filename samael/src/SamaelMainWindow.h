@@ -21,7 +21,6 @@ private:
     void createActions();
     void createMenus();
     void createWidgets();
-    void createLayouts();
     void createStatusBar();
 
     // QActions

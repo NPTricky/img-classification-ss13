@@ -12,9 +12,10 @@ public:
     virtual ~SamaelDockWidget();
 
     void rename(const QString& name, const QString& title);
+    void finalise(QLayout* layout);
 
 protected:
-    QWidget m_ContentWidget;
+    QWidget* m_ContentWidget;
 
 private:
     
