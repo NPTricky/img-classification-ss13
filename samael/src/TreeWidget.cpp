@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TreeWidget.h"
 #include "SamaelItemModel.h"
+#include "Logger.h"
 
 TreeWidget::TreeWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Image Data Tree"))
@@ -11,8 +12,8 @@ TreeWidget::TreeWidget(QWidget *parent)
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
     m_TreeView->header()->setSectionsClickable(false);
-    m_TreeView->setSelectionBehavior( QAbstractItemView::SelectRows );
-    m_TreeView->setSelectionMode( QAbstractItemView::SingleSelection ); // for now
+    m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_TreeView->setModel(m_SamaelItemModel);
 
     // configure the layout of this widget
@@ -20,6 +21,8 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_TreeView);
     finalise(m_Layout);
+
+    QLOG_INFO() << "TreeWidget - Ready!";
 }
 
 TreeWidget::~TreeWidget()

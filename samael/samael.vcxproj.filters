@@ -72,6 +72,12 @@
     <Filter Include="Source Files\gui\base">
       <UniqueIdentifier>{c35a91aa-18df-43ec-b720-577a1998c3e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{45bbb710-d0a3-4b61-a24d-fce7965ad276}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{cdfe8ffc-c566-41b9-9f87-9fde4b6a81b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_samael.cpp">
@@ -122,9 +128,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_SamaelItemModel.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="src\TerminalWidget.cpp">
-      <Filter>Source Files\gui</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TerminalWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -157,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="src\SamaelDockWidget.cpp">
       <Filter>Source Files\gui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TerminalWidget.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,14 +234,14 @@
     <CustomBuild Include="src\SamaelItemModel.h">
       <Filter>Header Files\mvc</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\TerminalWidget.h">
-      <Filter>Header Files\gui</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\TreeWidget.h">
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
     <CustomBuild Include="src\SamaelDockWidget.h">
       <Filter>Header Files\gui\base</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\TerminalWidget.h">
+      <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

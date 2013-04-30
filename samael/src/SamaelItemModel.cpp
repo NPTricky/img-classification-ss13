@@ -5,19 +5,20 @@
 SamaelItemModel::SamaelItemModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    #pragma WARNING("das wird später noch besser gehen als so..")
+    // initialize a root node
     QVector<QVariant> vector;
-    vector << "Hello";
+    vector << "ROOT";
     m_RootNode = new TreeNode(vector);
 }
 
 SamaelItemModel::~SamaelItemModel()
 {
+    // item model will recursively delete the full tree
     delete m_RootNode;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Basics
+// Item Model Basics
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 QModelIndex SamaelItemModel::index( int row, int column, const QModelIndex &parent /*= QModelIndex( ) */ ) const
@@ -73,11 +74,6 @@ int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) *
 
 Qt::ItemFlags SamaelItemModel::flags( const QModelIndex &index ) const
 {
-    //if (!index.isValid())
-    //    return 0;
-
-    //return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-
     return QAbstractItemModel::flags(index);
 }
 
