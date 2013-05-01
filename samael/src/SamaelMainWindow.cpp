@@ -89,9 +89,12 @@ void SamaelMainWindow::createMenus()
 
 void SamaelMainWindow::createWidgets()
 {
+    // Viewer Widget
+    this->setCentralWidget(m_TerminalWidget); ///< viewer plz
+
     // Terminal Widget
     connect(m_TerminalWidget, SIGNAL(command(QString)), m_TerminalWidget, SLOT(result(QString)));
-    this->setCentralWidget(m_TerminalWidget);
+    this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
 
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);

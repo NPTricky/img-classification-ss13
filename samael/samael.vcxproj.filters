@@ -72,11 +72,11 @@
     <Filter Include="Source Files\gui\base">
       <UniqueIdentifier>{c35a91aa-18df-43ec-b720-577a1998c3e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\core">
-      <UniqueIdentifier>{45bbb710-d0a3-4b61-a24d-fce7965ad276}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\core">
-      <UniqueIdentifier>{cdfe8ffc-c566-41b9-9f87-9fde4b6a81b3}</UniqueIdentifier>
+      <UniqueIdentifier>{82438fa9-6c4d-45eb-b4aa-d89ae72ac11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{3f562698-ca52-4f49-b0d5-edfe89527816}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,7 +162,7 @@
       <Filter>Source Files\gui\base</Filter>
     </ClCompile>
     <ClCompile Include="src\TerminalWidget.cpp">
-      <Filter>Source Files\core</Filter>
+      <Filter>Source Files\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +241,7 @@
       <Filter>Header Files\gui\base</Filter>
     </CustomBuild>
     <CustomBuild Include="src\TerminalWidget.h">
-      <Filter>Header Files\core</Filter>
+      <Filter>Header Files\gui</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

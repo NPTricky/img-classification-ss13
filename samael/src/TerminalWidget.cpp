@@ -3,19 +3,27 @@
 #include "Logger.h"
 
 TerminalWidget::TerminalWidget(QWidget *parent)
-    : QPlainTextEdit(parent)
+    : SamaelDockWidget(parent, QStringLiteral("TerminalWidget"), QStringLiteral("Terminal"))
     , m_UserPrompt(QString("[root@samael /]# "))
     , m_InputLock(false)
     , m_HistorySkip(false)
 {
-    setFont(QFont("Courier",9));
-
-    clear();
+    // clear history
     m_HistoryUp.clear();
     m_HistoryDown.clear();
-    setLineWrapMode(NoWrap);
-    insertPlainText(m_UserPrompt);
+
+    // configure the text edit
+    m_TextEdit = new QPlainTextEdit(parent);
+    m_TextEdit->setFont(QFont("Courier",9));
+    m_TextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
+    m_TextEdit->insertPlainText(m_UserPrompt);
     
+    // configure the layout of this widget
+    m_Layout = new QVBoxLayout(m_ContentWidget);
+    m_Layout->setContentsMargins(0,0,0,0);
+    m_Layout->addWidget(m_TextEdit);
+    finalise(m_Layout);
+
     QLOG_INFO() << "TerminalWidget - Ready!";
 }
 
@@ -57,7 +65,8 @@ void TerminalWidget::keyPressEvent(QKeyEvent *event)
         onHome();
         break;
     default:
-        QPlainTextEdit::keyPressEvent(event);
+        //((QObject*)(m_TextEdit))->event(event);
+        //QPlainTextEdit::keyPressEvent(event);
         break;
     }
 }
@@ -82,23 +91,23 @@ void TerminalWidget::onEnter()
     if (cmd.length() > 0)
     {
         m_InputLock = true;
-        setFocus();
-        insertPlainText("\n");
+        m_TextEdit->setFocus();
+        m_TextEdit->insertPlainText("\n");
         emit command(cmd);
     } else {
-        insertPlainText("\n");
-        insertPlainText(m_UserPrompt);
-        ensureCursorVisible();
+        m_TextEdit->insertPlainText("\n");
+        m_TextEdit->insertPlainText(m_UserPrompt);
+        m_TextEdit->ensureCursorVisible();
     }
 }
 
 // Result received
 void TerminalWidget::result(QString result)
 {
-    insertPlainText(result);
-    insertPlainText("\n");
-    insertPlainText(m_UserPrompt);
-    ensureCursorVisible();
+    m_TextEdit->insertPlainText(result);
+    m_TextEdit->insertPlainText("\n");
+    m_TextEdit->insertPlainText(m_UserPrompt);
+    m_TextEdit->ensureCursorVisible();
     m_InputLock = false;
 }
 
@@ -108,16 +117,16 @@ void TerminalWidget::log(QString message)
 {   
     //auto cmd = getCommand();
     //clearLine();
-    appendPlainText(message);
-    ensureCursorVisible();
+    m_TextEdit->appendPlainText(message);
+    m_TextEdit->ensureCursorVisible();
 }
 
 // Append line but do not display prompt afterwards
 void TerminalWidget::append(QString text)
 {
-    insertPlainText(text);
-    insertPlainText("\n");
-    ensureCursorVisible();
+    m_TextEdit->insertPlainText(text);
+    m_TextEdit->insertPlainText("\n");
+    m_TextEdit->ensureCursorVisible();
 }
 
 // Arrow up pressed
@@ -129,7 +138,7 @@ void TerminalWidget::onUp()
         m_HistoryDown.push(cmd);
 
         clearLine();
-        insertPlainText(cmd);
+        m_TextEdit->insertPlainText(cmd);
     }
 
     m_HistorySkip = true;
@@ -150,7 +159,7 @@ void TerminalWidget::onDown()
         m_HistoryUp.push(cmd);
 
         clearLine();
-        insertPlainText(cmd);
+        m_TextEdit->insertPlainText(cmd);
     } else {
         clearLine();
     }
@@ -158,16 +167,16 @@ void TerminalWidget::onDown()
 
 void TerminalWidget::clearLine()
 {
-    QTextCursor c = this->textCursor();
+    QTextCursor c = m_TextEdit->textCursor();
     c.select(QTextCursor::LineUnderCursor);
     c.removeSelectedText();
-    this->insertPlainText(m_UserPrompt);
+    m_TextEdit->insertPlainText(m_UserPrompt);
 }
 
 // Select and return the user-input (exclude the prompt)
 QString TerminalWidget::getCommand() const
 {
-    QTextCursor c = this->textCursor();
+    QTextCursor c = m_TextEdit->textCursor();
     c.select(QTextCursor::LineUnderCursor);
 
     QString text = c.selectedText();
@@ -178,26 +187,27 @@ QString TerminalWidget::getCommand() const
 
 void TerminalWidget::moveToEndOfLine()
 {
-    QPlainTextEdit::moveCursor(QTextCursor::EndOfLine);
+    m_TextEdit->moveCursor(QTextCursor::EndOfLine);
 }
 
 // The text cursor is not allowed to move beyond the
 // prompt
 void TerminalWidget::onLeft(QKeyEvent *event)
 {
-    if(getIndex(textCursor()) > m_UserPrompt.length())
+    if(getIndex(m_TextEdit->textCursor()) > m_UserPrompt.length())
     {
-        QPlainTextEdit::keyPressEvent(event);
+        //((QObject*)(m_TextEdit))->event(event);
+        //QPlainTextEdit::keyPressEvent(event);
     }
 }
 
 // Home (pos1) key pressed
 void TerminalWidget::onHome()
 {
-    QTextCursor c = textCursor();
+    QTextCursor c = m_TextEdit->textCursor();
     c.movePosition(QTextCursor::StartOfLine);
     c.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, m_UserPrompt.length());
-    setTextCursor(c);
+    m_TextEdit->setTextCursor(c);
 }
 
 // Solution for getting x and y position of the cursor. Found

@@ -2,8 +2,9 @@
 #define SAMAELCONSOLEWIDGET_H
 
 #include <QPlainTextEdit>
+#include "SamaelDockWidget.h"
 
-class TerminalWidget : public QPlainTextEdit
+class TerminalWidget : public SamaelDockWidget
 {
     Q_OBJECT
 
@@ -17,11 +18,10 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event);
 
-    /// disable handling of mouse events
-    void mousePressEvent(QMouseEvent *) { /* ignore */ }
-    void mouseDoubleClickEvent(QMouseEvent *) { /* ignore */ }
-    void mouseMoveEvent(QMouseEvent *) { /* ignore */ }
-    void mouseReleaseEvent(QMouseEvent *) { /* ignore */ }
+    void mousePressEvent(QMouseEvent*) { /* Ignore */ }
+    void mouseDoubleClickEvent(QMouseEvent*) { /* Ignore */ }
+    void mouseMoveEvent(QMouseEvent*) { /* Ignore */ }
+    void mouseReleaseEvent(QMouseEvent*) { /* Ignore */ }
 
 private:
     void onLeft(QKeyEvent *event);
@@ -41,6 +41,8 @@ private:
     QStack<QString> m_HistoryDown;
     bool m_InputLock;
     bool m_HistorySkip;
+    QPlainTextEdit* m_TextEdit;
+    QVBoxLayout* m_Layout;
 
 signals:
     void command(QString command); ///< fired on user input
