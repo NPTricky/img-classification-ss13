@@ -1,6 +1,20 @@
 #include "stdafx.h"
 #include "TreeNode.h"
 
+TreeNode::TreeNode( TreeNode* parent /*= nullptr*/ )
+    : m_Parent(parent)
+    , m_Data(QVector<QVariant>())
+{
+
+}
+
+TreeNode::TreeNode(const QVariant& data, TreeNode* parent /*= nullptr*/)
+    : m_Parent(parent)
+    , m_Data(QVector<QVariant>(1, data))
+{
+
+}
+
 TreeNode::TreeNode(const QVector<QVariant>& data, TreeNode* parent /*= nullptr*/)
     : m_Parent(parent)
     , m_Data(data)
@@ -13,9 +27,19 @@ TreeNode::~TreeNode()
     qDeleteAll(m_Children);
 }
 
+void TreeNode::insertChild( int row, TreeNode* child )
+{
+    m_Children.insert(row, child);
+}
+
 void TreeNode::appendChild(TreeNode* child)
 {
     m_Children.append(child);
+}
+
+void TreeNode::removeChild( int row )
+{
+    m_Children.remove(row);
 }
 
 TreeNode* TreeNode::getChild(int row)

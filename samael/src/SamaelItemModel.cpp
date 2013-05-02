@@ -6,9 +6,7 @@ SamaelItemModel::SamaelItemModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
     // initialize a root node
-    QVector<QVariant> vector;
-    vector << "ROOT";
-    m_RootNode = new TreeNode(vector);
+    m_RootNode = new TreeNode(QString("TREE ROOT"));
 
     QVector<QVariant> vector1;
     vector1 << "CHILD1_OF_ROOT";
@@ -122,17 +120,63 @@ QVariant SamaelItemModel::headerData( int section, Qt::Orientation orientation, 
 // Editability
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool SamaelItemModel::setData( const QModelIndex &index, const QVariant &value, int role /*= Qt::EditRole */ )
+bool SamaelItemModel::setData(const QModelIndex &index, const QVariant &value, int role /*= Qt::EditRole */)
 {
     throw std::exception("The method or operation is not implemented.");
 }
 
-bool SamaelItemModel::insertRows( int row, int count, const QModelIndex &parent /*= QModelIndex( ) */ )
+bool SamaelItemModel::insertRows(int row, int count, const QModelIndex &parent /*= QModelIndex( ) */)
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (!parent.isValid())
+        return false;
+
+    TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
+
+    beginInsertRows(parent, row, row + count - 1);
+    
+    for (int i = row; i < (row + count - 1); i++)
+        node->insertChild(i, new TreeNode(QVector<QVariant>(), node));
+
+    endInsertRows();
+
+    return true;
 }
 
-bool SamaelItemModel::removeRows( int row, int count, const QModelIndex &parent /*= QModelIndex( ) */ )
+bool SamaelItemModel::insertRows(int row, const QVector<QVariant>& data, const QModelIndex &parent /*= QModelIndex()*/)
 {
-    throw std::exception("The method or operation is not implemented.");
+    if (data.isEmpty() || !parent.isValid())
+        return false;
+
+    int count = data.size();
+    TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
+    QVector<QVariant>::const_iterator iter = data.cbegin();
+    
+    beginInsertRows(parent, row, row + count - 1);
+
+    for (int i = row; i < (row + count - 1); i++)
+    {
+        node->insertChild(i, new TreeNode((*iter), node));
+        ++iter;
+    }
+
+    endInsertRows();
+
+    return true;
+}
+
+bool SamaelItemModel::removeRows(int row, int count, const QModelIndex &parent /*= QModelIndex( ) */)
+{
+    if (!parent.isValid())
+        return false;
+
+    TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
+
+    beginRemoveRows(parent, row, row + count - 1);
+
+    for (int i = row; i < (row + count - 1); i++)
+        node->removeChild(i);
+
+    endRemoveRows();
+
+    return true;
 }

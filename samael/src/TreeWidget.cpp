@@ -4,7 +4,7 @@
 #include "Logger.h"
 
 TreeWidget::TreeWidget(QWidget *parent)
-    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Image Data Tree"))
+    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
 {
     // create the data model
     m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
