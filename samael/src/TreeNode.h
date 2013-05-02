@@ -9,6 +9,7 @@ public:
 
     void appendChild(TreeNode* child);
     TreeNode* getChild(int row);
+    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
     QVector<TreeNode*> getChildren();
 
     int childCount() const;

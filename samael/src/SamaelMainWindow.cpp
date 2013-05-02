@@ -36,12 +36,25 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     this->setMinimumSize(640,480);
 
+    createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
     createActions();   ///< creates QActions which represent specific user commands
     createMenus();     ///< populates the MenuBar (File, Edit, Help, ...) with QActions
-    createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
     createStatusBar(); ///< create and configure the QStatusBar at the bottom of the window
 
     QLOG_INFO() << "SamaelMainWindow - Ready!";
+}
+
+void SamaelMainWindow::createWidgets()
+{
+    // Viewer Widget
+    this->setCentralWidget(m_TerminalWidget); ///< viewer plz
+
+    // Terminal Widget
+    this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
+
+    // Tree Widget
+    m_TreeWidget = new TreeWidget(this);
+    this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
 }
 
 void SamaelMainWindow::createActions()
@@ -51,7 +64,7 @@ void SamaelMainWindow::createActions()
     m_OpenAction->setShortcut(Qt::CTRL + Qt::Key_O);
     m_OpenAction->setToolTip(tr("Open File(s)"));
     m_OpenAction->setStatusTip(tr("Open File(s)"));
-    connect(m_OpenAction, SIGNAL(triggered()), this, SLOT(open()));
+    connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(open()));
 
     // "Exit" Action
     m_ExitAction = new QAction(tr("&Exit"), this);
@@ -87,19 +100,6 @@ void SamaelMainWindow::createMenus()
         m_HelpMenu->addAction(m_AboutAction);
 }
 
-void SamaelMainWindow::createWidgets()
-{
-    // Viewer Widget
-    this->setCentralWidget(m_TerminalWidget); ///< viewer plz
-
-    // Terminal Widget
-    this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
-
-    // Tree Widget
-    m_TreeWidget = new TreeWidget(this);
-    this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
-}
-
 void SamaelMainWindow::createStatusBar()
 {
     m_StatusBarLabel = new QLabel(this);
@@ -113,52 +113,6 @@ void SamaelMainWindow::createStatusBar()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Slots
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SamaelMainWindow::open()
-{
-    QStringList files;
-
-    QString	currentFileType;
-    QFileInfo currentFileInfo;
-
-    this->statusBar()->showMessage(tr("Invoked - File >> Open"));
-
-    files = QFileDialog::getOpenFileNames(
-        this,
-        tr("Open File(s)"),
-        QDir::currentPath(),
-        tr("Image Types (*.bmp *.dib *.jpeg *.jpg *.jpe *.jp2 *.png *.pbm *.pgm *.ppm *.tiff *.tif);;" \
-           "Bitmap (*.bmp *.dib);;" \
-           "JPEG (*.jpeg *.jpg *.jpe *.jp2);;" \
-           "Portable Network Graphics (*.png);;" \
-           "Portable Image Format (*.pbm *.pgm *.ppm);;" \
-           "TIFF (*.tiff *.tif);;" \
-           "All Types (*.*)")
-    );
- 
-    if (files.isEmpty()) return;
-
-    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
-    {
-        currentFileInfo.setFile(*iter);
-
-        // print some general information
-        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
-            .arg(currentFileInfo.fileName())
-            .arg(currentFileInfo.suffix())
-            .arg(currentFileInfo.size())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("PATH: %1")
-            .arg(currentFileInfo.absolutePath())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
-            .arg(currentFileInfo.isReadable())
-            .arg(currentFileInfo.isWritable())
-            .toStdString().c_str();
-
-        // DO STUFF
-    }
-}
 
 void SamaelMainWindow::exit()
 {

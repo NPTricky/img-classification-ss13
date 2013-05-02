@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SamaelUtility.h"
 
-namespace SAM
+namespace SamaelUtility
 {
 
     QImage MatToQImage(const cv::Mat3b &src) 
@@ -51,4 +51,13 @@ namespace SAM
         return dest;
     }
 
-} // namespace SAM
+    template <typename T>
+    cv::Mat_<T> ResizeMatToWidth(const cv::Mat_<T> &src, const int width)
+    {
+        int rows = cvRound(src.rows/src.cols) * width;
+        cv::Mat_<T> dest(rows,width);
+        cv::resize(src, dest, dest.size(), 0, 0, cv::INTER_LINEAR);
+        return dest;
+    }
+
+} // namespace SamaelUtility

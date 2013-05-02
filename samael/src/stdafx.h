@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include <opencv2/opencv.hpp>
 
 // pragma warning macro hack
 #define STRINGIZE_HELPER(x) #x

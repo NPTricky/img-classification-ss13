@@ -9,6 +9,19 @@ SamaelItemModel::SamaelItemModel(QObject *parent)
     QVector<QVariant> vector;
     vector << "ROOT";
     m_RootNode = new TreeNode(vector);
+
+    QVector<QVariant> vector1;
+    vector1 << "CHILD1_OF_ROOT";
+    m_RootNode->appendChild(new TreeNode(vector1,m_RootNode));
+
+    QVector<QVariant> vector2;
+    vector2 << "CHILD2_OF_ROOT";
+    auto tmp = new TreeNode(vector2,m_RootNode);    
+    m_RootNode->appendChild(tmp);
+
+    QVector<QVariant> vector3;
+    vector3 << "TEST";
+    tmp->appendChild(new TreeNode(vector3,tmp));
 }
 
 SamaelItemModel::~SamaelItemModel()
@@ -45,11 +58,6 @@ QModelIndex SamaelItemModel::parent( const QModelIndex &child ) const
         return QModelIndex();
 
     return createIndex(tmpParent->row(), 0, tmpParent);
-}
-
-bool SamaelItemModel::hasChildren( const QModelIndex &parent /*= QModelIndex( ) */ ) const
-{
-    return parent.isValid() ? false : (rowCount() > 0);
 }
 
 int SamaelItemModel::rowCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const

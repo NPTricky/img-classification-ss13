@@ -22,9 +22,6 @@ namespace QLog
         void registerCreator(const QString& key, Creator<LogDestination>* creator);
         void create(const QString& key, const QString& groupName = "Default");
 
-        template <typename T>
-        void create(const QString& key, const QString& groupName, T* destination);
-
         void setLogLevel(Level level);
         Level Logger::getLogLevel();
 

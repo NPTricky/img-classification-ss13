@@ -29,3 +29,46 @@ TreeWidget::~TreeWidget()
 {
 
 }
+
+void TreeWidget::open()
+{
+    QStringList files;
+
+    QFileInfo info;
+
+    files = QFileDialog::getOpenFileNames(
+        this,
+        tr("Open File(s)"),
+        QDir::currentPath(),
+        tr("Image Types (*.bmp *.dib *.jpeg *.jpg *.jpe *.jp2 *.png *.pbm *.pgm *.ppm *.tiff *.tif);;" \
+        "Bitmap (*.bmp *.dib);;" \
+        "JPEG (*.jpeg *.jpg *.jpe *.jp2);;" \
+        "Portable Network Graphics (*.png);;" \
+        "Portable Image Format (*.pbm *.pgm *.ppm);;" \
+        "TIFF (*.tiff *.tif);;" \
+        "All Types (*.*)")
+        );
+
+    if (files.isEmpty()) return;
+
+    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
+    {
+        info.setFile(*iter);
+
+        // print some general information
+        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
+            .arg(info.fileName())
+            .arg(info.suffix())
+            .arg(info.size())
+            .toStdString().c_str();
+        QLOG_INFO() << QString("PATH: %1")
+            .arg(info.absolutePath())
+            .toStdString().c_str();
+        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
+            .arg(info.isReadable())
+            .arg(info.isWritable())
+            .toStdString().c_str();
+
+        // DO STUFF
+    }
+}

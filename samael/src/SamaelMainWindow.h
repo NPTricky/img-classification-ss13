@@ -48,7 +48,6 @@ private:
     QVBoxLayout *m_DockBetaVBoxLayout;
 
 public slots:
-    void open();
     void exit();
     void about();
 };

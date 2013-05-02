@@ -11,6 +11,7 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
     
+    // script system? anyone? the entry point is over here!
     connect(m_Terminal, SIGNAL(command(QString)), this, SLOT(result(QString)));
 
     // configure the layout of this widget
@@ -29,7 +30,7 @@ TerminalWidget::~TerminalWidget()
 
 void TerminalWidget::keyPressEvent(QKeyEvent *event)
 {
-    ((QObject*)(m_Terminal))->event(event);
+    static_cast<QObject*>(m_Terminal)->event(event);
 }
 
 void TerminalWidget::result(QString result)

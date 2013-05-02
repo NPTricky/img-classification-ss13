@@ -15,11 +15,6 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event);
 
-    void mousePressEvent(QMouseEvent*) { /* Ignore */ }
-    void mouseDoubleClickEvent(QMouseEvent*) { /* Ignore */ }
-    void mouseMoveEvent(QMouseEvent*) { /* Ignore */ }
-    void mouseReleaseEvent(QMouseEvent*) { /* Ignore */ }
-
 private:
     Terminal* m_Terminal;
     QVBoxLayout* m_Layout;

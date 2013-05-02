@@ -16,7 +16,6 @@ public:
     /// basic model
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &child) const;
-    virtual bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
