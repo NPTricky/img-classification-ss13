@@ -9,6 +9,8 @@ Terminal::Terminal(QWidget *parent)
 {
     m_HistoryUp.clear();
     m_HistoryDown.clear();
+
+    clearLine();
 }
 
 Terminal::~Terminal()
@@ -94,13 +96,20 @@ void Terminal::result(QString result)
     m_InputLock = false;
 }
 
-#pragma WARNING("log() method would need to save the current line (if it isn't a log), delete the current line, print the log and bring back the saved line for clean visuals. for now its ok.")
-// same as result but without unlocking
 void Terminal::log(QString message)
 {   
-    //auto cmd = getCommand();
-    //clearLine();
-    appendPlainText(message);
+    QTextCursor c = textCursor();
+    c.select(QTextCursor::LineUnderCursor);
+    QString text = c.selectedText();
+
+    if (text.startsWith(m_UserPrompt)) 
+    {
+        c.removeSelectedText();
+        append(message);
+        c.insertText(text);
+    }
+    else { append(message); }
+
     ensureCursorVisible();
 }
 

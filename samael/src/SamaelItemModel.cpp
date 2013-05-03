@@ -135,7 +135,7 @@ bool SamaelItemModel::insertRows(int row, int count, const QModelIndex &parent /
     beginInsertRows(parent, row, row + count - 1);
     
     for (int i = row; i < (row + count - 1); i++)
-        node->insertChild(i, new TreeNode(QVector<QVariant>(), node));
+        node->insertChild(i, new TreeNode(node));
 
     endInsertRows();
 

@@ -36,11 +36,9 @@ void SamaelApplication::initialize()
     m_Logger.setLogLevel(QLog::TraceLevel);
 
     // warm up the logger...
-    QLOG_INFO() << "\n"
-                << "\n" 
-                << "     As-Salamu Alaykum!" << "\n"
-                << "     Excelling in Image Classification since 2013." << "\n"
-                << "     Copyright: Sarah Pauksch, Christoph Laemmerhirt, Tim Benedict Jagla" << "\n";
+    QLOG_INFO() << "As-Salamu Alaykum!";
+    QLOG_INFO() << "Excelling in Image Classification since 2013.";
+    QLOG_INFO() << "Copyright: Sarah Pauksch, Christoph Laemmerhirt, Tim Benedict Jagla";
 
     QLOG_INFO()  << "Check Logger Functionality...";
     QLOG_TRACE() << "LevelToText(0) >" << QLog::LevelToText(QLog::TraceLevel) << "| ID:" << static_cast<int>(QLog::TraceLevel);
