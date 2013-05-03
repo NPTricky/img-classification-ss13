@@ -14,9 +14,18 @@ public:
     ~TreeWidget();
 
 private:
-    SamaelItemModel* m_SamaelItemModel;
+    void createActions();
+
+    // QActions
+    QAction *m_ExpandAction;
+    QAction *m_CollapseAction;
+
+    // QWidgets
     QTreeView* m_TreeView;
     QVBoxLayout* m_Layout;
+    QToolBar* m_ToolBar;
+
+    SamaelItemModel* m_SamaelItemModel;
 
 public slots:
     void open();

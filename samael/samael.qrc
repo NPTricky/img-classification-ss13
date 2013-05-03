@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="SamaelMainWindow">
+    <qresource prefix="/">
+        <file>content/icons/treewidget_collapse.svg</file>
+        <file>content/icons/treewidget_expand.svg</file>
     </qresource>
 </RCC>

@@ -17,6 +17,7 @@ int runApplication(int argc, char * argv[])
 
     // meta information for the executable
     a.setApplicationName("Samael");
+    a.setApplicationVersion("0.2.5");
     a.setOrganizationName("AG Bildverarbeitung");
     a.setOrganizationDomain("http://wwwisg.cs.uni-magdeburg.de/bv/index.php?article_id=14");
 

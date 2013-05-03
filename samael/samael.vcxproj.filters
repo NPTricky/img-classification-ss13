@@ -226,6 +226,9 @@
     <ClInclude Include="src\Samael.h">
       <Filter>Header Files\mvc</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">
