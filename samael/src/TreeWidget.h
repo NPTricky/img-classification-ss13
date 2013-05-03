@@ -14,6 +14,7 @@ public:
     ~TreeWidget();
 
 private:
+    void load(QStringList files);
     void createActions();
 
     // QActions

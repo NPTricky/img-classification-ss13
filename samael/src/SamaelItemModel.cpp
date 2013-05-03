@@ -32,6 +32,25 @@ SamaelItemModel::~SamaelItemModel()
 // Item Model Basics
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Root Item (Empty)
+// |
+// |--- Adam (row = 0)
+// |   | 
+// |   |--- ChildA (row = 0)
+// |   |    | 
+// |   |    |--- ChildOfA (row = 0)
+// |   |
+// |   |--- ChildB (row = 1)
+// |   |
+// |   |--- ChildC (row = 2)
+// |
+// |--- Eva (row = 1)
+// .
+// .
+// 
+// Row Count = Children - Number of Child Nodes of a Node
+// Column Count = Data - Number of QVariant within the QVector<QVariant> of a Node
+
 QModelIndex SamaelItemModel::index( int row, int column, const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
     if (!hasIndex(row,column,parent))
@@ -149,15 +168,11 @@ bool SamaelItemModel::insertRows(int row, const QVector<QVariant>& data, const Q
 
     int count = data.size();
     TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
-    QVector<QVariant>::const_iterator iter = data.cbegin();
     
     beginInsertRows(parent, row, row + count - 1);
 
     for (int i = row; i < (row + count - 1); i++)
-    {
-        node->insertChild(i, new TreeNode((*iter), node));
-        ++iter;
-    }
+        node->insertChild(i, new TreeNode(data[i-row], node));
 
     endInsertRows();
 
@@ -179,4 +194,102 @@ bool SamaelItemModel::removeRows(int row, int count, const QModelIndex &parent /
     endRemoveRows();
 
     return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Search
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+QModelIndexList SamaelItemModel::match(const QModelIndex &start, int role, const QVariant &value, int hits /*= 1*/, Qt::MatchFlags flags /*= Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap ) */) const
+{
+    // Note: 
+    // The default implementation of this function only searches columns.
+    // Reimplement this function to include a different search behavior.
+
+    throw std::exception("The method or operation is not implemented.");
+
+    QModelIndexList result;
+
+    uint paramMatchType = flags & 0x0F;
+    Qt::CaseSensitivity paramCaseSensitvity = flags & Qt::MatchCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    bool paramMatchRecursive = flags & Qt::MatchRecursive;
+    bool paramMatchWrap = flags & Qt::MatchWrap;
+    bool paramAllHits = (hits == -1);
+
+    QModelIndex p = parent(start);
+    int from = start.row();
+    int to = rowCount(p);
+
+    QString text; ///< only convert to a string if it is needed
+
+    for (int i = 0; (!paramMatchWrap && i < 1) || (paramMatchWrap && i < 2); ++i) ///< iterates twice if wrapping and once if not
+    {
+        for (int r = from; (r < to) && (paramAllHits || result.count() < hits); ++r) ///< takes care to meet the hit count
+        {
+            QModelIndex idx = index(r, start.column(), p);
+
+            if (!idx.isValid())
+                continue;
+
+            QVariant v = data(idx, role);
+
+            if (paramMatchType == Qt::MatchExactly) ///< variant based matching
+            { 
+                if (value == v)
+                    result.append(idx);
+            } 
+            else ///< string based matching
+            {
+                if (text.isEmpty()) ///< lazy conversion
+                    text = value.toString();
+
+                QString t = v.toString();
+
+                switch (paramMatchType) 
+                {
+                case Qt::MatchRegExp:
+                    if (QRegExp(text, paramCaseSensitvity).exactMatch(t))
+                        result.append(idx);
+                    break;
+                case Qt::MatchWildcard:
+                    if (QRegExp(text, paramCaseSensitvity, QRegExp::Wildcard).exactMatch(t))
+                        result.append(idx);
+                    break;
+                case Qt::MatchStartsWith:
+                    if (t.startsWith(text, paramCaseSensitvity))
+                        result.append(idx);
+                    break;
+                case Qt::MatchEndsWith:
+                    if (t.endsWith(text, paramCaseSensitvity))
+                        result.append(idx);
+                    break;
+                case Qt::MatchFixedString:
+                    if (t.compare(text, paramCaseSensitvity) == 0)
+                        result.append(idx);
+                    break;
+                case Qt::MatchContains:
+                default:
+                    if (t.contains(text, paramCaseSensitvity))
+                        result.append(idx);
+                }
+            }
+
+            if (paramMatchRecursive && hasChildren(idx)) ///< search the hierarchy
+            {
+                result += match \
+                ( \
+                    index( 0, idx.column(), idx ), \
+                    role, \
+                    ( text.isEmpty() ? value : text ), \
+                    ( paramAllHits ? -1 : hits - result.count() ), \
+                    flags \
+                );
+            }
+        }
+        
+        from = 0; ///< prepare for the next iteration
+        to = start.row();
+    }
+
+    return result;
 }

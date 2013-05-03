@@ -39,6 +39,35 @@ TreeWidget::~TreeWidget()
 
 }
 
+void TreeWidget::load(QStringList files)
+{
+    if (files.isEmpty()) return;
+
+    QFileInfo info;
+
+    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
+    {
+        info.setFile(*iter);
+
+        // print some general information
+        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
+            .arg(info.fileName())
+            .arg(info.suffix())
+            .arg(info.size())
+            .toStdString().c_str();
+        QLOG_INFO() << QString("PATH: %1")
+            .arg(info.absolutePath())
+            .toStdString().c_str();
+        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
+            .arg(info.isReadable())
+            .arg(info.isWritable())
+            .toStdString().c_str();
+
+        // DO STUFF
+        //m_SamaelItemModel->insertRows()
+    }
+}
+
 void TreeWidget::createActions()
 {
     // "Expand" Action
@@ -74,11 +103,7 @@ void TreeWidget::createActions()
 
 void TreeWidget::open()
 {
-    QStringList files;
-
-    QFileInfo info;
-
-    files = QFileDialog::getOpenFileNames(
+    QStringList files = QFileDialog::getOpenFileNames(
         this,
         tr("Open File(s)"),
         QDir::currentPath(),
@@ -91,26 +116,5 @@ void TreeWidget::open()
         "All Types (*.*)")
         );
 
-    if (files.isEmpty()) return;
-
-    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
-    {
-        info.setFile(*iter);
-
-        // print some general information
-        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
-            .arg(info.fileName())
-            .arg(info.suffix())
-            .arg(info.size())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("PATH: %1")
-            .arg(info.absolutePath())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
-            .arg(info.isReadable())
-            .arg(info.isWritable())
-            .toStdString().c_str();
-
-        // DO STUFF
-    }
+    load(files);
 }
