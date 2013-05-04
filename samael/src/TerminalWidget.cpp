@@ -2,6 +2,7 @@
 #include "TerminalWidget.h"
 #include "Logger.h"
 #include "Terminal.h"
+#include "SamaelHighlighter.h"
 
 TerminalWidget::TerminalWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TerminalWidget"), QStringLiteral("Terminal"))
@@ -10,7 +11,11 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     m_Terminal = new Terminal(parent);
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
-    
+
+    // configure the text highlighter
+    m_Highlighter = new SamaelHighlighter(m_Terminal->document());
+    m_Highlighter->setContext(SamaelHighlighter::CONTEXT_TERMINAL);
+
     // script system? anyone? the entry point is over here!
     connect(m_Terminal, SIGNAL(command(QString)), this, SLOT(result(QString)));
 

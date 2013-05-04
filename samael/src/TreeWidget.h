@@ -30,8 +30,8 @@ private:
     SamaelItemModel* m_SamaelItemModel;
 
 public slots:
-    void open();
-    void openFolder();
+    void openFiles();
+    void openDirectories();
 };
 
 #endif // TREEWIDGET_H

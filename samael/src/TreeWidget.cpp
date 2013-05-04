@@ -111,7 +111,7 @@ void TreeWidget::createActions()
 // Slots
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TreeWidget::open()
+void TreeWidget::openFiles()
 {
     QStringList files = QFileDialog::getOpenFileNames(
         this,
@@ -129,7 +129,7 @@ void TreeWidget::open()
     load(files);
 }
 
-void TreeWidget::openFolder()
+void TreeWidget::openDirectories()
 {
     // configure dialog
     QFileDialog* dialog = new QFileDialog(

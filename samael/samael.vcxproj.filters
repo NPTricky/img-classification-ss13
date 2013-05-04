@@ -173,6 +173,15 @@
     <ClCompile Include="src\Terminal.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\SamaelHighlighter.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SamaelHighlighter.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SamaelHighlighter.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -256,6 +265,9 @@
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
     <CustomBuild Include="src\Terminal.h">
+      <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\SamaelHighlighter.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>

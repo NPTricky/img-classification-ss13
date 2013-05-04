@@ -3,6 +3,7 @@
 
 #include "SamaelDockWidget.h"
 class Terminal; 
+class SamaelHighlighter;
 
 class TerminalWidget : public SamaelDockWidget
 {
@@ -18,6 +19,7 @@ protected:
 private:
     Terminal* m_Terminal;
     QVBoxLayout* m_Layout;
+    SamaelHighlighter* m_Highlighter;
 
 public slots:
     void result(QString result); ///< displays the result of a command within the terminal
