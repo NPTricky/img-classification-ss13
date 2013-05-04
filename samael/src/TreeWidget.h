@@ -14,7 +14,8 @@ public:
     ~TreeWidget();
 
 private:
-    void load(QStringList files);
+    void load(QString file, const QModelIndex &parent = QModelIndex());
+    void load(QStringList files, const QModelIndex &parent = QModelIndex());
     void createActions();
 
     // QActions
@@ -30,6 +31,7 @@ private:
 
 public slots:
     void open();
+    void openFolder();
 };
 
 #endif // TREEWIDGET_H

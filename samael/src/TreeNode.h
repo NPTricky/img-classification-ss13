@@ -16,8 +16,8 @@ public:
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
     QVector<TreeNode*> getChildren();
 
-    int childCount() const;
-    int columnCount() const;
+    int rowCount() const; ///< child count
+    int columnCount() const; ///< data count
     
     int row() const;
     QVariant data(int column) const;

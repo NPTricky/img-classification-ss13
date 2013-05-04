@@ -1,25 +1,30 @@
 #include "stdafx.h"
 #include "SamaelItemModel.h"
 #include "TreeNode.h"
+#include "SamaelImage.h"
 
 SamaelItemModel::SamaelItemModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
     // initialize a root node
-    m_RootNode = new TreeNode(QString("TREE ROOT"));
+    m_RootNode = new TreeNode("TREE ROOT");
+#pragma WARNING(DELETE: Test Code!)
+    auto tmp1 = new TreeNode("CHILD1_OF_ROOT",m_RootNode);
+    m_RootNode->appendChild(tmp1);
+    tmp1->appendChild(new TreeNode("TESTA",tmp1));
+    tmp1->appendChild(new TreeNode("TESTB",tmp1));
 
-    QVector<QVariant> vector1;
-    vector1 << "CHILD1_OF_ROOT";
-    m_RootNode->appendChild(new TreeNode(vector1,m_RootNode));
+    auto tmp2 = new TreeNode("CHILD2_OF_ROOT",m_RootNode);    
+    m_RootNode->appendChild(tmp2);
+    tmp2->appendChild(new TreeNode("TEST1",tmp2));
+    tmp2->appendChild(new TreeNode("TEST2",tmp2));
+    tmp2->appendChild(new TreeNode("TEST3",tmp2));
 
-    QVector<QVariant> vector2;
-    vector2 << "CHILD2_OF_ROOT";
-    auto tmp = new TreeNode(vector2,m_RootNode);    
-    m_RootNode->appendChild(tmp);
-
-    QVector<QVariant> vector3;
-    vector3 << "TEST";
-    tmp->appendChild(new TreeNode(vector3,tmp));
+    auto tmp3 = new TreeNode("TEST4",tmp2);    
+    tmp2->appendChild(tmp3);
+    tmp3->appendChild(new TreeNode("TESTX",tmp3));
+    tmp3->appendChild(new TreeNode("TESTY",tmp3));
+    tmp3->appendChild(new TreeNode("TESTZ",tmp3));
 }
 
 SamaelItemModel::~SamaelItemModel()
@@ -38,7 +43,7 @@ SamaelItemModel::~SamaelItemModel()
 // |   | 
 // |   |--- ChildA (row = 0)
 // |   |    | 
-// |   |    |--- ChildOfA (row = 0)
+// |   |    |--- ChildX (row = 0)
 // |   |
 // |   |--- ChildB (row = 1)
 // |   |
@@ -85,12 +90,17 @@ int SamaelItemModel::rowCount( const QModelIndex &parent /*= QModelIndex( ) */ )
     TreeNode* tmpParent;
     tmpParent = parent.isValid() ? static_cast<TreeNode*>(parent.internalPointer()) : m_RootNode;
 
-    return tmpParent->childCount();
+    return tmpParent->rowCount();
 }
 
 int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) */ ) const
 {
     return parent.isValid() ? static_cast<TreeNode*>(parent.internalPointer())->columnCount() : m_RootNode->columnCount();
+}
+
+bool SamaelItemModel::hasChildren( const QModelIndex &parent /*= QModelIndex( ) */ ) const
+{
+    return (rowCount(parent) > 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +109,13 @@ int SamaelItemModel::columnCount( const QModelIndex &parent /*= QModelIndex( ) *
 
 Qt::ItemFlags SamaelItemModel::flags( const QModelIndex &index ) const
 {
-    return QAbstractItemModel::flags(index);
+    if (!index.isValid())
+        return 0;
+
+    TreeNode* node = static_cast<TreeNode*>(index.internalPointer());
+    SamaelImage image = qvariant_cast<SamaelImage>(node->data(index.column()));
+#pragma WARNING(TODO: Aw... Hell Naw!)
+    return QAbstractItemModel::flags(index); ///< Qt::ItemIsSelectable | Qt::ItemIsEnabled
 }
 
 QVariant SamaelItemModel::data( const QModelIndex &index, int role /*= Qt::DisplayRole */ ) const
@@ -107,24 +123,27 @@ QVariant SamaelItemModel::data( const QModelIndex &index, int role /*= Qt::Displ
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
+    TreeNode* node = static_cast<TreeNode*>(index.internalPointer());
+    SamaelImage image = qvariant_cast<SamaelImage>(node->data(index.column()));
+#pragma WARNING(TODO: Aw... Hell Naw!)
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        return node->data(index.column());
+        break;
+    case Qt::ToolTipRole:
         return QVariant();
-
-    //switch (role)
-    //{
-    //case Qt::DisplayRole:
-    //    break;
-    //case Qt::ToolTipRole:
-    //    break;
-    //case Qt::AccessibleTextRole:
-    //    break;
-    //case Qt::AccessibleDescriptionRole:
-    //    break;
-    //default:
-    //    break;
-    //}
-    
-    return static_cast<TreeNode*>(index.internalPointer())->data(index.column());
+        break;
+    case Qt::AccessibleTextRole:
+        return QVariant();
+        break;
+    case Qt::AccessibleDescriptionRole:
+        return QVariant();
+        break;
+    default:
+        return QVariant();
+        break;
+    }
 }
 
 QVariant SamaelItemModel::headerData( int section, Qt::Orientation orientation, int role /*= Qt::DisplayRole */ ) const
@@ -168,7 +187,7 @@ bool SamaelItemModel::insertRows(int row, const QVector<QVariant>& data, const Q
 
     int count = data.size();
     TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
-    
+#pragma WARNING(TODO: Aw... Hell Naw!)
     beginInsertRows(parent, row, row + count - 1);
 
     for (int i = row; i < (row + count - 1); i++)
@@ -202,12 +221,6 @@ bool SamaelItemModel::removeRows(int row, int count, const QModelIndex &parent /
 
 QModelIndexList SamaelItemModel::match(const QModelIndex &start, int role, const QVariant &value, int hits /*= 1*/, Qt::MatchFlags flags /*= Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap ) */) const
 {
-    // Note: 
-    // The default implementation of this function only searches columns.
-    // Reimplement this function to include a different search behavior.
-
-    throw std::exception("The method or operation is not implemented.");
-
     QModelIndexList result;
 
     uint paramMatchType = flags & 0x0F;
@@ -245,7 +258,7 @@ QModelIndexList SamaelItemModel::match(const QModelIndex &start, int role, const
 
                 QString t = v.toString();
 
-                switch (paramMatchType) 
+                switch (paramMatchType) ///< string based matching by match type
                 {
                 case Qt::MatchRegExp:
                     if (QRegExp(text, paramCaseSensitvity).exactMatch(t))

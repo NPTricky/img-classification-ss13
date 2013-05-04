@@ -49,7 +49,7 @@ TreeNode* TreeNode::getChild(int row)
 
 bool TreeNode::hasChildren(const QModelIndex &parent /*= QModelIndex( ) */) const
 {
-    return parent.isValid() ? false : (childCount() > 0);
+    return parent.isValid() ? false : (rowCount() > 0);
 }
 
 QVector<TreeNode*> TreeNode::getChildren()
@@ -57,7 +57,7 @@ QVector<TreeNode*> TreeNode::getChildren()
     return m_Children;
 }
 
-int TreeNode::childCount() const
+int TreeNode::rowCount() const
 {
     return m_Children.size();
 }

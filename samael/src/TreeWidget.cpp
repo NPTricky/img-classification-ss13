@@ -2,6 +2,7 @@
 #include "TreeWidget.h"
 #include "SamaelItemModel.h"
 #include "Logger.h"
+#include "SamaelImage.h"
 
 TreeWidget::TreeWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
@@ -39,32 +40,41 @@ TreeWidget::~TreeWidget()
 
 }
 
-void TreeWidget::load(QStringList files)
+void TreeWidget::load(QString file, const QModelIndex &parent)
+{
+    if (file.isEmpty())
+        return;
+
+    QFileInfo info = QFileInfo(file);
+
+    // print some general information
+    QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
+        .arg(info.fileName())
+        .arg(info.suffix())
+        .arg(info.size())
+        .toStdString().c_str();
+    QLOG_INFO() << QString("PATH: %1")
+        .arg(info.absolutePath())
+        .toStdString().c_str();
+    QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
+        .arg(info.isReadable())
+        .arg(info.isWritable())
+        .toStdString().c_str();
+
+    // do the loading
+    QVector<QVariant> data;
+    //data.append(QVariant::fromValue(SamaelNodeMetadata()));
+    //data.append(QVariant::fromValue(SamaelImage()));
+    //m_SamaelItemModel->insertRow(parent.row(),data,parent);
+}
+
+void TreeWidget::load(QStringList files, const QModelIndex &parent)
 {
     if (files.isEmpty()) return;
 
-    QFileInfo info;
-
     for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
     {
-        info.setFile(*iter);
-
-        // print some general information
-        QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
-            .arg(info.fileName())
-            .arg(info.suffix())
-            .arg(info.size())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("PATH: %1")
-            .arg(info.absolutePath())
-            .toStdString().c_str();
-        QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
-            .arg(info.isReadable())
-            .arg(info.isWritable())
-            .toStdString().c_str();
-
-        // DO STUFF
-        //m_SamaelItemModel->insertRows()
+        load(*iter, parent);
     }
 }
 
@@ -118,3 +128,37 @@ void TreeWidget::open()
 
     load(files);
 }
+
+void TreeWidget::openFolder()
+{
+    // configure dialog
+    QFileDialog* dialog = new QFileDialog(
+        this,
+        tr("Open Folder(s)"),
+        QDir::currentPath()
+        );
+    dialog->setFileMode(QFileDialog::Directory);
+    dialog->setOption(QFileDialog::ShowDirsOnly);
+
+    // configure tree view
+    QTreeView* tree = dialog->findChild<QTreeView*>();
+    tree->setRootIsDecorated(true);
+    tree->setItemsExpandable(true);
+    
+    int result = dialog->exec();
+
+    if (result)
+    {
+        QStringList directories = dialog->selectedFiles();
+
+        // DO STUFF
+    }
+}
+
+//// this function stores the absolute paths of each file in a QVector
+//void findFilesRecursively(QDir rootDir) {
+//    QDirIterator it(rootDir, QDirIterator::Subdirectories);
+//    while(it.hasNext()) {
+//        filesStack->push(it.next());
+//    }
+//}

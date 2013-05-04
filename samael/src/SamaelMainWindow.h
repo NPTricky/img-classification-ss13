@@ -25,6 +25,7 @@ private:
 
     // QActions
     QAction *m_OpenAction;
+    QAction *m_OpenFolderAction;
     QAction *m_ExitAction;
     QAction *m_AboutAction;
 
