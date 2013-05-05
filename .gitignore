@@ -20,6 +20,7 @@
 *.exe
 *.ilk
 *.pdb
+*.psd
 /build-x64/log/*.txt
 
 # Custom Ignores - Folders
