@@ -185,23 +185,23 @@
     <ClCompile Include="src\ViewerWidget.cpp">
       <Filter>Source Files\gui</Filter>
     </ClCompile>
-    <ClCompile Include="src\VisualizerWidget.cpp">
-      <Filter>Source Files\gui\base</Filter>
-    </ClCompile>
     <ClCompile Include="src\VisualizationManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_VisualizationManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_VisualizationManager.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_VisualizationManager.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_VisualizerWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_VisualizerWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_VisualizerWidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
+    <ClCompile Include="src\VisualizerWidget.cpp">
+      <Filter>Source Files\gui\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
