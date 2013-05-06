@@ -8,6 +8,8 @@
 #include "SamaelItemModel.h"
 #include "SamaelImage.h"
 #include "TreeWidget.h"
+#include "VisualizationManager.h"
+#include "ViewerWidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -21,7 +23,8 @@ SamaelMainWindow::SamaelMainWindow(QWidget *parent)
 
 SamaelMainWindow::~SamaelMainWindow()
 {
-
+  VisualizationManager *visualizationManager = VisualizationManager::getInstance();
+  visualizationManager->disconnectWidget(m_viewerWidget);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +34,12 @@ SamaelMainWindow::~SamaelMainWindow()
 void SamaelMainWindow::initialize(TerminalWidget* terminal)
 {
     qRegisterMetaType<SamaelImage>("SamaelImage");
+
+    VisualizationManager *visualizationManager = VisualizationManager::getInstance();
+    m_viewerWidget = new ViewerWidget(this);
+
+    visualizationManager->connectWidget(m_viewerWidget);
+    visualizationManager->addBoundingBox(m_viewerWidget, new QRectF(QPointF(0, 0), QPointF(100, 100)));
 
     m_TerminalWidget = terminal;
 
@@ -47,7 +56,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 void SamaelMainWindow::createWidgets()
 {
     // Viewer Widget
-    this->setCentralWidget(m_TerminalWidget); ///< viewer plz
+    this->setCentralWidget(m_viewerWidget); ///< viewer plz
 
     // Terminal Widget
     this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
