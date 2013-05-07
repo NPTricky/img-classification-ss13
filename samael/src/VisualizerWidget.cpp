@@ -9,6 +9,18 @@ VisualizerWidget::~VisualizerWidget()
 {
 }
 
+void VisualizerWidget::initializeGL()
+{
+}
+
+void VisualizerWidget::updateGL()
+{
+}
+
+void VisualizerWidget::paintGL()
+{
+}
+
 void VisualizerWidget::paintEvent(QPaintEvent *paintEvent)
 {
   emit doPaint(this);

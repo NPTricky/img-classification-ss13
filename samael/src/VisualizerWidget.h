@@ -12,6 +12,12 @@ public:
   VisualizerWidget(QWidget *parent = nullptr);
   virtual ~VisualizerWidget() = 0;
 
+  void initializeGL();
+
+  void updateGL();
+
+  void paintGL();
+
   void paintEvent(QPaintEvent *paintEvent);
 
 signals:

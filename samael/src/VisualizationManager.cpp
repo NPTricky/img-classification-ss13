@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "VisualizationManager.h"
 #include "VisualizerWidget.h"
+#include "VisualizationManager.h"
 
 VisualizationManager::VisualizationManager()
 {

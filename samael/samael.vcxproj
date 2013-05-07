@@ -31,12 +31,14 @@
     <Import Project="OpenCV-2.4.5-Debug.props" />
     <Import Project="TBB-4.1U3-Debug.props" />
     <Import Project="ICU-5-Debug.props" />
+    <Import Project="GLEW-1.9.0-Debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="OpenCV-2.4.5-Release.props" />
     <Import Project="TBB-4.1U3-Release.props" />
     <Import Project="ICU-5-Release.props" />
+    <Import Project="GLEW-1.9.0-Release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
