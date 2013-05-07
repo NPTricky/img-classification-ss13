@@ -1,9 +1,9 @@
 #ifndef VISUALIZERWIDGET_H_
 #define VISUALIZERWIDGET_H_
 
-#include <QWidget>
+#include <QGLWidget>
 
-class VisualizerWidget : public QWidget
+class VisualizerWidget : public QGLWidget
 {
   Q_OBJECT
 
