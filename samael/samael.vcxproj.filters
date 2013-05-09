@@ -185,9 +185,6 @@
     <ClCompile Include="src\ViewerWidget.cpp">
       <Filter>Source Files\gui</Filter>
     </ClCompile>
-    <ClCompile Include="src\VisualizationManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_VisualizationManager.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -202,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="src\VisualizerWidget.cpp">
       <Filter>Source Files\gui\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThumbnailIconProvider.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VisualizationManager.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +265,9 @@
     <ClInclude Include="src\ViewerWidget.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\ThumbnailIconProvider.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">
@@ -294,11 +300,11 @@
     <CustomBuild Include="src\SamaelHighlighter.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\VisualizationManager.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\VisualizerWidget.h">
       <Filter>Header Files\gui\base</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\VisualizationManager.h">
+      <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

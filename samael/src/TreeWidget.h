@@ -22,7 +22,6 @@ private:
     void createActions();
 
     // QActions
-    QAction *m_ExpandAction;
     QAction *m_CollapseAction;
 
     // QWidgets

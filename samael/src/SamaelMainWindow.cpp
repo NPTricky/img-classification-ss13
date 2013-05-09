@@ -35,13 +35,13 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 {
     qRegisterMetaType<SamaelImage>("SamaelImage");
 
+    m_TerminalWidget = terminal;
+
     VisualizationManager *visualizationManager = VisualizationManager::getInstance();
     m_viewerWidget = new ViewerWidget(this);
 
     visualizationManager->connectWidget(m_viewerWidget);
     visualizationManager->addBoundingBox(m_viewerWidget, new QRectF(QPointF(0, 0), QPointF(100, 100)));
-
-    m_TerminalWidget = terminal;
 
     this->setMinimumSize(640,480);
 
@@ -56,10 +56,10 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 void SamaelMainWindow::createWidgets()
 {
     // Viewer Widget
-    this->setCentralWidget(m_viewerWidget); ///< viewer plz
+    this->setCentralWidget(m_viewerWidget);
 
     // Terminal Widget
-    this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
+    this->addDockWidget(Qt::BottomDockWidgetArea,m_TerminalWidget);
 
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);

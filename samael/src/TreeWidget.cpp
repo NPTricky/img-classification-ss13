@@ -11,6 +11,8 @@
 TreeWidget::TreeWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
 {
+    this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
     // create the data model
     m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
     m_FileSystemModel->setRootPath(QDir::currentPath());
@@ -40,7 +42,6 @@ TreeWidget::TreeWidget(QWidget *parent)
 
     // configure the toolbar
     m_ToolBar = new QToolBar(m_ContentWidget);
-    m_ToolBar->addAction(m_ExpandAction);
     m_ToolBar->addAction(m_CollapseAction);
 
     // configure the layout of this widget
@@ -139,19 +140,6 @@ void TreeWidget::load(QString file, const QModelIndex &parent)
 
 void TreeWidget::createActions()
 {
-    // "Expand" Action
-    m_ExpandAction = new QAction(tr("&Expand Tree"), this);
-    m_ExpandAction->setObjectName(QStringLiteral("m_ExpandAction"));
-    m_ExpandAction->setShortcut(Qt::CTRL + Qt::Key_O);
-    m_ExpandAction->setText(tr("Expand Tree"));
-    m_ExpandAction->setToolTip(tr("Expand Tree"));
-    m_ExpandAction->setStatusTip(tr("Expand Tree"));
-    connect(m_ExpandAction, SIGNAL(triggered()), m_TreeView, SLOT(expandAll()));
-
-    QIcon iconExpand;
-    iconExpand.addFile(":/content/icons/treewidget_expand.svg", QSize(), QIcon::Normal, QIcon::Off);
-    m_ExpandAction->setIcon(iconExpand);
-
     // "Collapse" Action
     m_CollapseAction = new QAction(tr("&Collapse Tree"), this);
     m_CollapseAction->setObjectName(QStringLiteral("m_CollapseAction"));

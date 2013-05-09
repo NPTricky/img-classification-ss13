@@ -7,11 +7,13 @@
 TerminalWidget::TerminalWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TerminalWidget"), QStringLiteral("Terminal"))
 {
+    this->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
     // configure the text edit
     m_Terminal = new Terminal(parent);
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
-    m_Terminal->setMaximumBlockCount(1000);
+    m_Terminal->setMaximumBlockCount(100);
 
     // configure the text highlighter
     m_Highlighter = new SamaelHighlighter(m_Terminal->document());
