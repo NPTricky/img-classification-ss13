@@ -203,9 +203,6 @@
     <ClCompile Include="src\VisualizerWidget.cpp">
       <Filter>Source Files\gui\base</Filter>
     </ClCompile>
-    <ClCompile Include="src\SamaelNodeMetadata.cpp">
-      <Filter>Source Files\data</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -264,9 +261,6 @@
     </ClInclude>
     <ClInclude Include="src\ViewerWidget.h">
       <Filter>Header Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SamaelNodeMetadata.h">
-      <Filter>Header Files\data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

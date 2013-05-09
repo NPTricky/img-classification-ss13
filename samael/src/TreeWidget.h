@@ -15,7 +15,7 @@ public:
 
 private:
     /// usability
-    QModelIndex insertDefault(QString path, const QModelIndex &parent = QModelIndex());
+    QModelIndex insertNodeReturnIndex(QString name, const QModelIndex &parent = QModelIndex());
 
     void load(QDir directory);
     void load(QString file, const QModelIndex &parent = QModelIndex());
@@ -29,8 +29,10 @@ private:
     QTreeView* m_TreeView;
     QVBoxLayout* m_Layout;
     QToolBar* m_ToolBar;
+    QListView* m_ListView;
 
-    SamaelItemModel* m_SamaelItemModel;
+    QFileSystemModel* m_FileSystemModel;
+    QFileInfo* m_Info;
     QStringList m_Filters;
 
 public slots:

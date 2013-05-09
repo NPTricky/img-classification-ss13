@@ -12,17 +12,28 @@ TreeWidget::TreeWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
 {
     // create the data model
-    m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
+    m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
+    m_FileSystemModel->setRootPath(QDir::currentPath());
 
     // create file type filter
     m_Filters << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg"<< "*.jpe"<< "*.jp2" << "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
-    m_TreeView->header()->setSectionsClickable(false);
-    m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_TreeView->setModel(m_SamaelItemModel);
+    m_TreeView->setCurrentIndex(m_FileSystemModel->index(QDir::currentPath()));
+    m_TreeView->setModel(m_FileSystemModel);
+
+    // configure the list view
+    m_ListView = new QListView(m_ContentWidget);
+    //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_ListView->setCurrentIndex(m_FileSystemModel->index(QDir::currentPath()));
+    m_ListView->setViewMode(QListView::IconMode);
+    m_ListView->setIconSize(QSize(60, 60));
+    m_ListView->setSpacing(10);
+    m_ListView->setModel(m_FileSystemModel);
 
     // create actions
     createActions();
@@ -37,7 +48,11 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_ToolBar);
     m_Layout->addWidget(m_TreeView);
+    m_Layout->addWidget(m_ListView);
     finalise(m_Layout);
+
+    // create connections
+    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(QModelIndex)));
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }
@@ -51,45 +66,47 @@ TreeWidget::~TreeWidget()
 // Functions
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-QModelIndex TreeWidget::insertDefault(QString path, const QModelIndex &parent /*= QModelIndex( ) */)
+QModelIndex TreeWidget::insertNodeReturnIndex(QString name, const QModelIndex &parent /*= QModelIndex( ) */)
 {
+    //m_SamaelItemModel->insertRows(0, 1, parent);
+    //auto node = m_SamaelItemModel->index(0,0,parent);
+    ////createNode(name, parent)
+    ////setData
     return QModelIndex();
 }
 
 void TreeWidget::load(QDir directory)
 {
-    if (!directory.exists())
-        return;
+    //if (!directory.exists())
+    //    return;
 
-    QModelIndex root = m_SamaelItemModel->index(0,0);
+    //auto root = m_SamaelItemModel->index(0,0);
+    //QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
+    //
+    //QModelIndex parent = matches.isEmpty() ? insertNodeReturnIndex(directory.dirName()) : matches[0];
 
-    QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
-    
-    QModelIndex parent = matches.isEmpty() ? /*create dir node*/ : matches[0];
+    //// load all files within the directory
+    //directory.setNameFilters(m_Filters);
+    //directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    // load all files within the directory
-    directory.setNameFilters(m_Filters);
-    directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    //QStringList files = directory.entryList();
 
-    QStringList files = directory.entryList();
+    //for (int i = 0; i < files.count(); i++)
+    //{
+    //    //fileList[i]
+    //}
 
-    for (int i = 0; i < files.count(); i++)
-    {
-        //fileList[i]
-    }
+    //// recurse subdirectories
+    //directory.setNameFilters(QStringList());
+    //directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    // recurse subdirectories
-    directory.setNameFilters(QStringList());
-    directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    //QStringList directories = directory.entryList();
 
-    QFileInfo info;
-    QStringList directories = directory.entryList();
-
-    for (int i = 0; i < directories.size(); ++i)
-    {
-        QString newPath = QString("%1/%2").arg(directory.absolutePath()).arg(directories.at(i));
-        load(QDir(newPath));
-    }
+    //for (int i = 0; i < directories.size(); i++)
+    //{
+    //    QString path = directory.absolutePath().append("/" + directories[0]);
+    //    load(QDir(path));
+    //}
 }
 
 void TreeWidget::load(QString file, const QModelIndex &parent)
@@ -114,9 +131,9 @@ void TreeWidget::load(QString file, const QModelIndex &parent)
         .toStdString().c_str();
 
     // do the loading
-    QVector<QVariant> data;
+    //QVector<QVariant> data;
     //data.append(QVariant::fromValue(SamaelNodeMetadata()));
-    data.append(QVariant::fromValue(SamaelImage(file)));
+    //data.append(QVariant::fromValue(SamaelImage(file)));
     //m_SamaelItemModel->insertColumns(0,data,parent);
 }
 
