@@ -7,14 +7,12 @@ class SamaelImage
 {
 public:
     SamaelImage();
-    SamaelImage(const QFileInfo info);
+    SamaelImage(const QString& path);
     ~SamaelImage();
 
-    QFileInfo& getFileInfo();
     cv::Mat& getMat();
 
 private:
-    QFileInfo m_FileInfo;
     cv::Mat m_Mat;
 };
 Q_DECLARE_METATYPE(SamaelImage)

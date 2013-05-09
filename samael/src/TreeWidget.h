@@ -14,8 +14,11 @@ public:
     ~TreeWidget();
 
 private:
+    /// usability
+    QModelIndex insertDefault(QString path, const QModelIndex &parent = QModelIndex());
+
+    void load(QDir directory);
     void load(QString file, const QModelIndex &parent = QModelIndex());
-    void load(QStringList files, const QModelIndex &parent = QModelIndex());
     void createActions();
 
     // QActions
@@ -28,10 +31,11 @@ private:
     QToolBar* m_ToolBar;
 
     SamaelItemModel* m_SamaelItemModel;
+    QStringList m_Filters;
 
 public slots:
     void openFiles();
-    void openDirectories();
+    void openDirectory();
 };
 
 #endif // TREEWIDGET_H

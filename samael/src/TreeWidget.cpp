@@ -4,11 +4,18 @@
 #include "Logger.h"
 #include "SamaelImage.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Constructors & Destructor
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 TreeWidget::TreeWidget(QWidget *parent)
     : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
 {
     // create the data model
     m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
+
+    // create file type filter
+    m_Filters << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg"<< "*.jpe"<< "*.jp2" << "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
@@ -40,12 +47,57 @@ TreeWidget::~TreeWidget()
 
 }
 
-void TreeWidget::load(QString file, const QModelIndex &parent)
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+QModelIndex TreeWidget::insertDefault(QString path, const QModelIndex &parent /*= QModelIndex( ) */)
 {
-    if (file.isEmpty())
+    return QModelIndex();
+}
+
+void TreeWidget::load(QDir directory)
+{
+    if (!directory.exists())
         return;
 
-    QFileInfo info = QFileInfo(file);
+    QModelIndex root = m_SamaelItemModel->index(0,0);
+
+    QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
+    
+    QModelIndex parent = matches.isEmpty() ? /*create dir node*/ : matches[0];
+
+    // load all files within the directory
+    directory.setNameFilters(m_Filters);
+    directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    QStringList files = directory.entryList();
+
+    for (int i = 0; i < files.count(); i++)
+    {
+        //fileList[i]
+    }
+
+    // recurse subdirectories
+    directory.setNameFilters(QStringList());
+    directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    QFileInfo info;
+    QStringList directories = directory.entryList();
+
+    for (int i = 0; i < directories.size(); ++i)
+    {
+        QString newPath = QString("%1/%2").arg(directory.absolutePath()).arg(directories.at(i));
+        load(QDir(newPath));
+    }
+}
+
+void TreeWidget::load(QString file, const QModelIndex &parent)
+{
+    if (file.isEmpty() || !parent.isValid())
+        return;
+
+    QFileInfo info(file);
 
     // print some general information
     QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
@@ -64,18 +116,8 @@ void TreeWidget::load(QString file, const QModelIndex &parent)
     // do the loading
     QVector<QVariant> data;
     //data.append(QVariant::fromValue(SamaelNodeMetadata()));
-    //data.append(QVariant::fromValue(SamaelImage()));
-    //m_SamaelItemModel->insertRow(parent.row(),data,parent);
-}
-
-void TreeWidget::load(QStringList files, const QModelIndex &parent)
-{
-    if (files.isEmpty()) return;
-
-    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
-    {
-        load(*iter, parent);
-    }
+    data.append(QVariant::fromValue(SamaelImage(file)));
+    //m_SamaelItemModel->insertColumns(0,data,parent);
 }
 
 void TreeWidget::createActions()
@@ -126,39 +168,27 @@ void TreeWidget::openFiles()
         "All Types (*.*)")
         );
 
-    load(files);
+    if (files.isEmpty())
+        return;
+
+    QString dir = QFileInfo(files[0]).dir().dirName();
+
+    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
+    {
+        load(*iter);
+    }
 }
 
-void TreeWidget::openDirectories()
+void TreeWidget::openDirectory()
 {
-    // configure dialog
-    QFileDialog* dialog = new QFileDialog(
+    QString directory = QFileDialog::getExistingDirectory(
         this,
         tr("Open Folder(s)"),
         QDir::currentPath()
         );
-    dialog->setFileMode(QFileDialog::Directory);
-    dialog->setOption(QFileDialog::ShowDirsOnly);
 
-    // configure tree view
-    QTreeView* tree = dialog->findChild<QTreeView*>();
-    tree->setRootIsDecorated(true);
-    tree->setItemsExpandable(true);
-    
-    int result = dialog->exec();
+    if (directory.isEmpty())
+        return;
 
-    if (result)
-    {
-        QStringList directories = dialog->selectedFiles();
-
-        // DO STUFF
-    }
+    load(QDir(directory));
 }
-
-//// this function stores the absolute paths of each file in a QVector
-//void findFilesRecursively(QDir rootDir) {
-//    QDirIterator it(rootDir, QDirIterator::Subdirectories);
-//    while(it.hasNext()) {
-//        filesStack->push(it.next());
-//    }
-//}

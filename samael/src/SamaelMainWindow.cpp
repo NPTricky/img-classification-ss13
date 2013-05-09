@@ -73,14 +73,14 @@ void SamaelMainWindow::createActions()
     m_OpenAction->setShortcut(Qt::CTRL + Qt::Key_O);
     m_OpenAction->setToolTip(tr("Open File(s)"));
     m_OpenAction->setStatusTip(tr("Open File(s)"));
-    connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(open()));
+    connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openFiles()));
 
     // "Open Folder" Action
     m_OpenFolderAction = new QAction(tr("Open &Folder"), this);
     m_OpenFolderAction->setShortcut(Qt::CTRL + Qt::Key_F);
     m_OpenFolderAction->setToolTip(tr("Open Folder(s)"));
     m_OpenFolderAction->setStatusTip(tr("Open Folder(s)"));
-    connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openFolder()));
+    connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openDirectory()));
 
     // "Exit" Action
     m_ExitAction = new QAction(tr("&Exit"), this);

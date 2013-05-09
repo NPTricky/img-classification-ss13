@@ -39,8 +39,8 @@ SamaelItemModel::~SamaelItemModel()
 
 // Root Item (Empty)
 // |
-// |--- Adam (row = 0)
-// |   | 
+// |--- Adam (row = 0) 
+// |   |
 // |   |--- ChildA (row = 0)
 // |   |    | 
 // |   |    |--- ChildX (row = 0)
@@ -174,24 +174,6 @@ bool SamaelItemModel::insertRows(int row, int count, const QModelIndex &parent /
     
     for (int i = row; i < (row + count - 1); i++)
         node->insertChild(i, new TreeNode(node));
-
-    endInsertRows();
-
-    return true;
-}
-
-bool SamaelItemModel::insertRows(int row, const QVector<QVariant>& data, const QModelIndex &parent /*= QModelIndex()*/)
-{
-    if (data.isEmpty() || !parent.isValid())
-        return false;
-
-    int count = data.size();
-    TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
-#pragma WARNING(TODO: Aw... Hell Naw!)
-    beginInsertRows(parent, row, row + count - 1);
-
-    for (int i = row; i < (row + count - 1); i++)
-        node->insertChild(i, new TreeNode(data[i-row], node));
 
     endInsertRows();
 
