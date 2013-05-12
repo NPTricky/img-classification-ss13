@@ -59,11 +59,13 @@ void SamaelMainWindow::createWidgets()
     this->setCentralWidget(m_viewerWidget);
 
     // Terminal Widget
+    m_TerminalWidget->setParent(this);
     this->addDockWidget(Qt::BottomDockWidgetArea,m_TerminalWidget);
 
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);
     this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
+
 }
 
 void SamaelMainWindow::createActions()
@@ -110,6 +112,8 @@ void SamaelMainWindow::createMenus()
 
     // "View" Menu
     m_ViewMenu = menuBar()->addMenu(tr("&View"));
+        m_ViewMenu->addAction(m_TreeWidget->toggleViewAction());
+        m_ViewMenu->addAction(m_TerminalWidget->toggleViewAction());
         m_ViewMenu->addSeparator();
 
     // "Help" Menu

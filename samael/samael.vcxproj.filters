@@ -206,6 +206,24 @@
     <ClCompile Include="src\VisualizationManager.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\FileExplorerTreeProxyModel.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileExplorerListProxyModel.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerTreeProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerTreeProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerListProxyModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerListProxyModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -305,6 +323,12 @@
     </CustomBuild>
     <CustomBuild Include="src\VisualizationManager.h">
       <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\FileExplorerTreeProxyModel.h">
+      <Filter>Header Files\mvc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\FileExplorerListProxyModel.h">
+      <Filter>Header Files\mvc</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

@@ -2,8 +2,10 @@
 #define TREEWIDGET_H
 
 #include "SamaelDockWidget.h"
-class SamaelItemModel;
+
 class QTreeView;
+class FileExplorerTreeProxyModel;
+class FileExplorerListProxyModel;
 
 class TreeWidget : public SamaelDockWidget
 {
@@ -31,6 +33,8 @@ private:
     QListView* m_ListView;
 
     QFileSystemModel* m_FileSystemModel;
+    FileExplorerTreeProxyModel* m_TreeProxyModel;
+    FileExplorerListProxyModel* m_ListProxyModel;
     QFileInfo* m_Info;
     QStringList m_Filters;
 

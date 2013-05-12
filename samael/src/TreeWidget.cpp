@@ -1,41 +1,48 @@
 #include "stdafx.h"
 #include "TreeWidget.h"
-#include "SamaelItemModel.h"
 #include "Logger.h"
 #include "SamaelImage.h"
+#include "FileExplorerTreeProxyModel.h"
+#include "FileExplorerListProxyModel.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 TreeWidget::TreeWidget(QWidget *parent)
-    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
+    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("File Explorer"))
 {
     this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     // create the data model
     m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
-    m_FileSystemModel->setRootPath(QDir::currentPath());
+    m_FileSystemModel->setRootPath("");
 
-    // create file type filter
-    m_Filters << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg"<< "*.jpe"<< "*.jp2" << "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
+    // create the respective proxy models
+    m_TreeProxyModel = new FileExplorerTreeProxyModel(m_ContentWidget);
+    m_TreeProxyModel->setSourceModel(m_FileSystemModel);
+    m_TreeProxyModel->invalidate();
+    m_ListProxyModel = new FileExplorerListProxyModel(m_ContentWidget);
+    m_ListProxyModel->setSourceModel(m_FileSystemModel);
+    m_ListProxyModel->invalidate();
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
     //m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_TreeView->setCurrentIndex(m_FileSystemModel->index(QDir::currentPath()));
-    m_TreeView->setModel(m_FileSystemModel);
+    m_TreeView->setIndentation(20);
+    m_TreeView->setModel(m_TreeProxyModel);
+    //m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
+    //m_TreeView->setCurrentIndex(m_FileSystemModel->index(""));
 
     // configure the list view
     m_ListView = new QListView(m_ContentWidget);
     //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_ListView->setCurrentIndex(m_FileSystemModel->index(QDir::currentPath()));
     m_ListView->setViewMode(QListView::IconMode);
     m_ListView->setIconSize(QSize(60, 60));
     m_ListView->setSpacing(10);
-    m_ListView->setModel(m_FileSystemModel);
+    m_ListView->setModel(m_ListProxyModel);
 
     // create actions
     createActions();
@@ -52,8 +59,9 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_Layout->addWidget(m_ListView);
     finalise(m_Layout);
 
+    #pragma WARNING(TODO: solve proxy model connection problems)
     // create connections
-    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(QModelIndex)));
+    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(m_ListProxyModel->mapFromSource(QModelIndex))));
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }

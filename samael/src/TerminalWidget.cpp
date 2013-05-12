@@ -10,7 +10,7 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     this->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
     // configure the text edit
-    m_Terminal = new Terminal(parent);
+    m_Terminal = new Terminal(m_ContentWidget);
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
     m_Terminal->setMaximumBlockCount(100);
