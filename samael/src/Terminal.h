@@ -2,7 +2,6 @@
 #define TERMINAL_H
 
 #include <QPlainTextEdit>
-#include "SamaelDockWidget.h"
 
 class Terminal : public QPlainTextEdit
 {

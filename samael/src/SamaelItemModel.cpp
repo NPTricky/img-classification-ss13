@@ -8,23 +8,24 @@ SamaelItemModel::SamaelItemModel(QObject *parent)
 {
     // initialize a root node
     m_RootNode = new TreeNode("TREE ROOT");
+
 #pragma WARNING(DELETE: Test Code!)
-    auto tmp1 = new TreeNode("CHILD1_OF_ROOT",m_RootNode);
-    m_RootNode->appendChild(tmp1);
-    tmp1->appendChild(new TreeNode("TESTA",tmp1));
-    tmp1->appendChild(new TreeNode("TESTB",tmp1));
-
-    auto tmp2 = new TreeNode("CHILD2_OF_ROOT",m_RootNode);    
-    m_RootNode->appendChild(tmp2);
-    tmp2->appendChild(new TreeNode("TEST1",tmp2));
-    tmp2->appendChild(new TreeNode("TEST2",tmp2));
-    tmp2->appendChild(new TreeNode("TEST3",tmp2));
-
-    auto tmp3 = new TreeNode("TEST4",tmp2);    
-    tmp2->appendChild(tmp3);
-    tmp3->appendChild(new TreeNode("TESTX",tmp3));
-    tmp3->appendChild(new TreeNode("TESTY",tmp3));
-    tmp3->appendChild(new TreeNode("TESTZ",tmp3));
+//    auto tmp1 = new TreeNode("CHILD1_OF_ROOT",m_RootNode);
+//    m_RootNode->appendChild(tmp1);
+//    tmp1->appendChild(new TreeNode("TESTA",tmp1));
+//    tmp1->appendChild(new TreeNode("TESTB",tmp1));
+//
+//    auto tmp2 = new TreeNode("CHILD2_OF_ROOT",m_RootNode);    
+//    m_RootNode->appendChild(tmp2);
+//    tmp2->appendChild(new TreeNode("TEST1",tmp2));
+//    tmp2->appendChild(new TreeNode("TEST2",tmp2));
+//    tmp2->appendChild(new TreeNode("TEST3",tmp2));
+//
+//    auto tmp3 = new TreeNode("TEST4",tmp2);    
+//    tmp2->appendChild(tmp3);
+//    tmp3->appendChild(new TreeNode("TESTX",tmp3));
+//    tmp3->appendChild(new TreeNode("TESTY",tmp3));
+//    tmp3->appendChild(new TreeNode("TESTZ",tmp3));
 }
 
 SamaelItemModel::~SamaelItemModel()
@@ -39,8 +40,8 @@ SamaelItemModel::~SamaelItemModel()
 
 // Root Item (Empty)
 // |
-// |--- Adam (row = 0)
-// |   | 
+// |--- Adam (row = 0) 
+// |   |
 // |   |--- ChildA (row = 0)
 // |   |    | 
 // |   |    |--- ChildX (row = 0)
@@ -112,9 +113,6 @@ Qt::ItemFlags SamaelItemModel::flags( const QModelIndex &index ) const
     if (!index.isValid())
         return 0;
 
-    TreeNode* node = static_cast<TreeNode*>(index.internalPointer());
-    SamaelImage image = qvariant_cast<SamaelImage>(node->data(index.column()));
-#pragma WARNING(TODO: Aw... Hell Naw!)
     return QAbstractItemModel::flags(index); ///< Qt::ItemIsSelectable | Qt::ItemIsEnabled
 }
 
@@ -174,24 +172,6 @@ bool SamaelItemModel::insertRows(int row, int count, const QModelIndex &parent /
     
     for (int i = row; i < (row + count - 1); i++)
         node->insertChild(i, new TreeNode(node));
-
-    endInsertRows();
-
-    return true;
-}
-
-bool SamaelItemModel::insertRows(int row, const QVector<QVariant>& data, const QModelIndex &parent /*= QModelIndex()*/)
-{
-    if (data.isEmpty() || !parent.isValid())
-        return false;
-
-    int count = data.size();
-    TreeNode* node = static_cast<TreeNode*>(parent.internalPointer());
-#pragma WARNING(TODO: Aw... Hell Naw!)
-    beginInsertRows(parent, row, row + count - 1);
-
-    for (int i = row; i < (row + count - 1); i++)
-        node->insertChild(i, new TreeNode(data[i-row], node));
 
     endInsertRows();
 

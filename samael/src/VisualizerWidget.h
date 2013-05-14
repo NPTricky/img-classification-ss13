@@ -1,9 +1,9 @@
 #ifndef VISUALIZERWIDGET_H_
 #define VISUALIZERWIDGET_H_
 
-#include <QWidget>
+#include <QGLWidget>
 
-class VisualizerWidget : public QWidget
+class VisualizerWidget : public QGLWidget
 {
   Q_OBJECT
 
@@ -11,6 +11,12 @@ public:
 
   VisualizerWidget(QWidget *parent = nullptr);
   virtual ~VisualizerWidget() = 0;
+
+  void initializeGL();
+
+  void updateGL();
+
+  void paintGL();
 
   void paintEvent(QPaintEvent *paintEvent);
 

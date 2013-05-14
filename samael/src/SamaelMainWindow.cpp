@@ -36,13 +36,13 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 {
     qRegisterMetaType<SamaelImage>("SamaelImage");
 
+    m_TerminalWidget = terminal;
+
     VisualizationManager *visualizationManager = VisualizationManager::getInstance();
     m_viewerWidget = new ViewerWidget(this);
 
     visualizationManager->connectWidget(m_viewerWidget);
     visualizationManager->addBoundingBox(m_viewerWidget, new QRectF(QPointF(0, 0), QPointF(100, 100)));
-
-    m_TerminalWidget = terminal;
 
     this->setMinimumSize(640,480);
 
@@ -57,18 +57,20 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 void SamaelMainWindow::createWidgets()
 {
     // Viewer Widget
-    this->setCentralWidget(m_viewerWidget); ///< viewer plz
+    this->setCentralWidget(m_viewerWidget);
 
     // Terminal Widget
-    this->addDockWidget(Qt::RightDockWidgetArea,m_TerminalWidget);
+    m_TerminalWidget->setParent(this);
+    this->addDockWidget(Qt::BottomDockWidgetArea,m_TerminalWidget);
 
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);
     this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
 
+
 	// Toolbox Widget
 	m_Toolbox = new Toolbox(this);
-	this->addDockWidget(Qt::LeftDockWidgetArea,m_Toolbox);
+	this->addDockWidget(Qt::RightDockWidgetArea,m_Toolbox);
 
 }
 
@@ -79,14 +81,14 @@ void SamaelMainWindow::createActions()
     m_OpenAction->setShortcut(Qt::CTRL + Qt::Key_O);
     m_OpenAction->setToolTip(tr("Open File(s)"));
     m_OpenAction->setStatusTip(tr("Open File(s)"));
-    connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(open()));
+    connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openFiles()));
 
     // "Open Folder" Action
     m_OpenFolderAction = new QAction(tr("Open &Folder"), this);
     m_OpenFolderAction->setShortcut(Qt::CTRL + Qt::Key_F);
     m_OpenFolderAction->setToolTip(tr("Open Folder(s)"));
     m_OpenFolderAction->setStatusTip(tr("Open Folder(s)"));
-    connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openFolder()));
+    connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openDirectory()));
 
     // "Exit" Action
     m_ExitAction = new QAction(tr("&Exit"), this);
@@ -116,6 +118,8 @@ void SamaelMainWindow::createMenus()
 
     // "View" Menu
     m_ViewMenu = menuBar()->addMenu(tr("&View"));
+        m_ViewMenu->addAction(m_TreeWidget->toggleViewAction());
+        m_ViewMenu->addAction(m_TerminalWidget->toggleViewAction());
         m_ViewMenu->addSeparator();
 
     // "Help" Menu

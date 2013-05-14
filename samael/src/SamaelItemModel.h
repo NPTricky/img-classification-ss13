@@ -27,7 +27,6 @@ public:
     /// editability of items & datastructure
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool insertRows(int row, const QVector<QVariant>& data, const QModelIndex &parent = QModelIndex());
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     /// search

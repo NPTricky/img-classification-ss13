@@ -1,28 +1,54 @@
 #include "stdafx.h"
 #include "TreeWidget.h"
-#include "SamaelItemModel.h"
 #include "Logger.h"
 #include "SamaelImage.h"
+#include "FileExplorerTreeProxyModel.h"
+#include "FileExplorerListProxyModel.h"
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Constructors & Destructor
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 TreeWidget::TreeWidget(QWidget *parent)
-    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("Data"))
+    : SamaelDockWidget(parent, QStringLiteral("TreeWidget"), QStringLiteral("File Explorer"))
 {
+    this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
     // create the data model
-    m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
+    m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
+    m_FileSystemModel->setRootPath("");
+
+    // create the respective proxy models
+    m_TreeProxyModel = new FileExplorerTreeProxyModel(m_ContentWidget);
+    m_TreeProxyModel->setSourceModel(m_FileSystemModel);
+    m_TreeProxyModel->invalidate();
+    m_ListProxyModel = new FileExplorerListProxyModel(m_ContentWidget);
+    m_ListProxyModel->setSourceModel(m_FileSystemModel);
+    m_ListProxyModel->invalidate();
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
-    m_TreeView->header()->setSectionsClickable(false);
-    m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    //m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_TreeView->setModel(m_SamaelItemModel);
+    m_TreeView->setIndentation(20);
+    m_TreeView->setModel(m_TreeProxyModel);
+    //m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
+    //m_TreeView->setCurrentIndex(m_FileSystemModel->index(""));
+
+    // configure the list view
+    m_ListView = new QListView(m_ContentWidget);
+    //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_ListView->setViewMode(QListView::IconMode);
+    m_ListView->setIconSize(QSize(60, 60));
+    m_ListView->setSpacing(10);
+    m_ListView->setModel(m_ListProxyModel);
 
     // create actions
     createActions();
 
     // configure the toolbar
     m_ToolBar = new QToolBar(m_ContentWidget);
-    m_ToolBar->addAction(m_ExpandAction);
     m_ToolBar->addAction(m_CollapseAction);
 
     // configure the layout of this widget
@@ -30,7 +56,12 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_ToolBar);
     m_Layout->addWidget(m_TreeView);
+    m_Layout->addWidget(m_ListView);
     finalise(m_Layout);
+
+    #pragma WARNING(TODO: solve proxy model connection problems)
+    // create connections
+    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(m_ListProxyModel->mapFromSource(QModelIndex))));
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }
@@ -40,12 +71,59 @@ TreeWidget::~TreeWidget()
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+QModelIndex TreeWidget::insertNodeReturnIndex(QString name, const QModelIndex &parent /*= QModelIndex( ) */)
+{
+    //m_SamaelItemModel->insertRows(0, 1, parent);
+    //auto node = m_SamaelItemModel->index(0,0,parent);
+    ////createNode(name, parent)
+    ////setData
+    return QModelIndex();
+}
+
+void TreeWidget::load(QDir directory)
+{
+    //if (!directory.exists())
+    //    return;
+
+    //auto root = m_SamaelItemModel->index(0,0);
+    //QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
+    //
+    //QModelIndex parent = matches.isEmpty() ? insertNodeReturnIndex(directory.dirName()) : matches[0];
+
+    //// load all files within the directory
+    //directory.setNameFilters(m_Filters);
+    //directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    //QStringList files = directory.entryList();
+
+    //for (int i = 0; i < files.count(); i++)
+    //{
+    //    //fileList[i]
+    //}
+
+    //// recurse subdirectories
+    //directory.setNameFilters(QStringList());
+    //directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+
+    //QStringList directories = directory.entryList();
+
+    //for (int i = 0; i < directories.size(); i++)
+    //{
+    //    QString path = directory.absolutePath().append("/" + directories[0]);
+    //    load(QDir(path));
+    //}
+}
+
 void TreeWidget::load(QString file, const QModelIndex &parent)
 {
-    if (file.isEmpty())
+    if (file.isEmpty() || !parent.isValid())
         return;
 
-    QFileInfo info = QFileInfo(file);
+    QFileInfo info(file);
 
     // print some general information
     QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
@@ -62,37 +140,14 @@ void TreeWidget::load(QString file, const QModelIndex &parent)
         .toStdString().c_str();
 
     // do the loading
-    QVector<QVariant> data;
+    //QVector<QVariant> data;
     //data.append(QVariant::fromValue(SamaelNodeMetadata()));
-    //data.append(QVariant::fromValue(SamaelImage()));
-    //m_SamaelItemModel->insertRow(parent.row(),data,parent);
-}
-
-void TreeWidget::load(QStringList files, const QModelIndex &parent)
-{
-    if (files.isEmpty()) return;
-
-    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
-    {
-        load(*iter, parent);
-    }
+    //data.append(QVariant::fromValue(SamaelImage(file)));
+    //m_SamaelItemModel->insertColumns(0,data,parent);
 }
 
 void TreeWidget::createActions()
 {
-    // "Expand" Action
-    m_ExpandAction = new QAction(tr("&Expand Tree"), this);
-    m_ExpandAction->setObjectName(QStringLiteral("m_ExpandAction"));
-    m_ExpandAction->setShortcut(Qt::CTRL + Qt::Key_O);
-    m_ExpandAction->setText(tr("Expand Tree"));
-    m_ExpandAction->setToolTip(tr("Expand Tree"));
-    m_ExpandAction->setStatusTip(tr("Expand Tree"));
-    connect(m_ExpandAction, SIGNAL(triggered()), m_TreeView, SLOT(expandAll()));
-
-    QIcon iconExpand;
-    iconExpand.addFile(":/content/icons/treewidget_expand.svg", QSize(), QIcon::Normal, QIcon::Off);
-    m_ExpandAction->setIcon(iconExpand);
-
     // "Collapse" Action
     m_CollapseAction = new QAction(tr("&Collapse Tree"), this);
     m_CollapseAction->setObjectName(QStringLiteral("m_CollapseAction"));
@@ -126,39 +181,27 @@ void TreeWidget::openFiles()
         "All Types (*.*)")
         );
 
-    load(files);
+    if (files.isEmpty())
+        return;
+
+    QString dir = QFileInfo(files[0]).dir().dirName();
+
+    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
+    {
+        load(*iter);
+    }
 }
 
-void TreeWidget::openDirectories()
+void TreeWidget::openDirectory()
 {
-    // configure dialog
-    QFileDialog* dialog = new QFileDialog(
+    QString directory = QFileDialog::getExistingDirectory(
         this,
         tr("Open Folder(s)"),
         QDir::currentPath()
         );
-    dialog->setFileMode(QFileDialog::Directory);
-    dialog->setOption(QFileDialog::ShowDirsOnly);
 
-    // configure tree view
-    QTreeView* tree = dialog->findChild<QTreeView*>();
-    tree->setRootIsDecorated(true);
-    tree->setItemsExpandable(true);
-    
-    int result = dialog->exec();
+    if (directory.isEmpty())
+        return;
 
-    if (result)
-    {
-        QStringList directories = dialog->selectedFiles();
-
-        // DO STUFF
-    }
+    load(QDir(directory));
 }
-
-//// this function stores the absolute paths of each file in a QVector
-//void findFilesRecursively(QDir rootDir) {
-//    QDirIterator it(rootDir, QDirIterator::Subdirectories);
-//    while(it.hasNext()) {
-//        filesStack->push(it.next());
-//    }
-//}

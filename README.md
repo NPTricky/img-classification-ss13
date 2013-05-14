@@ -18,6 +18,7 @@
 * **Download Library (Developer Package)** [lib_pkg_project.7z (240.5 MB)](https://mega.co.nz/#!Q5tlWKQC!S7q32E5mK_Pkv72AqTrnbk0CgABqZ_FmgS96eeYeqBA)
   * **WARNING** 7-zip REQUIRED! Compression = LZMA2
 * **Download Library (User Package)** [LATER...]()
+* **Download Glew Library** [GLEW-1.9.0](http://www.file-upload.net/download-7564382/glew-1.9.0.zip.html)
 
 #### Content
 
@@ -25,6 +26,7 @@
   * (From Source) ICU 5 (09.03.2013)
 * (Prebuilt) Intel Thread Building Blocks 4.1 Update 3 (01.04.2013)
 * (Prebuilt) OpenCV 2.4.5 (05.04.2013)
+* (From Source) GLEW 1.9.0 (08.12.2012)
 
 #### Environment Variable Usage
 
@@ -32,3 +34,4 @@
 * OPENCV_DIR = [...]lib\opencv
 * TBB_DIR = [...]lib\TBB
 * ICU_DIR = [...]lib\icu
+* GLEW_DIR = [...]lib\glew-1.9.0

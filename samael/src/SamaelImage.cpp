@@ -7,10 +7,9 @@ SamaelImage::SamaelImage()
 
 }
 
-SamaelImage::SamaelImage(const QFileInfo info)
-    : m_FileInfo(info)
+SamaelImage::SamaelImage(const QString& path)
 {
-    m_Mat = cv::imread(info.absoluteFilePath().toStdString(),CV_LOAD_IMAGE_UNCHANGED);
+    m_Mat = cv::imread(path.toStdString(),CV_LOAD_IMAGE_UNCHANGED);
     int tmp = m_Mat.type();
 }
 
@@ -22,11 +21,6 @@ SamaelImage::~SamaelImage()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Getters & Setters
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-QFileInfo& SamaelImage::getFileInfo()
-{
-    return m_FileInfo;
-}
 
 cv::Mat& SamaelImage::getMat()
 {
