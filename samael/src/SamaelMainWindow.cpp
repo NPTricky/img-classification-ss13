@@ -8,6 +8,7 @@
 #include "SamaelItemModel.h"
 #include "SamaelImage.h"
 #include "TreeWidget.h"
+#include "ToolBox.h"
 #include "VisualizationManager.h"
 #include "ViewerWidget.h"
 
@@ -64,6 +65,11 @@ void SamaelMainWindow::createWidgets()
     // Tree Widget
     m_TreeWidget = new TreeWidget(this);
     this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
+
+	// Toolbox Widget
+	m_Toolbox = new Toolbox(this);
+	this->addDockWidget(Qt::LeftDockWidgetArea,m_Toolbox);
+
 }
 
 void SamaelMainWindow::createActions()

@@ -7,6 +7,7 @@ class TerminalWidget;
 class SamaelItemModel;
 class TreeWidget;
 class ViewerWidget;
+class Toolbox;
 
 class SamaelMainWindow : public QMainWindow
 {
@@ -45,6 +46,7 @@ private:
     TerminalWidget *m_TerminalWidget;
     TreeWidget *m_TreeWidget;
     ViewerWidget *m_viewerWidget;
+	Toolbox *m_Toolbox;
 
     // QLayouts
     QVBoxLayout *m_DockAlphaVBoxLayout;

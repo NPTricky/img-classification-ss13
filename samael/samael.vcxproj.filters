@@ -203,6 +203,15 @@
     <ClCompile Include="src\VisualizerWidget.cpp">
       <Filter>Source Files\gui\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\ToolBox.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ToolBox.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ToolBox.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -299,6 +308,9 @@
     </CustomBuild>
     <CustomBuild Include="src\VisualizerWidget.h">
       <Filter>Header Files\gui\base</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ToolBox.h">
+      <Filter>Header Files\gui</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
