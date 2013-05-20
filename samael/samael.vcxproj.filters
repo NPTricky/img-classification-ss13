@@ -233,6 +233,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ToolBox.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="ComputationManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -341,6 +350,9 @@
     </CustomBuild>
     <CustomBuild Include="src\ToolBox.h">
       <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ComputationManager.h">
+      <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
