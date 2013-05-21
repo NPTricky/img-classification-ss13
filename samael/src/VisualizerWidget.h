@@ -12,17 +12,21 @@ public:
   VisualizerWidget(QWidget *parent = nullptr);
   virtual ~VisualizerWidget() = 0;
 
-  void initializeGL();
-
   void updateGL();
 
+protected:
+
+  void initializeGL();
+
   void paintGL();
+
+  void resizeGL(int width, int height);
 
   void paintEvent(QPaintEvent *paintEvent);
 
 signals:
 
-    void doPaint(QPaintDevice *device);
+  void doPaint(QPaintDevice *device);
 };
 
 #endif

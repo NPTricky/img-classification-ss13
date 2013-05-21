@@ -2,6 +2,10 @@
 #include "VisualizerWidget.h"
 #include "VisualizationManager.h"
 
+#include "Shader.h"
+#include "Texture.h"
+#include "Renderquad.h"
+
 VisualizationManager::VisualizationManager()
 {
   m_painter = new QPainter();
@@ -102,25 +106,34 @@ void VisualizationManager::removeBoundingBox(QPaintDevice *device, QRectF *bBox)
 
 void VisualizationManager::paint(QPaintDevice *device)
 {
-  unsigned int id = reinterpret_cast<unsigned int>(device);
+  //unsigned int id = reinterpret_cast<unsigned int>(device);
 
-  m_painter->begin(device);
-  std::list<QImage*>::iterator imageIterator = m_imageList[id].begin(), imageIteratorEnd = m_imageList[id].end();
-  for(; imageIterator != imageIteratorEnd; imageIterator++)
-  {
-    m_painter->drawImage(0, 0, **imageIterator);
-  }
+  //m_painter->begin(device);
 
-  std::list<QPoint*>::iterator keyPointIterator = m_keyPointList[id].begin(), keyPointIteratorEnd = m_keyPointList[id].end();
-  for(; keyPointIterator != keyPointIteratorEnd; keyPointIterator++)
-  {
-    m_painter->drawPoint(**keyPointIterator);
-  }
+  //{
+  //  m_painter->beginNativePainting();
 
-  std::list<QRectF*>::iterator bBoxIterator = m_bBoxList[id].begin(), bBoxIteratorEnd = m_bBoxList[id].end();
-  for(; bBoxIterator != bBoxIteratorEnd; bBoxIterator++)
-  {
-    m_painter->drawRect(**bBoxIterator);
-  }
-  m_painter->end();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  //  m_painter->endNativePainting();
+  //}
+
+  //std::list<QImage*>::iterator imageIterator = m_imageList[id].begin(), imageIteratorEnd = m_imageList[id].end();
+  //for(; imageIterator != imageIteratorEnd; imageIterator++)
+  //{
+  //  m_painter->drawImage(0, 0, **imageIterator);
+  //}
+
+  //std::list<QPoint*>::iterator keyPointIterator = m_keyPointList[id].begin(), keyPointIteratorEnd = m_keyPointList[id].end();
+  //for(; keyPointIterator != keyPointIteratorEnd; keyPointIterator++)
+  //{
+  //  m_painter->drawPoint(**keyPointIterator);
+  //}
+
+  //std::list<QRectF*>::iterator bBoxIterator = m_bBoxList[id].begin(), bBoxIteratorEnd = m_bBoxList[id].end();
+  //for(; bBoxIterator != bBoxIteratorEnd; bBoxIterator++)
+  //{
+  //  m_painter->drawRect(**bBoxIterator);
+  //}
+  //m_painter->end();
 }
