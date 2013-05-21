@@ -22,9 +22,10 @@ Toolbox::Toolbox(QWidget *parent)
 	m_toolbox->addItem(new QPushButton("Visualize"), "Analyze");
 	m_toolbox->addItem(new QWidget(), tr("Test"));
 
-    m_Layout = new QVBoxLayout(m_ContentWidget);
+	m_Layout = new QVBoxLayout(m_ContentWidget);
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_toolbox);
+	m_Layout->addStretch(1);
     finalise(m_Layout);
 
     QLOG_INFO() << "Toolbox - Ready!";
