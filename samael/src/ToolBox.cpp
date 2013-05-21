@@ -12,29 +12,15 @@ Toolbox::Toolbox(QWidget *parent)
 
     // configure the toolbox
     m_toolbox = new QToolBox(m_ContentWidget);
+	//m_toolbox->setFixedSize(150, 150);
 
-	m_toolbox->setFixedSize(250, 150);
-
-	//m_toolbox->addItem(new QWidget(), tr("Compute"));
-	//m_toolbox->addItem(new QWidget(), tr("Analyze"));
-
-	/*buttonGroup = new QButtonGroup(m_Toolbox);
-	bbb = new QPushButton();
-	buttonGroup->addButton(bbb, 1);
-    QPushButton *button1 = new QPushButton(buttonGroup, "Button 1");
-    QPushButton *button2 = new QPushButton(buttonGroup, "Button 2");*/
-    //m_toolboxTabs->addItem(buttonGroup, "Category A");
+	/*m_toolbox->addItem(new QWidget(), tr("Compute"));
+	m_toolbox->addItem(new QWidget(), tr("Analyze"));
+	m_toolbox->addItem(new QPushButton(tr("VVV")), tr("Visualize"));*/
 
 	m_toolbox->addItem(new QPushButton("Key Points"), "Compute");
 	m_toolbox->addItem(new QPushButton("Visualize"), "Analyze");
 	m_toolbox->addItem(new QWidget(), tr("Test"));
-
-	/*m_Toolbox->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	m_Toolbox->setFeatures( QDockWidget::DockWidgetClosable |
-                        QDockWidget::DockWidgetFloatable |
-                        QDockWidget::DockWidgetMovable);
-	m_toolboxTabs = new QTabWidget(m_Toolbox);
-    m_toolboxTabs->addTab(new QWidget(),"Compute");*/
 
     m_Layout = new QVBoxLayout(m_ContentWidget);
     m_Layout->setContentsMargins(0,0,0,0);
