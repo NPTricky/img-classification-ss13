@@ -14,6 +14,11 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
     m_Terminal->setMaximumBlockCount(100);
+    // background & text color
+    auto p = m_Terminal->palette();
+    p.setColor(QPalette::Base,QColor(qRgb(28,32,36)));
+    p.setColor(QPalette::Text,QColor(qRgb(186,200,198)));
+    m_Terminal->setPalette(p);
 
     // configure the text highlighter
     m_Highlighter = new SamaelHighlighter(m_Terminal->document());
