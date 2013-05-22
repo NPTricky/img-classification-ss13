@@ -5,35 +5,25 @@
 class SamaelItemModel;
 class QToolBox;
 
-class ToolBox : public SamaelDockWidget
+class Toolbox : public SamaelDockWidget
 {
     Q_OBJECT
 
 public:
-    ToolBox(QWidget *parent);
-    ~ToolBox();
+    Toolbox(QWidget *parent);
+    ~Toolbox();
 
 private:
+    void load(QString file, const QModelIndex &parent = QModelIndex());
+    void load(QStringList files, const QModelIndex &parent = QModelIndex());
     void createActions();
 
-    QToolBox *m_ToolBox;
-	QVBoxLayout *m_Layout;
+	// Container
+    QToolBox *m_toolbox;
+	QVBoxLayout* m_Layout;
 
-    // ToolBox Group "Compute" (GC = Group Compute)
-    QWidget *m_ComputeContent;
-    QGridLayout *m_ComputeContentLayout;
-    QComboBox *m_GCKeyPointComboBox;
-    QPushButton *m_GCKeyPointButton;
-    QComboBox *m_GCDescriptorComboBox;
-    QPushButton *m_GCDescriptorButton;
+    SamaelItemModel* m_SamaelItemModel;
 
-    // ToolBox Group "Analyze" (GA = Group Analyze)
-    QWidget *m_AnalyzeContent;
-    QVBoxLayout *m_AnalyzeContentLayout;
-
-    // ToolBox Group "Test" (GT = Group Test)
-    QWidget *m_TestContent;
-    QVBoxLayout *m_TestContentLayout;
 };
 
 #endif // TOOLBOX_H

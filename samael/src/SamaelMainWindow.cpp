@@ -69,8 +69,8 @@ void SamaelMainWindow::createWidgets()
 
 
 	// Toolbox Widget
-	m_ToolBox = new ToolBox(this);
-	this->addDockWidget(Qt::RightDockWidgetArea,m_ToolBox);
+	m_Toolbox = new Toolbox(this);
+	this->addDockWidget(Qt::RightDockWidgetArea,m_Toolbox);
 
 }
 
