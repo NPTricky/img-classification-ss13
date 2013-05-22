@@ -4,77 +4,69 @@
 #include "Logger.h"
 #include "SamaelImage.h"
 
-Toolbox::Toolbox(QWidget *parent)
-    : SamaelDockWidget(parent, QStringLiteral("Toolbox"), QStringLiteral("Operations"))
+ToolBox::ToolBox(QWidget *parent)
+    : SamaelDockWidget(parent, QStringLiteral("ToolBox"), QStringLiteral("Operations"))
 {
-    // create the data model
-    m_SamaelItemModel = new SamaelItemModel(m_ContentWidget);
-
     // configure the toolbox
-    m_toolbox = new QToolBox(m_ContentWidget);
-	//m_toolbox->setFixedSize(150, 150);
+    m_ToolBox = new QToolBox(m_ContentWidget);
+    m_ToolBox->setMinimumWidth(200);
 
-	/*m_toolbox->addItem(new QWidget(), tr("Compute"));
-	m_toolbox->addItem(new QWidget(), tr("Analyze"));
-	m_toolbox->addItem(new QPushButton(tr("VVV")), tr("Visualize"));*/
+    // configure the toolbox group "compute" (GC = Group Compute)
+    m_ComputeContent = new QWidget(m_ContentWidget);
+    m_ComputeContentLayout = new QGridLayout(m_ComputeContent);
+    m_ComputeContentLayout->setContentsMargins(0,0,0,0);
+    m_GCKeyPointComboBox = new QComboBox(m_ComputeContent);
+    m_GCKeyPointComboBox->addItem(tr("SIFT"));
+    m_GCKeyPointComboBox->addItem(tr("SURF"));
+    m_GCKeyPointComboBox->addItem(tr("MSER"));
+    m_GCKeyPointButton = new QPushButton(tr("Find KeyPoints"), m_ComputeContent);
+    m_GCDescriptorComboBox = new QComboBox(m_GCKeyPointComboBox);
+    m_GCDescriptorComboBox->addItem(tr("SIFT"));
+    m_GCDescriptorComboBox->addItem(tr("SURF"));
+    m_GCDescriptorComboBox->addItem(tr("MSER"));
+    m_GCDescriptorButton = new QPushButton(tr("Extract Descriptors"), m_ComputeContent);
+    // ... ADD MORE STUFF
+    m_ComputeContentLayout->addWidget(m_GCKeyPointComboBox,0,0);
+    m_ComputeContentLayout->addWidget(m_GCKeyPointButton,0,1);
+    m_ComputeContentLayout->addWidget(m_GCDescriptorComboBox,1,0);
+    m_ComputeContentLayout->addWidget(m_GCDescriptorButton,1,1);
+    //m_ComputeContentLayout->addWidget(,m_ComputeContentLayout->rowCount(),0);
+    m_ComputeContent->setLayout(m_ComputeContentLayout);
 
-	m_toolbox->addItem(new QPushButton("Key Points"), "Compute");
-	m_toolbox->addItem(new QPushButton("Visualize"), "Analyze");
-	m_toolbox->addItem(new QWidget(), tr("Test"));
+    // configure the toolbox group "analyze" (GA = Group Analyze)
+    m_AnalyzeContent = new QWidget(m_ContentWidget);
+    m_AnalyzeContentLayout = new QVBoxLayout(m_AnalyzeContent);
+    m_AnalyzeContentLayout->setContentsMargins(0,0,0,0);
+    // ... ADD MORE STUFF
+    m_ComputeContent->setLayout(m_AnalyzeContentLayout);
+
+    // configure the toolbox group "test" (GT = Group Test)
+    m_TestContent = new QWidget(m_ContentWidget);
+    m_TestContentLayout = new QVBoxLayout(m_TestContent);
+    m_TestContentLayout->setContentsMargins(0,0,0,0);
+    // ... ADD MORE STUFF
+    m_ComputeContent->setLayout(m_TestContentLayout);
+
+    // add the toolbox groups to the toolbox
+	m_ToolBox->addItem(m_ComputeContent, tr("Compute"));
+	m_ToolBox->addItem(m_AnalyzeContent, tr("Analyze"));
+    m_ToolBox->addItem(m_TestContent, tr("Test"));
 
 	m_Layout = new QVBoxLayout(m_ContentWidget);
     m_Layout->setContentsMargins(0,0,0,0);
-    m_Layout->addWidget(m_toolbox);
-	m_Layout->addStretch(1);
+    m_Layout->addWidget(m_ToolBox);
+    m_Layout->addStretch(1);
     finalise(m_Layout);
 
     QLOG_INFO() << "Toolbox - Ready!";
 }
 
-Toolbox::~Toolbox()
+ToolBox::~ToolBox()
 {
 
 }
 
-void Toolbox::load(QString file, const QModelIndex &parent)
-{
-    if (file.isEmpty())
-        return;
-
-    QFileInfo info = QFileInfo(file);
-
-    // print some general information
-    QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
-        .arg(info.fileName())
-        .arg(info.suffix())
-        .arg(info.size())
-        .toStdString().c_str();
-    QLOG_INFO() << QString("PATH: %1")
-        .arg(info.absolutePath())
-        .toStdString().c_str();
-    QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
-        .arg(info.isReadable())
-        .arg(info.isWritable())
-        .toStdString().c_str();
-
-    // do the loading
-    QVector<QVariant> data;
-    //data.append(QVariant::fromValue(SamaelNodeMetadata()));
-    //data.append(QVariant::fromValue(SamaelImage()));
-    //m_SamaelItemModel->insertRow(parent.row(),data,parent);
-}
-
-void Toolbox::load(QStringList files, const QModelIndex &parent)
-{
-    if (files.isEmpty()) return;
-
-    for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
-    {
-        load(*iter, parent);
-    }
-}
-
-void Toolbox::createActions()
+void ToolBox::createActions()
 {
    
 }
