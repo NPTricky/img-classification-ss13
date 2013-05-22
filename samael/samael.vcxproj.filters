@@ -78,6 +78,12 @@
     <Filter Include="Source Files\core">
       <UniqueIdentifier>{3f562698-ca52-4f49-b0d5-edfe89527816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\visualization">
+      <UniqueIdentifier>{6e9d839b-7b62-46a8-babd-8de55835ffe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\visualization">
+      <UniqueIdentifier>{7bc98349-92dc-4f0e-965a-3f9c0f387b97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_samael.cpp">
@@ -242,6 +248,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>Source Files\visualization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files\visualization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderquad.cpp">
+      <Filter>Source Files\visualization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -303,6 +318,15 @@
     </ClInclude>
     <ClInclude Include="src\ThumbnailIconProvider.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderquad.h">
+      <Filter>Header Files\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader.h">
+      <Filter>Header Files\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>Header Files\visualization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

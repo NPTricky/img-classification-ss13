@@ -10,14 +10,15 @@ class SamaelHighlighter: public QSyntaxHighlighter
 public:
     enum FormatType 
     {
-        Keyword = 0,
-        Comment,
-        DataType,
-        BuiltInVariable,
-        BuiltInFunction,
-        Number,
-        String,
-        Misc,
+        Trace = 0,
+        Debug,
+        Info,
+        Warn,
+        Error,
+        Fatal,
+        Date,
+        Time,
+        Source,
         FormatType_Max
     };
 
@@ -43,13 +44,9 @@ protected:
     QList<SamaelHighlighter::Rule> highlightingRulesTerminal();
 
     void setRules(const QList<Rule>& rules);
-    void setMultiLineCommentStart(const QString& string);
-    void setMultiLineCommentEnd(const QString& string);
 
 private:
     QList<Rule> m_Rules;
-    QString m_MultiLineCommentStart;
-    QString m_MultiLineCommentEnd;
     FormatContext m_CurrentFormatContext;
 
     QVector<QTextCharFormat> m_Formats;
