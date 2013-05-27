@@ -9,7 +9,6 @@
 #include "SamaelImage.h"
 #include "TreeWidget.h"
 #include "ToolBox.h"
-#include "VisualizationManager.h"
 #include "ViewerWidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +23,6 @@ SamaelMainWindow::SamaelMainWindow(QWidget *parent)
 
 SamaelMainWindow::~SamaelMainWindow()
 {
-  VisualizationManager *visualizationManager = VisualizationManager::getInstance();
-  visualizationManager->disconnectWidget(m_viewerWidget);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,11 +35,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_TerminalWidget = terminal;
 
-    VisualizationManager *visualizationManager = VisualizationManager::getInstance();
     m_viewerWidget = new ViewerWidget(this);
-
-    visualizationManager->connectWidget(m_viewerWidget);
-    visualizationManager->addBoundingBox(m_viewerWidget, new QRectF(QPointF(0, 0), QPointF(100, 100)));
 
     this->setMinimumSize(640,480);
 

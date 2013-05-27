@@ -84,6 +84,9 @@
     <Filter Include="Source Files\visualization">
       <UniqueIdentifier>{7bc98349-92dc-4f0e-965a-3f9c0f387b97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{c8be857b-c735-44ac-8bb8-cf67303541e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_samael.cpp">
@@ -191,12 +194,6 @@
     <ClCompile Include="src\ViewerWidget.cpp">
       <Filter>Source Files\gui</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_VisualizationManager.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_VisualizationManager.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_VisualizerWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -207,9 +204,6 @@
       <Filter>Source Files\gui\base</Filter>
     </ClCompile>
     <ClCompile Include="src\ThumbnailIconProvider.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VisualizationManager.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="src\FileExplorerTreeProxyModel.cpp">
@@ -363,9 +357,6 @@
     <CustomBuild Include="src\VisualizerWidget.h">
       <Filter>Header Files\gui\base</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\VisualizationManager.h">
-      <Filter>Header Files\core</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\FileExplorerTreeProxyModel.h">
       <Filter>Header Files\mvc</Filter>
     </CustomBuild>
@@ -378,5 +369,28 @@
     <CustomBuild Include="ComputationManager.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\bBoxVisualizer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\bBoxVisualizer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\imageVisualizer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\imageVisualizer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\keypointVisualizer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\keypointVisualizer.vert">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\keypointVisualizer.geom">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

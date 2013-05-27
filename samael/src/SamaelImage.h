@@ -3,6 +3,8 @@
 
 #include <opencv2/core/core.hpp>
 
+class Texture;
+
 class SamaelImage
 {
 public:
@@ -11,9 +13,11 @@ public:
     ~SamaelImage();
 
     cv::Mat& getMat();
+    Texture& getTexture();
 
 private:
     cv::Mat m_Mat;
+    Texture *m_texture;
 };
 Q_DECLARE_METATYPE(SamaelImage)
 
