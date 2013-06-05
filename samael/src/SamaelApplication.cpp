@@ -4,6 +4,7 @@
 #include "CommandLineLogDestination.h"
 #include "FileLogDestination.h"
 #include "TerminalWidgetLogDestination.h"
+#include "Logger.h"
 
 SamaelApplication::SamaelApplication(int& argc, char** argv)
     : QApplication(argc, argv)
@@ -18,8 +19,29 @@ SamaelApplication::~SamaelApplication()
     delete m_MainWindow;
 }
 
+void LoggerMessageHandler(QtMsgType type, const QMessageLogContext & context, const QString & message)
+{
+        switch (type)
+        {
+        case QtDebugMsg:
+            QLOG_DEBUG_NOCONTEXT() << message;
+            break;
+        case QtWarningMsg:
+            QLOG_WARN_NOCONTEXT() << message;
+            break;
+        case QtCriticalMsg:
+            QLOG_ERROR_NOCONTEXT() << message;
+            break;
+        case QtFatalMsg:
+            QLOG_FATAL_NOCONTEXT() << message;
+            break;
+        }
+}
+
 void SamaelApplication::initialize()
 {
+    qInstallMessageHandler(LoggerMessageHandler);
+
     // fill the logger creator registry with the available LogDestinationCreators
     m_Logger.registerCreator("CommandLineLogDestination",new QLog::LogDestinationCreator<QLog::CommandLineLogDestination>);
     m_Logger.registerCreator("FileLogDestination",new QLog::LogDestinationCreator<QLog::FileLogDestination>);

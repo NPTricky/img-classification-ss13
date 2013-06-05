@@ -113,6 +113,7 @@ void SamaelMainWindow::createMenus()
     m_ViewMenu = menuBar()->addMenu(tr("&View"));
         m_ViewMenu->addAction(m_TreeWidget->toggleViewAction());
         m_ViewMenu->addAction(m_TerminalWidget->toggleViewAction());
+        m_ViewMenu->addAction(m_ToolBox->toggleViewAction());
         m_ViewMenu->addSeparator();
 
     // "Help" Menu

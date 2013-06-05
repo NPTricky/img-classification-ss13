@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Renderquad.h"
+#include "Logger.h"
 
 VisualizerWidget::VisualizerWidget(QWidget *parent) : QGLWidget(QGLFormat(QFlags<QGL::FormatOption>(QGL::DoubleBuffer | QGL::DepthBuffer | QGL::StencilBuffer | QGL::Rgba | QGL::AlphaChannel | QGL::NoDeprecatedFunctions)), parent)
 {
@@ -178,11 +179,9 @@ void VisualizerWidget::removeAllBoundingBoxes()
 void VisualizerWidget::initializeGL()
 {
   GLenum err = glewInit();
-  char errString[1024];
+
   if(err != GLEW_OK)
-  {
-    sprintf(errString, "Error: %s\n", glewGetErrorString(err));
-  }
+      QLOG_ERROR_NOCONTEXT() << glewGetErrorString(err);
 
   m_imageVisualizer = new Shader("shader/imageVisualizer.vert", "shader/imageVisualizer.frag", nullptr, nullptr, nullptr, nullptr);
   m_keypointVisualizer = new Shader("shader/keypointVisualizer.vert", "shader/keypointVisualizer.frag", "shader/keypointVisualizer.geom", nullptr, nullptr, nullptr);

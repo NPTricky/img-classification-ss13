@@ -7,7 +7,6 @@
 
 namespace QLog
 {
-
     class LogDestination;
 
     class Logger
@@ -97,5 +96,24 @@ namespace QLog
     else QLog::Logger::Helper(QLog::ErrorLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
 #define QLOG_FATAL() \
     QLog::Logger::Helper(QLog::FatalLevel).stream() << QString("%1 [%2]").arg(__FILE__).arg(__LINE__, 4, 10, QChar('0')).toStdString().c_str()
+
+#define QLOG_TRACE_NOCONTEXT() \
+    if( QLog::Logger::Instance().getLogLevel() > QLog::TraceLevel ){} \
+    else  QLog::Logger::Helper(QLog::TraceLevel).stream()
+#define QLOG_DEBUG_NOCONTEXT() \
+    if( QLog::Logger::Instance().getLogLevel() > QLog::DebugLevel ){} \
+    else QLog::Logger::Helper(QLog::DebugLevel).stream()
+#define QLOG_INFO_NOCONTEXT()  \
+    if( QLog::Logger::Instance().getLogLevel() > QLog::InfoLevel ){} \
+    else QLog::Logger::Helper(QLog::InfoLevel).stream()
+#define QLOG_WARN_NOCONTEXT()  \
+    if( QLog::Logger::Instance().getLogLevel() > QLog::WarnLevel ){} \
+    else QLog::Logger::Helper(QLog::WarnLevel).stream()
+#define QLOG_ERROR_NOCONTEXT() \
+    if( QLog::Logger::Instance().getLogLevel() > QLog::ErrorLevel ){} \
+    else QLog::Logger::Helper(QLog::ErrorLevel).stream()
+#define QLOG_FATAL_NOCONTEXT() \
+    QLog::Logger::Helper(QLog::FatalLevel).stream()
+
 
 #endif // LOGGER_H
