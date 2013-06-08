@@ -8,6 +8,7 @@
 class Renderquad;
 class Shader;
 class SamaelImage;
+class ParallelCoordinates;
 
 class VisualizerWidget : public QGLWidget
 {
@@ -44,6 +45,8 @@ protected:
   void resizeGL(int width, int height);
 
   void paintEvent(QPaintEvent *paintEvent);
+
+  ParallelCoordinates *m_parallelCoordinates;
 
   Renderquad *m_renderQuad;
 

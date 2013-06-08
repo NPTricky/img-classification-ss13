@@ -251,6 +251,9 @@
     <ClCompile Include="src\Renderquad.cpp">
       <Filter>Source Files\visualization</Filter>
     </ClCompile>
+    <ClCompile Include="src\ParallelCoordinates.cpp">
+      <Filter>Source Files\visualization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -320,6 +323,9 @@
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
     <ClInclude Include="src\Texture.h">
+      <Filter>Header Files\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParallelCoordinates.h">
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
   </ItemGroup>
@@ -393,6 +399,15 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="shader\bBoxVisualizer.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\parallelCoordinatesVisualizer.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\parallelCoordinatesVisualizer.geom">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\parallelCoordinatesVisualizer.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

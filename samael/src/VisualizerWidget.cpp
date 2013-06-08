@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Renderquad.h"
+#include "ParallelCoordinates.h"
 
 VisualizerWidget::VisualizerWidget(QWidget *parent) : QGLWidget(QGLFormat(QFlags<QGL::FormatOption>(QGL::DoubleBuffer | QGL::DepthBuffer | QGL::StencilBuffer | QGL::Rgba | QGL::AlphaChannel | QGL::NoDeprecatedFunctions)), parent)
 {
@@ -32,6 +33,8 @@ VisualizerWidget::~VisualizerWidget()
 
   glDeleteBuffers(1, &m_keyPointVBO);
   glDeleteBuffers(1, &m_bBoxVBO);
+
+  delete m_parallelCoordinates;
 
   delete m_imageVisualizer;
   delete m_keypointVisualizer;
@@ -184,15 +187,28 @@ void VisualizerWidget::initializeGL()
     sprintf(errString, "Error: %s\n", glewGetErrorString(err));
   }
 
+  m_parallelCoordinates = new ParallelCoordinates(1.0f);
+
+  int featureNumber = 3;
+  int dimensionNumber = 128;
+  float *data = new float[featureNumber * dimensionNumber];//{0.2f,0.3f,0.4f,0.6f, 0.1f,0.2f,0.3f,0.4f, 0.5f,0.6f,0.7f,0.8f};
+
+  for(int i = 0; i < featureNumber; i++)
+  {
+    for(int j = 0; j < dimensionNumber; j++)
+    {
+      data[i * dimensionNumber + j] = rand() % 65536;
+    }
+  }
+
+  m_parallelCoordinates->setKeyPoints(cv::Mat(featureNumber, dimensionNumber, CV_32F, data));
+
   m_imageVisualizer = new Shader("shader/imageVisualizer.vert", "shader/imageVisualizer.frag", nullptr, nullptr, nullptr, nullptr);
   m_keypointVisualizer = new Shader("shader/keypointVisualizer.vert", "shader/keypointVisualizer.frag", "shader/keypointVisualizer.geom", nullptr, nullptr, nullptr);
   m_bBoxVisualizer = new Shader("shader/bBoxVisualizer.vert", "shader/bBoxVisualizer.frag", "shader/bBoxVisualizer.geom", nullptr, nullptr, nullptr);
 
   glVertexAttribFormat(0, 2, GL_FLOAT, GL_FALSE, 0);
   glVertexAttribBinding(0, 0);
-
-  glVertexAttribFormat(1, 2, GL_FLOAT, GL_FALSE, 0);
-  glVertexAttribBinding(1, 1);
 
   m_renderQuad = new Renderquad;
 
@@ -234,6 +250,8 @@ void VisualizerWidget::paintGL()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  m_parallelCoordinates->visualize();
+
   m_imageVisualizer->useShader();
 
   std::list<SamaelImage*>::iterator imageIterator = m_imageList.begin(), imageIteratorEnd = m_imageList.end();
@@ -245,18 +263,16 @@ void VisualizerWidget::paintGL()
   }
 
   glEnableVertexAttribArray(0);
+
   m_keypointVisualizer->useShader();
   glBindVertexBuffer(0, m_keyPointVBO, 0, sizeof(cv::Point2f));
   glDrawArrays(GL_POINTS, 0, m_keyPointNumber);
-  glDisableVertexAttribArray(0);
 
-  glEnableVertexAttribArray(1);
-  //glEnableVertexAttribArray(2);
   m_bBoxVisualizer->useShader();
-  glBindVertexBuffer(1, m_bBoxVBO, 0, sizeof(cv::Point2f));
+  glBindVertexBuffer(0, m_bBoxVBO, 0, sizeof(cv::Point2f));
   glDrawArrays(GL_LINE_STRIP, 0, 2 * m_bBoxNumber);
-  glDisableVertexAttribArray(1);
-  //glDisableVertexAttribArray(2);
+
+  glDisableVertexAttribArray(0);
 
   const GLenum ErrorValue = glGetError();
 	if(ErrorValue != GL_NO_ERROR) 
