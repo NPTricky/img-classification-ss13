@@ -36,4 +36,5 @@ bool FileExplorerTreeProxyModel::filterAcceptsColumn( int source_column, const Q
 void FileExplorerTreeProxyModel::onSourceModelChanged()
 {
     m_FileSystemModel = qobject_cast<QFileSystemModel*>(sourceModel());
+    invalidate();
 }

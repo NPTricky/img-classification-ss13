@@ -4,9 +4,9 @@
 FileExplorerListProxyModel::FileExplorerListProxyModel(QObject *parent /*= nullptr*/)
     : QSortFilterProxyModel(parent)
 {
-    setFilterRegExp(QRegExp("(.bmp|.dib|.jpeg|.jpg|.jpe|.jp2|.png|.pbm|.pgm|.ppm|.tiff|.tif)\\b", Qt::CaseInsensitive));
-
     connect(this,SIGNAL(modelReset()),this,SLOT(onSourceModelChanged()));
+
+    setFilterRegExp(QRegExp("(.bmp|.dib|.jpeg|.jpg|.jpe|.jp2|.png|.pbm|.pgm|.ppm|.tiff|.tif)\\b", Qt::CaseInsensitive));
 }
 
 FileExplorerListProxyModel::~FileExplorerListProxyModel()
@@ -22,4 +22,5 @@ FileExplorerListProxyModel::~FileExplorerListProxyModel()
 void FileExplorerListProxyModel::onSourceModelChanged()
 {
     m_FileSystemModel = qobject_cast<QFileSystemModel*>(sourceModel());
+    invalidate();
 }

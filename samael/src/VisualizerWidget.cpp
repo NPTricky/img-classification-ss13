@@ -182,9 +182,9 @@ void VisualizerWidget::removeAllBoundingBoxes()
 void VisualizerWidget::initializeGL()
 {
   GLenum err = glewInit();
-
+  
   if(err != GLEW_OK)
-      QLOG_ERROR_NOCONTEXT() << glewGetErrorString(err);
+      QLOG_ERROR_NOCONTEXT() << "GLEW:" << glewGetErrorString(err);
 
   m_parallelCoordinates = new ParallelCoordinates(1.0f);
 
