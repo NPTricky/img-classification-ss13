@@ -43,7 +43,7 @@ void LoggerMessageHandler(QtMsgType type, const QMessageLogContext & context, co
 
 void SamaelApplication::initialize()
 {
-    qInstallMessageHandler(LoggerMessageHandler);
+    //qInstallMessageHandler(LoggerMessageHandler);
 
     // fill the logger creator registry with the available LogDestinationCreators
     m_Logger.registerCreator("CommandLineLogDestination",new QLog::LogDestinationCreator<QLog::CommandLineLogDestination>);
