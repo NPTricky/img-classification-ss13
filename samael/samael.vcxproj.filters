@@ -254,6 +254,9 @@
     <ClCompile Include="src\ParallelCoordinates.cpp">
       <Filter>Source Files\visualization</Filter>
     </ClCompile>
+    <ClCompile Include="src\UBO.cpp">
+      <Filter>Source Files\visualization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -326,6 +329,9 @@
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
     <ClInclude Include="src\ParallelCoordinates.h">
+      <Filter>Header Files\visualization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UBO.h">
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
   </ItemGroup>
