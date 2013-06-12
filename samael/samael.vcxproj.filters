@@ -128,15 +128,6 @@
     <ClCompile Include="src\SamaelUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SamaelItemModel.cpp">
-      <Filter>Source Files\mvc</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_SamaelItemModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_SamaelItemModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TerminalWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -145,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="src\TerminalWidgetLogDestination.cpp">
       <Filter>Source Files\log\destination</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TreeNode.cpp">
-      <Filter>Source Files\mvc</Filter>
     </ClCompile>
     <ClCompile Include="src\SamaelImage.cpp">
       <Filter>Source Files\data</Filter>
@@ -254,6 +242,24 @@
     <ClCompile Include="src\ParallelCoordinates.cpp">
       <Filter>Source Files\visualization</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerListView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerListView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileExplorerListView.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerTreeView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerTreeView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileExplorerTreeView.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -298,9 +304,6 @@
     <ClInclude Include="src\TerminalWidgetLogDestination.h">
       <Filter>Header Files\log\destination</Filter>
     </ClInclude>
-    <ClInclude Include="src\TreeNode.h">
-      <Filter>Header Files\mvc</Filter>
-    </ClInclude>
     <ClInclude Include="src\SamaelImage.h">
       <Filter>Header Files\data</Filter>
     </ClInclude>
@@ -342,9 +345,6 @@
     <CustomBuild Include="src\SamaelMainWindow.h">
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\SamaelItemModel.h">
-      <Filter>Header Files\mvc</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\TreeWidget.h">
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
@@ -375,39 +375,45 @@
     <CustomBuild Include="ComputationManager.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
+    <CustomBuild Include="src\FileExplorerListView.h">
+      <Filter>Header Files\mvc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\FileExplorerTreeView.h">
+      <Filter>Header Files\mvc</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\bBoxVisualizer.frag">
+    <None Include="..\build-x64\shader\bBoxVisualizer.frag">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\bBoxVisualizer.vert">
+    <None Include="..\build-x64\shader\bBoxVisualizer.geom">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\imageVisualizer.frag">
+    <None Include="..\build-x64\shader\bBoxVisualizer.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\imageVisualizer.vert">
+    <None Include="..\build-x64\shader\imageVisualizer.frag">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\keypointVisualizer.frag">
+    <None Include="..\build-x64\shader\imageVisualizer.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\keypointVisualizer.vert">
+    <None Include="..\build-x64\shader\keypointVisualizer.frag">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\keypointVisualizer.geom">
+    <None Include="..\build-x64\shader\keypointVisualizer.geom">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\bBoxVisualizer.geom">
+    <None Include="..\build-x64\shader\keypointVisualizer.vert">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\parallelCoordinatesVisualizer.frag">
+    <None Include="..\build-x64\shader\parallelCoordinatesVisualizer.frag">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\parallelCoordinatesVisualizer.geom">
+    <None Include="..\build-x64\shader\parallelCoordinatesVisualizer.geom">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\parallelCoordinatesVisualizer.vert">
+    <None Include="..\build-x64\shader\parallelCoordinatesVisualizer.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

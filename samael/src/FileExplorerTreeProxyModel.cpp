@@ -14,18 +14,17 @@ FileExplorerTreeProxyModel::~FileExplorerTreeProxyModel()
 
 bool FileExplorerTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    bool result = false;
-
     QModelIndex index = m_FileSystemModel->index(source_row, 0, source_parent);
 
     if (m_FileSystemModel->isDir(index)) ///< only accept directories
-        result = true;
+        return true;
 
-    return result;
+    return false;
 }
 
 bool FileExplorerTreeProxyModel::filterAcceptsColumn( int source_column, const QModelIndex &source_parent ) const
 {
+    /// QFileSystemModel
     /// Column 0 = "Name"
     /// Column 1 = "Size"
     /// Column 2 = "Type"

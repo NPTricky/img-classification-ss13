@@ -6,7 +6,12 @@ FileExplorerListProxyModel::FileExplorerListProxyModel(QObject *parent /*= nullp
 {
     connect(this,SIGNAL(modelReset()),this,SLOT(onSourceModelChanged()));
 
-    setFilterRegExp(QRegExp("(.bmp|.dib|.jpeg|.jpg|.jpe|.jp2|.png|.pbm|.pgm|.ppm|.tiff|.tif)\\b", Qt::CaseInsensitive));
+    QRegExp m_Filters = QRegExp("(.bmp|.dib|.jpeg|.jpg|.jpe|.jp2|.png|.pbm|.pgm|.ppm|.tiff|.tif)\\b", Qt::CaseInsensitive);
+    setFilterRegExp(m_Filters);
+    
+    ///! BUG: empty indices after conversion between proxy models
+    ///! test
+    ///! 
 }
 
 FileExplorerListProxyModel::~FileExplorerListProxyModel()
@@ -14,10 +19,10 @@ FileExplorerListProxyModel::~FileExplorerListProxyModel()
 
 }
 
-//bool FileExplorerListProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
-//{
-//    return true;
-//}
+bool FileExplorerListProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    return true;
+}
 
 void FileExplorerListProxyModel::onSourceModelChanged()
 {

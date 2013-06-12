@@ -2,8 +2,10 @@
 #include "TreeWidget.h"
 #include "Logger.h"
 #include "SamaelImage.h"
+#include "FileExplorerListView.h"
 #include "FileExplorerTreeProxyModel.h"
 #include "FileExplorerListProxyModel.h"
+#include "SamaelApplication.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -21,10 +23,8 @@ TreeWidget::TreeWidget(QWidget *parent)
     // create the respective proxy models
     m_TreeProxyModel = new FileExplorerTreeProxyModel(m_ContentWidget);
     m_TreeProxyModel->setSourceModel(m_FileSystemModel);
-    m_TreeProxyModel->invalidate();
     m_ListProxyModel = new FileExplorerListProxyModel(m_ContentWidget);
     m_ListProxyModel->setSourceModel(m_FileSystemModel);
-    m_ListProxyModel->invalidate();
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
@@ -33,16 +33,18 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_TreeView->setIndentation(20);
     m_TreeView->setModel(m_TreeProxyModel);
     //m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
-    //m_TreeView->setCurrentIndex(m_FileSystemModel->index(""));
+    //m_TreeView->setCurrentIndex(m_FileSystemModel->index(GetApp()->applicationDirPath()));
+    m_TreeView->setRootIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
 
     // configure the list view
-    m_ListView = new QListView(m_ContentWidget);
+    m_ListView = new FileExplorerListView(m_ContentWidget,m_ListProxyModel);
     //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_ListView->setViewMode(QListView::IconMode);
     m_ListView->setIconSize(QSize(60, 60));
     m_ListView->setSpacing(10);
     m_ListView->setModel(m_ListProxyModel);
+    m_ListView->setRootIndexProxy(m_ListProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
 
     // create actions
     createActions();
@@ -61,7 +63,12 @@ TreeWidget::TreeWidget(QWidget *parent)
 
     #pragma WARNING(TODO: solve proxy model connection problems)
     // create connections
-    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(m_ListProxyModel->mapFromSource(QModelIndex))));
+    connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndexProxy(QModelIndex)));
+    
+    // Source Model -> Source Model : works
+    // Proxy Model -> Source Model : nothing happens
+    // Source Model -> Proxy Model : fucks up
+    //connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(QModelIndex)));
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }
@@ -74,15 +81,6 @@ TreeWidget::~TreeWidget()
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Functions
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-QModelIndex TreeWidget::insertNodeReturnIndex(QString name, const QModelIndex &parent /*= QModelIndex( ) */)
-{
-    //m_SamaelItemModel->insertRows(0, 1, parent);
-    //auto node = m_SamaelItemModel->index(0,0,parent);
-    ////createNode(name, parent)
-    ////setData
-    return QModelIndex();
-}
 
 void TreeWidget::load(QDir directory)
 {
@@ -118,9 +116,9 @@ void TreeWidget::load(QDir directory)
     //}
 }
 
-void TreeWidget::load(QString file, const QModelIndex &parent)
+void TreeWidget::load(QString file)
 {
-    if (file.isEmpty() || !parent.isValid())
+    if (file.isEmpty())
         return;
 
     QFileInfo info(file);
