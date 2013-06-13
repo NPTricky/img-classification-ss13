@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Shader.h"
+#include "Logger.h"
 
 Shader::Shader(const char *vertexFilename, 
 			         const char *fragmentFilename, 
@@ -201,11 +202,11 @@ Shader::Shader(const char *vertexFilename,
 		glGetProgramInfoLog(program, 1024, NULL, errorLog);
     if(vertexFilename != NULL)
     {
-      std::cout << "Error linking shader program " << vertexFilename <<  " because of:\n "<< errorLog << std::endl;
+      QLOG_ERROR_NOCONTEXT() << "Error linking shader program " << vertexFilename <<  " because of:\n "<< errorLog;
     }
     else
     {
-      std::cout << "Error linking shader program " << computeFilename << " because of:\n "<< errorLog << std::endl;
+      QLOG_ERROR_NOCONTEXT() << "Error linking shader program " << computeFilename << " because of:\n "<< errorLog;
     }
 		glDeleteProgram(program);
 	}
@@ -320,7 +321,7 @@ void Shader::enableTransformFeedback(int count, const char** varyings, GLenum bu
 	{
 		glGetTransformFeedbackVarying(program, i, 64, &length, &size, &type, var);
 		if(strcmp(var,varyings[i]))
-			std::cout<<"Error, the TransformFeedback varying "<<varyings[i]<<" is erroneous."<<std::endl;
+			QLOG_ERROR_NOCONTEXT() << "Error, the TransformFeedback varying "<< varyings[i] <<" is erroneous.";
 	}
 }
 
@@ -376,7 +377,7 @@ bool Shader::loadShaderSource(const char *filename, std::string &shadersource, s
 	{
 		file.close();
 
-		std::cout<< "Error: couldn't open shader source file "<<filename<<"."<<std::endl;
+		QLOG_ERROR_NOCONTEXT() << "Error: couldn't open shader source file "<<filename<<".";
 
 		return false;
 	}
@@ -394,7 +395,7 @@ bool Shader::checkShaderStatus(GLuint shader, const char *filename) const
 	{
 		char errorLog[1024];
 		glGetShaderInfoLog(shader, 1024, NULL, errorLog);
-		std::cout<<"Error compiling "<<filename<<" because of "<<errorLog<<std::endl;
+		QLOG_ERROR_NOCONTEXT()<<"Error compiling "<<filename<<" because of "<<errorLog;
 		return false;
 	}
 

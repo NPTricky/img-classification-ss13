@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Renderquad.h"
 #include "ParallelCoordinates.h"
+#include "Logger.h"
 
 VisualizerWidget::VisualizerWidget(QWidget *parent) : QGLWidget(QGLFormat(QFlags<QGL::FormatOption>(QGL::DoubleBuffer | QGL::DepthBuffer | QGL::StencilBuffer | QGL::Rgba | QGL::AlphaChannel | QGL::NoDeprecatedFunctions)), parent)
 {
@@ -181,11 +182,9 @@ void VisualizerWidget::removeAllBoundingBoxes()
 void VisualizerWidget::initializeGL()
 {
   GLenum err = glewInit();
-  char errString[1024];
+  
   if(err != GLEW_OK)
-  {
-    sprintf(errString, "Error: %s\n", glewGetErrorString(err));
-  }
+      QLOG_ERROR_NOCONTEXT() << "GLEW:" << glewGetErrorString(err);
 
   m_parallelCoordinates = new ParallelCoordinates(1.0f);
 

@@ -4,6 +4,7 @@
 #include "SamaelDockWidget.h"
 
 class QTreeView;
+class FileExplorerListView;
 class FileExplorerTreeProxyModel;
 class FileExplorerListProxyModel;
 
@@ -16,11 +17,8 @@ public:
     ~TreeWidget();
 
 private:
-    /// usability
-    QModelIndex insertNodeReturnIndex(QString name, const QModelIndex &parent = QModelIndex());
-
     void load(QDir directory);
-    void load(QString file, const QModelIndex &parent = QModelIndex());
+    void load(QString file);
     void createActions();
 
     // QActions
@@ -30,7 +28,7 @@ private:
     QTreeView* m_TreeView;
     QVBoxLayout* m_Layout;
     QToolBar* m_ToolBar;
-    QListView* m_ListView;
+    FileExplorerListView* m_ListView;
 
     QFileSystemModel* m_FileSystemModel;
     FileExplorerTreeProxyModel* m_TreeProxyModel;

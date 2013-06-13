@@ -1,5 +1,5 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef SAMAEL_H
+#define SAMAEL_H
 
 #include <QString>
 
@@ -30,4 +30,4 @@ namespace Samael
 
 } // namespace Item
 
-#endif // ITEM_H
+#endif // SAMAEL_H
