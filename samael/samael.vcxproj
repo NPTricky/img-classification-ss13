@@ -205,6 +205,7 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
     <ClCompile Include="src\ThumbnailIconProvider.cpp" />
+    <ClCompile Include="src\UBO.cpp" />
     <ClCompile Include="src\ViewerWidget.cpp" />
     <ClCompile Include="src\Terminal.cpp" />
     <ClCompile Include="src\TerminalWidget.cpp" />
@@ -338,6 +339,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\ThumbnailIconProvider.h" />
+    <ClInclude Include="src\UBO.h" />
     <ClInclude Include="src\ViewerWidget.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\src" "-I$(ICU_DIR)\include" "-I$(TBB_DIR)\include" "-I$(OPENCV_DIR)\include" "-I$(NOINHERIT)\." "-fstdafx.h" "-f../../src/%(Filename).h"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\src" "-I$(ICU_DIR)\include" "-I$(TBB_DIR)\include" "-I$(OPENCV_DIR)\include" "-I$(NOINHERIT)\." "-fstdafx.h" "-f../../src/%(Filename).h"</Command>
