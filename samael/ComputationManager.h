@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <SamaelImage.h>
+#include <vector>
 
 class ComputationManager : public QObject
 {
@@ -10,16 +11,9 @@ public:
 
   static ComputationManager* getInstance();
   Q_OBJECT
-  
-  SamaelImage image;
-  SamaelImage temp;
-  SamaelImage grey;
-  IplImage* imgSurf;
 
-  cv::KeyPoint *KeyPoint;
-  void loadImg(QString imagePath);
   int SURF(QString path);
-  int SIFT(QString imagePath);
+  std::vector<cv::DMatch> SIFT(std::string imagePath);
   int MSER(QString imagePath);
 
     
