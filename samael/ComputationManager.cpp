@@ -11,79 +11,172 @@
 #include <QDebug>
 #include <limits>
 #include <QVector4d>
-#include <vector>
 
 using namespace std;
 using namespace cv;
 
-ComputationManager::ComputationManager()
+ComputationManager::ComputationManager(int clusterNumber, Detector featureDetector) : m_featureDetector(featureDetector)
 {
+  m_bowTrainer = new cv::BOWKMeansTrainer(clusterNumber);
 
+  
 }
 
 ComputationManager::~ComputationManager()
 {
-  
+  delete m_bowTrainer;
+  delete m_bowExtractor;
 }
-ComputationManager* ComputationManager::getInstance()
+
+ComputationManager* ComputationManager::getInstance(int clusterNumber, Detector featureDetector)
 {
-  static ComputationManager instance;
+  static ComputationManager instance(clusterNumber, featureDetector);
   return &instance;
 }
 
-
-
-int ComputationManager::SIFT(QString path)
+void ComputationManager::trainClassifier(QString className, std::vector<cv::Mat> &images)
 {
-   //in MySIFT
-	return 0;
+  std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
+  std::vector<cv::Mat> imageDescriptors;
+
+  imageKeyPoints.resize(images.size());
+  imageDescriptors.resize(images.size());
+
+  switch(m_featureDetector)
+  {
+  case Detector::DETECTOR_SIFT:
+    SIFT(images, imageKeyPoints, imageDescriptors);
+    break;
+  case Detector::DETECTOR_SURF:
+    SURF(images, imageKeyPoints, imageDescriptors);
+    break;
+  case Detector::DETECTOR_MSER:
+    MSER(images, imageKeyPoints, imageDescriptors);
+    break;
+  };
+
+  createVocabulary(m_classNameID[className], imageDescriptors);
 }
-int ComputationManager::SURF(QString path)
+
+void ComputationManager::createVocabulary(int id, std::vector<cv::Mat> trainingDescriptors)
 {
-/*
-  Mat img_1; //image
-  Mat img_2; //scene
+  for(int i = 0; i < trainingDescriptors.size(); i++)
+  {
+    m_bowTrainer->add(trainingDescriptors[i]);
+  }
 
-  //if( !img_1.data || !img_2.data )
-  //{ std::cout<< " --(!) Error reading images " << std::endl; return -1; }
-
-  //Detect the keypoints using SURF Detector
-  int minHessian = 400;
-
-  SurfFeatureDetector detector( minHessian );
-
-  std::vector<cv::KeyPoint> keypoints_1, keypoints_2;
-
-  detector.detect( img_1, keypoints_1 );
-  detector.detect( img_2, keypoints_2 );
-
-  //-- Draw keypoints
-  Mat img_keypoints_1; Mat img_keypoints_2;
-
-  drawKeypoints( img_1, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-  drawKeypoints( img_2, keypoints_2, img_keypoints_2, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-
-  //-- Show detected (drawn) keypoints
-  imshow("Keypoints 1", img_keypoints_1 );
-  imshow("Keypoints 2", img_keypoints_2 );
-
-  waitKey(0);
-  */
-  return 0;
+  m_classVocabularies[id] = m_bowTrainer->cluster();
 }
-int ComputationManager::MSER(QString path)
+
+std::vector<QString> ComputationManager::classify(std::vector<cv::Mat> &images)
 {
-	/*Mat box = imread("C:\box.png",1);
-    MSER ms;
-    vector<vector<Point>> regions;
-    ms(box, regions, Mat());
-    for (int i = 0; i < regions.size(); i++)
+  std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
+  std::vector<cv::Mat> imageDescriptors;
+
+  imageKeyPoints.resize(images.size());
+  imageDescriptors.resize(images.size());
+
+  switch(m_featureDetector)
+  {
+  case Detector::DETECTOR_SIFT:
+    SIFT(images, imageKeyPoints, imageDescriptors);
+    break;
+  case Detector::DETECTOR_SURF:
+    SURF(images, imageKeyPoints, imageDescriptors);
+    break;
+  case Detector::DETECTOR_MSER:
+    MSER(images, imageKeyPoints, imageDescriptors);
+    break;
+  };
+
+  for(int j = 0; j < images.size(); j++)
+  {
+    for(int i = 0; i < m_classVocabularies.size(); i++)
     {
-        ellipse(box, fitEllipse(regions[i]), Scalar(255));
+      m_bowExtractor->setVocabulary(m_classVocabularies[i]);
+      m_bowExtractor->compute(images[j], imageKeyPoints[j], imageDescriptors[j]);
     }
-    imshow("mser", box);
-    waitKey(0);*/
+  }
 
-  return 0;
+  return std::vector<QString>();
 }
+
+void ComputationManager::SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+{
+  cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SiftFeatureDetector>(new cv::SiftFeatureDetector());
+  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
+  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
+
+  m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
+
+  detector->detect(images, imageKeyPoints);//create/detect keypoints
+  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
+}
+
+void ComputationManager::SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+{
+  cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SurfFeatureDetector>(new cv::SurfFeatureDetector());
+  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
+  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SurfDescriptorExtractor())));
+
+  m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
+
+  detector->detect(images, imageKeyPoints);//create/detect keypoints
+  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
   
+
+  //Mat img_1; //image
+  //Mat img_2; //scene
+
+  ////if( !img_1.data || !img_2.data )
+  ////{ std::cout<< " --(!) Error reading images " << std::endl; return -1; }
+
+  ////Detect the keypoints using SURF Detector
+  //int minHessian = 400;
+
+  //SurfFeatureDetector detector( minHessian );
+
+  //std::vector<cv::KeyPoint> keypoints_1, keypoints_2;
+
+  //detector.detect( img_1, keypoints_1 );
+  //detector.detect( img_2, keypoints_2 );
+
+  ////-- Draw keypoints
+  //Mat img_keypoints_1; Mat img_keypoints_2;
+
+  //drawKeypoints( img_1, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+  //drawKeypoints( img_2, keypoints_2, img_keypoints_2, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+
+  ////-- Show detected (drawn) keypoints
+  //imshow("Keypoints 1", img_keypoints_1 );
+  //imshow("Keypoints 2", img_keypoints_2 );
+
+  //waitKey(0);
+  //
+  //return 0;
+}
+
+void ComputationManager::MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+{
+  cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::MserFeatureDetector>(new cv::MserFeatureDetector());
+  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
+  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
+
+  m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
+
+  detector->detect(images, imageKeyPoints);//create/detect keypoints
+  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
+
+	//Mat box = imread("C:\box.png",1);
+ //   MSER ms;
+ //   vector<vector<Point>> regions;
+ //   ms(box, regions, Mat());
+ //   for (int i = 0; i < regions.size(); i++)
+ //   {
+ //       ellipse(box, fitEllipse(regions[i]), Scalar(255));
+ //   }
+ //   imshow("mser", box);
+ //   waitKey(0);
+
+  //return 0;
+}
