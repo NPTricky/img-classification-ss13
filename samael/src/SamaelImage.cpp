@@ -10,10 +10,8 @@ SamaelImage::SamaelImage()
 
 SamaelImage::SamaelImage(const QString& path)
 {
-    m_Mat = cv::imread(path.toStdString(),CV_LOAD_IMAGE_UNCHANGED);
-    m_texture = new Texture(m_Mat.cols, m_Mat.rows, GL_TEXTURE_2D, GL_FLOAT, GL_RGB8, GL_RGB, m_Mat.data);
-
-    int tmp = m_Mat.type();
+    m_Mat = cv::imread(path.toStdString(), CV_LOAD_IMAGE_COLOR);
+    m_texture = new Texture(m_Mat.cols, m_Mat.rows, GL_TEXTURE_2D, GL_UNSIGNED_BYTE, GL_RGB8, GL_RGB, m_Mat.data);
 }
 
 SamaelImage::~SamaelImage()

@@ -221,15 +221,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ToolBox.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="ComputationManager.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files\visualization</Filter>
     </ClCompile>
@@ -244,7 +235,7 @@
     </ClCompile>
     <ClCompile Include="src\UBO.cpp">
       <Filter>Source Files\visualization</Filter>
-		</ClCompile>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerListView.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -262,6 +253,30 @@
     </ClCompile>
     <ClCompile Include="src\FileExplorerTreeView.cpp">
       <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImageDatabase.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageDatabase.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComputationManagerBOW.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComputationManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManagerBOW.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -378,14 +393,20 @@
     <CustomBuild Include="src\ToolBox.h">
       <Filter>Header Files\gui</Filter>
     </CustomBuild>
-    <CustomBuild Include="ComputationManager.h">
-      <Filter>Header Files\core</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\FileExplorerListView.h">
       <Filter>Header Files\mvc</Filter>
     </CustomBuild>
     <CustomBuild Include="src\FileExplorerTreeView.h">
       <Filter>Header Files\mvc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ImageDatabase.h">
+      <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ComputationManagerBOW.h">
+      <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ComputationManager.h">
+      <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

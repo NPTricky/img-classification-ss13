@@ -10,6 +10,8 @@
 #include "TreeWidget.h"
 #include "ToolBox.h"
 #include "ViewerWidget.h"
+#include "ComputationManagerBOW.h"
+#include "ImageDatabase.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -37,7 +39,19 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_viewerWidget = new ViewerWidget(this);
 
-    this->setMinimumSize(640,480);
+    m_imageDataBase = ImageDataBase::getInstance();
+
+    m_computationManager = ComputationManagerBOW::getInstance(16, ComputationManagerBOW::DETECTOR_SIFT);
+
+    //testimages[0] = cv::imread("../samael/content/pic.png");
+
+    std::vector<SamaelImage*> testimages;
+    m_imageDataBase->getTrainingImages("NotClassified", testimages);
+
+    //m_computationManager->trainClassifier(QString("TestClass"), testimages);
+    //std::vector<QString> classname = m_computationManager->classify(testimages);
+
+    this->setMinimumSize(640, 480);
 
     createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
     createActions();   ///< creates QActions which represent specific user commands
@@ -49,22 +63,28 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
 void SamaelMainWindow::createWidgets()
 {
-    // Viewer Widget
-    this->setCentralWidget(m_viewerWidget);
+  // Viewer Widget
+  this->setCentralWidget(m_viewerWidget);
 
-    // Terminal Widget
-    m_TerminalWidget->setParent(this);
-    this->addDockWidget(Qt::BottomDockWidgetArea,m_TerminalWidget);
+  // Terminal Widget
+  m_TerminalWidget->setParent(this);
+  this->addDockWidget(Qt::BottomDockWidgetArea, m_TerminalWidget);
 
-    // Tree Widget
-    m_TreeWidget = new TreeWidget(this);
-    this->addDockWidget(Qt::LeftDockWidgetArea,m_TreeWidget);
+  // Tree Widget
+  m_TreeWidget = new TreeWidget(this);
+  this->addDockWidget(Qt::LeftDockWidgetArea, m_TreeWidget);
 
+  QObject::connect(m_TreeWidget, SIGNAL(saveImage(QString, SamaelImage*)), m_imageDataBase, SLOT(addImage(QString, SamaelImage*)));
+  QObject::connect(m_TreeWidget, SIGNAL(removeImages(QString)), m_imageDataBase, SLOT(removeImages(QString)));
 
 	// Toolbox Widget
 	m_ToolBox = new ToolBox(this);
-	this->addDockWidget(Qt::RightDockWidgetArea,m_ToolBox);
+	this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
 
+  QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
+  QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));
+  QObject::connect(m_ToolBox, SIGNAL(trainClassifier(QString, std::vector<SamaelImage*>&)), m_computationManager, SLOT(trainClassifier(QString, std::vector<SamaelImage*>&)));
+  QObject::connect(m_ToolBox, SIGNAL(classify(std::vector<SamaelImage*>&, std::vector<QString>&)), m_computationManager, SLOT(classify(std::vector<SamaelImage*>&, std::vector<QString>&)));
 }
 
 void SamaelMainWindow::createActions()

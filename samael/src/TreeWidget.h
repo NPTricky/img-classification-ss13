@@ -7,6 +7,7 @@ class QTreeView;
 class FileExplorerListView;
 class FileExplorerTreeProxyModel;
 class FileExplorerListProxyModel;
+class SamaelImage;
 
 class TreeWidget : public SamaelDockWidget
 {
@@ -37,8 +38,14 @@ private:
     QStringList m_Filters;
 
 public slots:
+
     void openFiles();
     void openDirectory();
+
+signals:
+
+    void saveImage(QString className, SamaelImage *image);
+    void removeImages(QString className);
 };
 
 #endif // TREEWIDGET_H

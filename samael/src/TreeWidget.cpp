@@ -7,6 +7,32 @@
 #include "FileExplorerListProxyModel.h"
 #include "SamaelApplication.h"
 
+static QString extractClassNameFromPath(QString &path)
+{
+  QString className;
+  std::string imagePath = path.toStdString();//extracting the classname out of the file path
+
+  int position = 0;
+  int oldPos;
+  do
+  {
+    oldPos = position + 1;
+    position = imagePath.find('/', position + 1);
+  }
+  while(position != std::string::npos);
+
+  int len = imagePath.size() - oldPos;
+  char *tmpClassName = new char[len + 1];
+  imagePath.copy(tmpClassName, len, oldPos);
+  tmpClassName[len] = '\0';
+
+  className = tmpClassName;
+
+  delete[] tmpClassName;
+
+  return className;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,8 +110,10 @@ TreeWidget::~TreeWidget()
 
 void TreeWidget::load(QDir directory)
 {
-    //if (!directory.exists())
-    //    return;
+    if (!directory.exists())
+    {
+        return;
+    }
 
     //auto root = m_SamaelItemModel->index(0,0);
     //QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
@@ -118,8 +146,10 @@ void TreeWidget::load(QDir directory)
 
 void TreeWidget::load(QString file)
 {
-    if (file.isEmpty())
-        return;
+    if(file.isEmpty())
+    {
+      return;
+    }
 
     QFileInfo info(file);
 
@@ -136,6 +166,12 @@ void TreeWidget::load(QString file)
         .arg(info.isReadable())
         .arg(info.isWritable())
         .toStdString().c_str();
+
+    SamaelImage *image = new SamaelImage(info.absolutePath() + QString("/") + info.fileName());
+    
+    QString className = extractClassNameFromPath(info.absolutePath());
+
+    emit saveImage(QString(className), image);
 
     // do the loading
     //QVector<QVariant> data;

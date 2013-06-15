@@ -13,46 +13,54 @@ ToolBox::ToolBox(QWidget *parent)
 
     // configure the toolbox group "compute" (GC = Group Compute)
     m_ComputeContent = new QWidget(m_ContentWidget);
+
+    m_GCClassifyButton = new QPushButton(tr("Classify"), m_ComputeContent);
+    connect(m_GCClassifyButton, SIGNAL(triggered()), this, SLOT(classifyBOW()));
+
     m_ComputeContentLayout = new QGridLayout(m_ComputeContent);
     m_ComputeContentLayout->setContentsMargins(0,0,0,0);
-    m_GCKeyPointComboBox = new QComboBox(m_ComputeContent);
-    m_GCKeyPointComboBox->addItem(tr("SIFT"));
-    m_GCKeyPointComboBox->addItem(tr("SURF"));
-    m_GCKeyPointComboBox->addItem(tr("MSER"));
-    m_GCKeyPointButton = new QPushButton(tr("Find KeyPoints"), m_ComputeContent);
-    m_GCDescriptorComboBox = new QComboBox(m_GCKeyPointComboBox);
-    m_GCDescriptorComboBox->addItem(tr("SIFT"));
-    m_GCDescriptorComboBox->addItem(tr("SURF"));
-    m_GCDescriptorComboBox->addItem(tr("MSER"));
-    m_GCDescriptorButton = new QPushButton(tr("Extract Descriptors"), m_ComputeContent);
-    // ... ADD MORE STUFF
-    m_ComputeContentLayout->addWidget(m_GCKeyPointComboBox,0,0);
-    m_ComputeContentLayout->addWidget(m_GCKeyPointButton,0,1);
-    m_ComputeContentLayout->addWidget(m_GCDescriptorComboBox,1,0);
-    m_ComputeContentLayout->addWidget(m_GCDescriptorButton,1,1);
-    //m_ComputeContentLayout->addWidget(,m_ComputeContentLayout->rowCount(),0);
+    m_ComputeContentLayout->addWidget(m_GCClassifyButton,1,1);
     m_ComputeContent->setLayout(m_ComputeContentLayout);
+
+    //m_ComputeContentLayout->addWidget(,m_ComputeContentLayout->rowCount(),0);
 
     // configure the toolbox group "analyze" (GA = Group Analyze)
     m_AnalyzeContent = new QWidget(m_ContentWidget);
-    m_AnalyzeContentLayout = new QVBoxLayout(m_AnalyzeContent);
+
+    m_GCVisualizeKeypointsButton = new QPushButton(tr("Visualize Keypoints"), m_AnalyzeContent);
+    m_GCVisualizeImageButton = new QPushButton(tr("Visualize Image"), m_AnalyzeContent);;
+    m_GCVisualizeParallelCoordinatesButton = new QPushButton(tr("Visualize Parallel Coordinates"), m_AnalyzeContent);;
+
+    m_AnalyzeContentLayout = new QGridLayout(m_AnalyzeContent);
     m_AnalyzeContentLayout->setContentsMargins(0,0,0,0);
-    // ... ADD MORE STUFF
+    m_AnalyzeContentLayout->addWidget(m_GCVisualizeKeypointsButton,0,0);
+    m_AnalyzeContentLayout->addWidget(m_GCVisualizeImageButton,1,0);
+    m_AnalyzeContentLayout->addWidget(m_GCVisualizeParallelCoordinatesButton,2,0);
     m_ComputeContent->setLayout(m_AnalyzeContentLayout);
 
-    // configure the toolbox group "test" (GT = Group Test)
-    m_TestContent = new QWidget(m_ContentWidget);
-    m_TestContentLayout = new QVBoxLayout(m_TestContent);
-    m_TestContentLayout->setContentsMargins(0,0,0,0);
-    // ... ADD MORE STUFF
-    m_ComputeContent->setLayout(m_TestContentLayout);
+    // configure the toolbox group "training" (GT = Group Test)
+    m_TrainContent = new QWidget(m_ContentWidget);
+    
+    m_GCDescriptorComboBox = new QComboBox(m_TrainContent);
+    m_GCDescriptorComboBox->addItem(tr("SIFT"));
+    m_GCDescriptorComboBox->addItem(tr("SURF"));
+    m_GCDescriptorComboBox->addItem(tr("MSER"));
+
+    m_GCTrainingButton = new QPushButton(tr("Train"), m_TrainContent);
+    connect(m_GCTrainingButton, SIGNAL(triggered()), this, SLOT(trainBOW()));
+
+    m_TrainContentLayout = new QGridLayout(m_TrainContent);
+    m_TrainContentLayout->setContentsMargins(0,0,0,0);
+    m_TrainContentLayout->addWidget(m_GCDescriptorComboBox,1,0);
+    m_TrainContentLayout->addWidget(m_GCTrainingButton,1,1);
+    m_ComputeContent->setLayout(m_TrainContentLayout);
 
     // add the toolbox groups to the toolbox
-	m_ToolBox->addItem(m_ComputeContent, tr("Compute"));
-	m_ToolBox->addItem(m_AnalyzeContent, tr("Analyze"));
-    m_ToolBox->addItem(m_TestContent, tr("Test"));
+    m_ToolBox->addItem(m_TrainContent, tr("Training"));
+	  m_ToolBox->addItem(m_ComputeContent, tr("Compute"));
+    m_ToolBox->addItem(m_AnalyzeContent, tr("Analyze"));
 
-	m_Layout = new QVBoxLayout(m_ContentWidget);
+	  m_Layout = new QVBoxLayout(m_ContentWidget);
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_ToolBox);
     m_Layout->addStretch(1);
@@ -69,4 +77,40 @@ ToolBox::~ToolBox()
 void ToolBox::createActions()
 {
    
+}
+
+void ToolBox::trainBOW()
+{
+  switch(m_GCDescriptorComboBox->currentIndex())
+  {
+  case 0:
+    emit setFeatureDetector(0);
+    break;
+  case 1:
+    emit setFeatureDetector(1);
+    break;
+  case 2:
+    emit setFeatureDetector(2);
+    break;
+  }
+
+  //emit trainClassifier();
+}
+
+void ToolBox::classifyBOW()
+{
+  switch(m_GCDescriptorComboBox->currentIndex())
+  {
+  case 0:
+    emit setFeatureDetector(0);
+    break;
+  case 1:
+    emit setFeatureDetector(1);
+    break;
+  case 2:
+    emit setFeatureDetector(2);
+    break;
+  }
+
+  //emit classify();
 }

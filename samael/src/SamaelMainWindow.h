@@ -8,6 +8,8 @@ class SamaelItemModel;
 class TreeWidget;
 class ViewerWidget;
 class ToolBox;
+class ComputationManagerBOW;
+class ImageDataBase;
 
 class SamaelMainWindow : public QMainWindow
 {
@@ -45,8 +47,10 @@ private:
     QLabel *m_StatusBarLabel;
     TerminalWidget *m_TerminalWidget;
     TreeWidget *m_TreeWidget;
+    ImageDataBase *m_imageDataBase;
     ViewerWidget *m_viewerWidget;
-	ToolBox *m_ToolBox;
+	  ToolBox *m_ToolBox;
+    ComputationManagerBOW *m_computationManager;
 
     // QLayouts
     QVBoxLayout *m_DockAlphaVBoxLayout;
