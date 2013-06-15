@@ -15,7 +15,7 @@ ToolBox::ToolBox(QWidget *parent)
     m_ComputeContent = new QWidget(m_ContentWidget);
 
     m_GCClassifyButton = new QPushButton(tr("Classify"), m_ComputeContent);
-    connect(m_GCClassifyButton, SIGNAL(triggered()), this, SLOT(classifyBOW()));
+    connect(m_GCClassifyButton, SIGNAL(pressed()), this, SLOT(classifyBOW()));
 
     m_ComputeContentLayout = new QGridLayout(m_ComputeContent);
     m_ComputeContentLayout->setContentsMargins(0,0,0,0);
@@ -47,7 +47,7 @@ ToolBox::ToolBox(QWidget *parent)
     m_GCDescriptorComboBox->addItem(tr("MSER"));
 
     m_GCTrainingButton = new QPushButton(tr("Train"), m_TrainContent);
-    connect(m_GCTrainingButton, SIGNAL(triggered()), this, SLOT(trainBOW()));
+    connect(m_GCTrainingButton, SIGNAL(pressed()), this, SLOT(trainBOW()));
 
     m_TrainContentLayout = new QGridLayout(m_TrainContent);
     m_TrainContentLayout->setContentsMargins(0,0,0,0);
@@ -84,17 +84,26 @@ void ToolBox::trainBOW()
   switch(m_GCDescriptorComboBox->currentIndex())
   {
   case 0:
-    emit setFeatureDetector(0);
+    emit setFeatureDetector(0);//SIFT
     break;
   case 1:
-    emit setFeatureDetector(1);
+    emit setFeatureDetector(1);//SURF
     break;
   case 2:
-    emit setFeatureDetector(2);
+    emit setFeatureDetector(2);//MSER
     break;
   }
 
-  //emit trainClassifier();
+  std::vector<QString> classNames;
+  std::vector<SamaelImage*> images;
+
+  emit getClassNames(classNames);
+
+  for(int i = 0; i < classNames.size(); i++)
+  {
+    emit getTrainingImages(classNames[i], images);
+    emit trainClassifier(classNames[i], images);
+  }
 }
 
 void ToolBox::classifyBOW()
@@ -102,15 +111,25 @@ void ToolBox::classifyBOW()
   switch(m_GCDescriptorComboBox->currentIndex())
   {
   case 0:
-    emit setFeatureDetector(0);
+    emit setFeatureDetector(0);//SIFT
     break;
   case 1:
-    emit setFeatureDetector(1);
+    emit setFeatureDetector(1);//SURF
     break;
   case 2:
-    emit setFeatureDetector(2);
+    emit setFeatureDetector(2);//MSER
     break;
   }
 
-  //emit classify();
+  std::vector<QString> classNames;
+  std::vector<QString> classifiedClassNames;
+  std::vector<SamaelImage*> images;
+
+  emit getClassNames(classNames);
+
+  for(int i = 0; i < classNames.size(); i++)
+  {
+    emit getTrainingImages(classNames[i], images);
+    emit classify(images, classifiedClassNames);
+  }
 }

@@ -49,7 +49,7 @@ void ImageDataBase::removeImages(QString className)
   }
 }
 
-void ImageDataBase::getClassNames(std::vector<QString> out_classNames)
+void ImageDataBase::getClassNames(std::vector<QString> &out_classNames)
 {
   out_classNames = m_classNames;
 }
@@ -90,6 +90,8 @@ void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage
     m_trainingImageIndices[className].push_back(index);//save the index of the training image
   }
 
+  out_images.resize(m_trainingImageIndices[className].size());
+
   for(int i = 0; i < m_trainingImageIndices[className].size(); i++)
   {
     out_images[i] = m_images[className][m_trainingImageIndices[className][i]];//copy all images from the training into the output
@@ -98,6 +100,9 @@ void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage
 
 void ImageDataBase::getClassifyImages(QString className, std::vector<SamaelImage*> &out_images)
 {
+  int size = m_trainingImageIndices[className].size();
+  out_images.resize(size - size % 2);
+
   bool copy = true;
   for(int i = 0; i < m_images[className].size(); i++)
   {

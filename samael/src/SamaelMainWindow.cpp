@@ -45,8 +45,8 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     //testimages[0] = cv::imread("../samael/content/pic.png");
 
-    std::vector<SamaelImage*> testimages;
-    m_imageDataBase->getTrainingImages("NotClassified", testimages);
+    //std::vector<SamaelImage*> testimages;
+    //m_imageDataBase->getTrainingImages("NotClassified", testimages);
 
     //m_computationManager->trainClassifier(QString("TestClass"), testimages);
     //std::vector<QString> classname = m_computationManager->classify(testimages);
@@ -80,6 +80,10 @@ void SamaelMainWindow::createWidgets()
 	// Toolbox Widget
 	m_ToolBox = new ToolBox(this);
 	this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
+
+  QObject::connect(m_ToolBox, SIGNAL(getClassNames(std::vector<QString>&)), m_imageDataBase, SLOT(getClassNames(std::vector<QString>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(QString, std::vector<SamaelImage*>&)), m_imageDataBase, SLOT(getTrainingImages(QString, std::vector<SamaelImage*>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(QString, std::vector<SamaelImage*>&)), m_imageDataBase, SLOT(getClassifyImages(QString, std::vector<SamaelImage*>&)));
 
   QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
   QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));

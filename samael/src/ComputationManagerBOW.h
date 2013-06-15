@@ -1,5 +1,5 @@
-#ifndef COMPUTATIONMANAGER_H_
-#define COMPUTATIONMANAGER_H_
+#ifndef COMPUTATIONMANAGERBOW_H_
+#define COMPUTATIONMANAGERBOW_H_
 
 #include <vector>
 #include <map>
@@ -34,15 +34,6 @@ private:
   void SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors);
   void SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors);
   void MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors);
-
-  //void loadImg(QString imagePath);//file-loading shouldnt be part of computation manager
-  
-  //cv::KeyPoint *KeyPoint;
-
-  //SamaelImage image;
-  //SamaelImage temp;
-  //SamaelImage grey;
-  //IplImage* imgSurf;
 
   Detector m_featureDetector;
 

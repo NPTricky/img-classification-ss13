@@ -122,7 +122,7 @@ void ComputationManagerBOW::classify(std::vector<SamaelImage*> &images, std::vec
     {
       m_bowExtractor->setVocabulary(m_classVocabularies[i]);
       m_bowExtractor->compute(rawImageData[j], imageKeyPoints[j], imageDescriptors[j], &histogram);
-    }
+    }//TODO: auswerten zu welcher Klasse das Histogramm passt und mit der eigentlichen Klasse vergleichen
   }
 
   out_classNames = std::vector<QString>();
@@ -150,37 +150,6 @@ void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::
 
   detector->detect(images, imageKeyPoints);//create/detect keypoints
   extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
-  
-
-  //Mat img_1; //image
-  //Mat img_2; //scene
-
-  ////if( !img_1.data || !img_2.data )
-  ////{ std::cout<< " --(!) Error reading images " << std::endl; return -1; }
-
-  ////Detect the keypoints using SURF Detector
-  //int minHessian = 400;
-
-  //SurfFeatureDetector detector( minHessian );
-
-  //std::vector<cv::KeyPoint> keypoints_1, keypoints_2;
-
-  //detector.detect( img_1, keypoints_1 );
-  //detector.detect( img_2, keypoints_2 );
-
-  ////-- Draw keypoints
-  //Mat img_keypoints_1; Mat img_keypoints_2;
-
-  //drawKeypoints( img_1, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-  //drawKeypoints( img_2, keypoints_2, img_keypoints_2, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-
-  ////-- Show detected (drawn) keypoints
-  //imshow("Keypoints 1", img_keypoints_1 );
-  //imshow("Keypoints 2", img_keypoints_2 );
-
-  //waitKey(0);
-  //
-  //return 0;
 }
 
 void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
@@ -193,17 +162,4 @@ void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::
 
   detector->detect(images, imageKeyPoints);//create/detect keypoints
   extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
-
-	//Mat box = imread("C:\box.png",1);
- //   MSER ms;
- //   vector<vector<Point>> regions;
- //   ms(box, regions, Mat());
- //   for (int i = 0; i < regions.size(); i++)
- //   {
- //       ellipse(box, fitEllipse(regions[i]), Scalar(255));
- //   }
- //   imshow("mser", box);
- //   waitKey(0);
-
-  //return 0;
 }

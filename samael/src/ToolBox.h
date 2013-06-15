@@ -48,6 +48,10 @@ private slots:
 
 signals:
 
+  void getClassNames(std::vector<QString> &out_classNames);
+  void getTrainingImages(QString className, std::vector<SamaelImage*> &out_images);
+  void getClassifyImages(QString className, std::vector<SamaelImage*> &out_images);
+
   void visualizeKeypoints();
   void visualizeImage();
   void visualizeParallelCoordinates();
