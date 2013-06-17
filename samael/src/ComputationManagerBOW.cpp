@@ -35,6 +35,8 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(int clusterNumber, Det
 void ComputationManagerBOW::setFeatureDetector(int featureDetector)
 {
   m_featureDetector = Detector(featureDetector);
+  m_classVocabularies.clear();//reset the vocabularies if the detector changes
+  m_bowTrainer->clear();//clears all previous vocabularies added to the trainer
 }
 
 void ComputationManagerBOW::getFeatureDetector(int &featureDetector)
@@ -52,6 +54,7 @@ void ComputationManagerBOW::trainClassifier(QString className, std::vector<Samae
   imageDescriptors.resize(images.size());
   rawImageData.resize(images.size());
 
+  m_classNameID[className] = m_classVocabularies.size();
   m_classVocabularies.resize(m_classVocabularies.size() + 1);
 
   for(int i = 0; i < images.size(); i++)

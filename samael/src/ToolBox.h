@@ -46,6 +46,8 @@ private slots:
   void trainBOW();
   void classifyBOW();
 
+  void classifierChanged(int i);
+
 signals:
 
   void getClassNames(std::vector<QString> &out_classNames);

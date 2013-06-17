@@ -62,7 +62,7 @@ void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage
   int index;
   int size = m_images[className].size();
 
-  for(int i = 0; i < size / 2 + size % 2; i++)//choose 50% random images for training and save their indices
+  for(int i = 0; i < size / 2 + (size & 1); i++)//choose 50% random images for training and save their indices
   {
     index = rand() % size;//random index
 
@@ -101,7 +101,7 @@ void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage
 void ImageDataBase::getClassifyImages(QString className, std::vector<SamaelImage*> &out_images)
 {
   int size = m_trainingImageIndices[className].size();
-  out_images.resize(size - size % 2);
+  out_images.resize(size - (size & 1));
 
   bool copy = true;
   for(int i = 0; i < m_images[className].size(); i++)

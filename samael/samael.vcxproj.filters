@@ -352,9 +352,6 @@
     <ClInclude Include="src\UBO.h">
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
-    <ClInclude Include="src\ComputationManager.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">
@@ -406,6 +403,9 @@
       <Filter>Header Files\core</Filter>
     </CustomBuild>
     <CustomBuild Include="src\ComputationManagerBOW.h">
+      <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ComputationManager.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>
