@@ -100,8 +100,7 @@ void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage
 
 void ImageDataBase::getClassifyImages(QString className, std::vector<SamaelImage*> &out_images)
 {
-  int size = m_trainingImageIndices[className].size();
-  out_images.resize(size - (size & 1));
+  out_images.resize(m_trainingImageIndices[className].size() - (m_images[className].size() & 1));
 
   bool copy = true;
   for(int i = 0; i < m_images[className].size(); i++)

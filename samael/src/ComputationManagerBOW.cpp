@@ -65,13 +65,13 @@ void ComputationManagerBOW::trainClassifier(QString className, std::vector<Samae
   switch(m_featureDetector)
   {
   case DETECTOR_SIFT:
-    SIFT(rawImageData, imageKeyPoints, imageDescriptors);
+    SIFT(rawImageData, imageKeyPoints, &imageDescriptors);
     break;
   case DETECTOR_SURF:
-    SURF(rawImageData, imageKeyPoints, imageDescriptors);
+    SURF(rawImageData, imageKeyPoints, &imageDescriptors);
     break;
   case DETECTOR_MSER:
-    MSER(rawImageData, imageKeyPoints, imageDescriptors);
+    MSER(rawImageData, imageKeyPoints, &imageDescriptors);
     break;
   };
 
@@ -107,13 +107,13 @@ void ComputationManagerBOW::classify(std::vector<SamaelImage*> &images, std::vec
   switch(m_featureDetector)
   {
   case DETECTOR_SIFT:
-    SIFT(rawImageData, imageKeyPoints, imageDescriptors);
+    SIFT(rawImageData, imageKeyPoints);
     break;
   case DETECTOR_SURF:
-    SURF(rawImageData, imageKeyPoints, imageDescriptors);
+    SURF(rawImageData, imageKeyPoints);
     break;
   case DETECTOR_MSER:
-    MSER(rawImageData, imageKeyPoints, imageDescriptors);
+    MSER(rawImageData, imageKeyPoints);
     break;
   };
 
@@ -131,7 +131,7 @@ void ComputationManagerBOW::classify(std::vector<SamaelImage*> &images, std::vec
   out_classNames = std::vector<QString>();
 }
 
-void ComputationManagerBOW::SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+void ComputationManagerBOW::SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SiftFeatureDetector>(new cv::SiftFeatureDetector());
   cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
@@ -139,11 +139,21 @@ void ComputationManagerBOW::SIFT(std::vector<cv::Mat> &images, std::vector<std::
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 
-  detector->detect(images, imageKeyPoints);//create/detect keypoints
-  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
+  for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+  {
+    detector->detect(images[i], out_imageKeyPoints[i]);//create/detect keypoints
+  }
+
+  if(out_imageDescriptors != nullptr)
+  {
+    for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+    {
+      extractor->compute(images[i], out_imageKeyPoints[i], (*out_imageDescriptors)[i]);//create keypoint descriptors
+    }
+  }
 }
 
-void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SurfFeatureDetector>(new cv::SurfFeatureDetector());
   cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
@@ -151,11 +161,21 @@ void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 
-  detector->detect(images, imageKeyPoints);//create/detect keypoints
-  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
+  for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+  {
+    detector->detect(images[i], out_imageKeyPoints[i]);//create/detect keypoints
+  }
+
+  if(out_imageDescriptors != nullptr)
+  {
+    for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+    {
+      extractor->compute(images[i], out_imageKeyPoints[i], (*out_imageDescriptors)[i]);//create keypoint descriptors
+    }
+  }
 }
 
-void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> &imageDescriptors)
+void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::MserFeatureDetector>(new cv::MserFeatureDetector());
   cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
@@ -163,6 +183,16 @@ void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 
-  detector->detect(images, imageKeyPoints);//create/detect keypoints
-  extractor->compute(images, imageKeyPoints, imageDescriptors);//create keypoint descriptors
+  for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+  {
+    detector->detect(images[i], out_imageKeyPoints[i]);//create/detect keypoints
+  }
+
+  if(out_imageDescriptors != nullptr)
+  {
+    for(int i = 0; i < images.size(); i++)//ToDo: parallelization
+    {
+      extractor->compute(images[i], out_imageKeyPoints[i], (*out_imageDescriptors)[i]);//create keypoint descriptors
+    }
+  }
 }

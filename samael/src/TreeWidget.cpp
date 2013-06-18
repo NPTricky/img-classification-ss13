@@ -171,7 +171,7 @@ void TreeWidget::load(QString file)
     
     QString className = extractClassNameFromPath(info.absolutePath());
 
-    emit saveImage(QString(className), image);
+    emit saveImage(className, image);
 
     // do the loading
     //QVector<QVariant> data;
