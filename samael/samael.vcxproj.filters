@@ -260,22 +260,22 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_ImageDatabase.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\ComputationManagerBOW.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="src\ComputationManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComputationManagerBOW.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>

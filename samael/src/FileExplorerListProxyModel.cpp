@@ -21,6 +21,11 @@ FileExplorerListProxyModel::~FileExplorerListProxyModel()
 
 bool FileExplorerListProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    //QModelIndex index = m_FileSystemModel->index(source_row, 0, source_parent);
+
+    //if (m_FileSystemModel->isDir(index)) ///< only accept directories
+    //    return false;
+
     return true;
 }
 

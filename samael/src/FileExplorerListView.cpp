@@ -2,11 +2,10 @@
 #include "FileExplorerListView.h"
 #include "FileExplorerTreeProxyModel.h"
 
-FileExplorerListView::FileExplorerListView(QWidget *parent, FileExplorerListProxyModel *list)
+FileExplorerListView::FileExplorerListView(QWidget *parent)
     : QListView(parent)
-    , m_ListProxyModel(list)
 {
-
+    connect(this,SIGNAL(modelReset()),this,SLOT(onSourceModelChanged()));
 }
 
 FileExplorerListView::~FileExplorerListView()
@@ -16,17 +15,20 @@ FileExplorerListView::~FileExplorerListView()
 
 void FileExplorerListView::setRootIndexProxy(const QModelIndex &index)
 {
-    QModelIndex index_list, index_source;
+    QModelIndex indexResult, indexSource;
 
     const QAbstractProxyModel* model = dynamic_cast<const QAbstractProxyModel*>(index.model()); ///< [FileExplorerTreeProxyModel]
 
     if (model)
-        index_source = model->mapToSource(index); ///< [QFileSystemModel]
+        indexSource = model->mapToSource(index); ///< [QFileSystemModel]
     
-    index_list = m_ListProxyModel->mapFromSource(index_source);
+    indexResult = m_ListProxyModel->mapFromSource(indexSource);
 
-    setRootIndex(index_list);
+    setRootIndex(indexResult);
+}
 
-
-    auto del = QAbstractItemView::model();
+void FileExplorerListView::setModel(FileExplorerListProxyModel *model)
+{
+    m_ListProxyModel = model;
+    QAbstractItemView::setModel(model);
 }
