@@ -58,12 +58,12 @@ TreeWidget::TreeWidget(QWidget *parent)
     m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_TreeView->setIndentation(20);
     m_TreeView->setModel(m_TreeProxyModel);
-    //m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
-    //m_TreeView->setCurrentIndex(m_FileSystemModel->index(GetApp()->applicationDirPath()));
-    m_TreeView->setRootIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
+    m_TreeView->setRootIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
+    m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
+ 
 
     // configure the list view
-    m_ListView = new FileExplorerListView(m_ContentWidget,m_ListProxyModel);
+    m_ListView = new FileExplorerListView(m_ContentWidget);
     //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_ListView->setViewMode(QListView::IconMode);
@@ -95,6 +95,10 @@ TreeWidget::TreeWidget(QWidget *parent)
     // Proxy Model -> Source Model : nothing happens
     // Source Model -> Proxy Model : fucks up
     //connect(m_TreeView, SIGNAL(clicked(QModelIndex)), m_ListView, SLOT(setRootIndex(QModelIndex)));
+    
+    //m_TreeView->scrollTo(m_TreeView->currentIndex(),QAbstractItemView::EnsureVisible);
+
+
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }
@@ -120,28 +124,28 @@ void TreeWidget::load(QDir directory)
     //
     //QModelIndex parent = matches.isEmpty() ? insertNodeReturnIndex(directory.dirName()) : matches[0];
 
-    //// load all files within the directory
-    //directory.setNameFilters(m_Filters);
-    //directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    // load all files within the directory
+    directory.setNameFilters(m_Filters);
+    directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    //QStringList files = directory.entryList();
+    QStringList files = directory.entryList();
 
-    //for (int i = 0; i < files.count(); i++)
-    //{
-    //    //fileList[i]
-    //}
+    for (int i = 0; i < files.count(); i++)
+    {
+        load(files[i]);
+    }
 
-    //// recurse subdirectories
-    //directory.setNameFilters(QStringList());
-    //directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    // recurse subdirectories
+    directory.setNameFilters(QStringList());
+    directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
-    //QStringList directories = directory.entryList();
+    QStringList directories = directory.entryList();
 
-    //for (int i = 0; i < directories.size(); i++)
-    //{
-    //    QString path = directory.absolutePath().append("/" + directories[0]);
-    //    load(QDir(path));
-    //}
+    for (int i = 0; i < directories.size(); i++)
+    {
+        QString path = directory.absolutePath().append("/" + directories[i]);
+        load(QDir(path));
+    }
 }
 
 void TreeWidget::load(QString file)
@@ -154,21 +158,22 @@ void TreeWidget::load(QString file)
     QFileInfo info(file);
 
     // print some general information
-    QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
-        .arg(info.fileName())
-        .arg(info.suffix())
-        .arg(info.size())
-        .toStdString().c_str();
-    QLOG_INFO() << QString("PATH: %1")
-        .arg(info.absolutePath())
-        .toStdString().c_str();
-    QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
-        .arg(info.isReadable())
-        .arg(info.isWritable())
-        .toStdString().c_str();
+    //QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
+    //    .arg(info.fileName())
+    //    .arg(info.suffix())
+    //    .arg(info.size())
+    //    .toStdString().c_str();
+    //QLOG_INFO() << QString("PATH: %1")
+    //    .arg(info.absolutePath())
+    //    .toStdString().c_str();
+    //QLOG_INFO() << QString("READ: %1 - WRITE: %2\n")
+    //    .arg(info.isReadable())
+    //    .arg(info.isWritable())
+    //    .toStdString().c_str();
 
+    /// info.absoluteFilePath()
     SamaelImage *image = new SamaelImage(info.absolutePath() + QString("/") + info.fileName());
-    
+
     QString className = extractClassNameFromPath(info.absolutePath());
 
     emit saveImage(QString(className), image);

@@ -9,14 +9,18 @@ class FileExplorerListView : public QListView
     Q_OBJECT
 
 public:
-    FileExplorerListView(QWidget *parent, FileExplorerListProxyModel *list);
+    FileExplorerListView(QWidget *parent);
     ~FileExplorerListView();
+
+    virtual void setModel(FileExplorerListProxyModel *model);
 
 public slots:
     virtual void setRootIndexProxy(const QModelIndex &index);
 
 private:
     FileExplorerListProxyModel *m_ListProxyModel;
+
+
 };
 
 #endif // FILEEXPLORERLISTVIEW_H
