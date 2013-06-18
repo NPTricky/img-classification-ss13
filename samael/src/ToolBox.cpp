@@ -83,30 +83,27 @@ void ToolBox::createActions()
 void ToolBox::trainBOW()
 {
   std::vector<QString> classNames;
-  std::vector<SamaelImage*> images;
+  std::map<QString, std::vector<SamaelImage*>> images;
 
   emit getClassNames(classNames);
 
-  for(int i = 0; i < classNames.size(); i++)
-  {
-    emit getTrainingImages(classNames[i], images);
-    emit trainClassifier(classNames[i], images);
-  }
+  emit getTrainingImages(images);
+
+  emit createVocabulary(images);
+  emit trainClassifier(images);
+  emit trainSVM();
 }
 
 void ToolBox::classifyBOW()
 {
   std::vector<QString> classNames;
   std::vector<QString> classifiedClassNames;
-  std::vector<SamaelImage*> images;
+  std::map<QString, std::vector<SamaelImage*>> images;
 
   emit getClassNames(classNames);
 
-  for(int i = 0; i < classNames.size(); i++)
-  {
-    emit getClassifyImages(classNames[i], images);
-    emit classify(images, classifiedClassNames);
-  }
+  emit getClassifyImages(images);
+  emit classify(images, classifiedClassNames);
 }
 
 void ToolBox::classifierChanged(int i)

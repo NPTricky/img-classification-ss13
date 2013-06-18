@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <QObject>
+#include <QString>
 
 class SamaelImage;
 
@@ -36,8 +37,8 @@ public slots:
 
   void getClassNames(std::vector<QString> &out_classNames);
 
-  void getTrainingImages(QString className, std::vector<SamaelImage*> &out_images);
-  void getClassifyImages(QString className, std::vector<SamaelImage*> &out_images);
+  void getTrainingImages(std::map<QString, std::vector<SamaelImage*>> &out_images);
+  void getClassifyImages(std::map<QString, std::vector<SamaelImage*>> &out_images);
 
   void addImage(QString className, SamaelImage *image);
   void removeImages(QString className);

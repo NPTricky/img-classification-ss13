@@ -12,9 +12,6 @@
 #include <limits>
 #include <QVector4d>
 
-using namespace std;
-using namespace cv;
-
 ComputationManagerBOW::ComputationManagerBOW(int clusterNumber, Detector featureDetector) : m_featureDetector(featureDetector)
 {
   m_bowTrainer = new cv::BOWKMeansTrainer(clusterNumber);
@@ -35,7 +32,7 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(int clusterNumber, Det
 void ComputationManagerBOW::setFeatureDetector(int featureDetector)
 {
   m_featureDetector = Detector(featureDetector);
-  m_classVocabularies.clear();//reset the vocabularies if the detector changes
+  m_vocabulary.deallocate();//resets the vocabulary if the detector changes
   m_bowTrainer->clear();//clears all previous vocabularies added to the trainer
 }
 
@@ -44,98 +41,200 @@ void ComputationManagerBOW::getFeatureDetector(int &featureDetector)
   featureDetector = m_featureDetector;
 }
 
-void ComputationManagerBOW::trainClassifier(QString className, std::vector<SamaelImage*> &images)
+void ComputationManagerBOW::createVocabulary(std::map<QString, std::vector<SamaelImage*>> &images)
 {
-  std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
-  std::vector<cv::Mat> imageDescriptors;
   std::vector<cv::Mat> rawImageData;
-
-  imageKeyPoints.resize(images.size());
-  imageDescriptors.resize(images.size());
-  rawImageData.resize(images.size());
-
-  m_classNameID[className] = m_classVocabularies.size();
-  m_classVocabularies.resize(m_classVocabularies.size() + 1);
-
-  for(int i = 0; i < images.size(); i++)
+  
+  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    rawImageData[i] = images[i]->getMat();
-  }
+    QString className = it->first;
+    std::vector<SamaelImage*> classImages = it->second;
 
-  switch(m_featureDetector)
-  {
-  case DETECTOR_SIFT:
-    SIFT(rawImageData, imageKeyPoints, &imageDescriptors);
-    break;
-  case DETECTOR_SURF:
-    SURF(rawImageData, imageKeyPoints, &imageDescriptors);
-    break;
-  case DETECTOR_MSER:
-    MSER(rawImageData, imageKeyPoints, &imageDescriptors);
-    break;
-  };
+    std::vector<cv::Mat> imageDescriptors;
+    std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
+    imageDescriptors.resize(classImages.size());
+    imageKeyPoints.resize(classImages.size());
 
-  createVocabulary(m_classNameID[className], imageDescriptors);
-}
-
-void ComputationManagerBOW::createVocabulary(int id, std::vector<cv::Mat> trainingDescriptors)
-{
-  for(int i = 0; i < trainingDescriptors.size(); i++)
-  {
-    m_bowTrainer->add(trainingDescriptors[i]);
-  }
-
-  m_classVocabularies[id] = m_bowTrainer->cluster();
-}
-
-void ComputationManagerBOW::classify(std::vector<SamaelImage*> &images, std::vector<QString> &out_classNames)
-{
-  std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
-  std::vector<cv::Mat> imageDescriptors;
-  std::vector<cv::Mat> rawImageData;
-
-  imageKeyPoints.resize(images.size());
-  imageDescriptors.resize(images.size());
-  out_classNames.resize(images.size());
-  rawImageData.resize(images.size());
-
-  for(int i = 0; i < images.size(); i++)
-  {
-    rawImageData[i] = images[i]->getMat();
-  }
-
-  switch(m_featureDetector)
-  {
-  case DETECTOR_SIFT:
-    SIFT(rawImageData, imageKeyPoints);
-    break;
-  case DETECTOR_SURF:
-    SURF(rawImageData, imageKeyPoints);
-    break;
-  case DETECTOR_MSER:
-    MSER(rawImageData, imageKeyPoints);
-    break;
-  };
-
-  std::vector<std::vector<int>> histogram;
-
-  for(int j = 0; j < images.size(); j++)
-  {
-    for(int i = 0; i < m_classVocabularies.size(); i++)
+    for(int i = 0; i < classImages.size(); i++)
     {
-      m_bowExtractor->setVocabulary(m_classVocabularies[i]);
-      m_bowExtractor->compute(rawImageData[j], imageKeyPoints[j], imageDescriptors[j], &histogram);
-    }//TODO: auswerten zu welcher Klasse das Histogramm passt und mit der eigentlichen Klasse vergleichen
+      rawImageData.push_back(classImages[i]->getMat());
+    }
+
+    switch(m_featureDetector)
+    {
+    case DETECTOR_SIFT:
+      SIFT(rawImageData, imageKeyPoints, &imageDescriptors);
+      break;
+    case DETECTOR_SURF:
+      SURF(rawImageData, imageKeyPoints, &imageDescriptors);
+      break;
+    case DETECTOR_MSER:
+      MSER(rawImageData, imageKeyPoints, &imageDescriptors);
+      break;
+    };
+
+    for(int i = 0; i < imageDescriptors.size(); i++)
+    {
+      m_bowTrainer->add(imageDescriptors[i]);
+    }
   }
 
-  out_classNames = std::vector<QString>();
+  m_vocabulary = m_bowTrainer->cluster();
+}
+
+void ComputationManagerBOW::trainClassifier(std::map<QString, std::vector<SamaelImage*>> &images)
+{
+  m_classNames.clear();
+  std::vector<cv::Mat> rawImageData;
+
+  m_bowExtractor->setVocabulary(m_vocabulary);
+
+  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  {
+    QString className = it->first;
+    std::vector<SamaelImage*> classImages = it->second;
+
+    std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
+    imageKeyPoints.resize(classImages.size());
+
+    m_classNames.push_back(className);
+
+    for(int i = 0; i < classImages.size(); i++)
+    {
+      rawImageData.push_back(classImages[i]->getMat());
+    }
+
+    switch(m_featureDetector)
+    {
+    case DETECTOR_SIFT:
+      SIFT(rawImageData, imageKeyPoints);
+      break;
+    case DETECTOR_SURF:
+      SURF(rawImageData, imageKeyPoints);
+      break;
+    case DETECTOR_MSER:
+      MSER(rawImageData, imageKeyPoints);
+      break;
+    };
+
+    cv::Mat histogram;
+
+    for(int j = 0; j < rawImageData.size(); j++)
+    {
+      m_bowExtractor->compute(rawImageData[j], imageKeyPoints[j], histogram);
+
+      if(m_histograms.count(className) == 0)
+      {
+        m_histograms[className].create(0, histogram.cols, histogram.type());
+      }
+      m_histograms[className].push_back(histogram);
+    }
+  }
+}
+
+void ComputationManagerBOW::trainSVM()
+{
+  for(int i = 0; i < m_classNames.size(); i++)
+  {
+    QString className = m_classNames[i];
+
+    cv::Mat samples(0, m_histograms[className].cols, m_histograms[className].type());
+    cv::Mat labels(0, 1, CV_32FC1);
+
+    samples.push_back(m_histograms[className]);
+    cv::Mat classLabel = cv::Mat::ones(m_histograms[className].rows, 1, CV_32FC1);
+    labels.push_back(classLabel);
+
+    for(std::map<QString, cv::Mat>::iterator hit = m_histograms.begin(); hit != m_histograms.end(); hit++)
+    {
+      QString notClassName = hit->first;
+
+      if(className == notClassName)
+      {
+        continue;
+      }
+
+      samples.push_back(m_histograms[notClassName]);
+      classLabel = cv::Mat::zeros(m_histograms[className].rows, 1, CV_32FC1);
+      labels.push_back(classLabel);
+    }
+
+    cv::Mat samples_32f; 
+    samples.convertTo(samples_32f, CV_32F);
+    if(samples.rows == 0) 
+    {
+      continue; //phantom class?!
+    }
+    CvSVM classifier; 
+    classifier.train(samples_32f, labels);
+    m_classifiers[className] = classifier;
+  }
+}
+
+void ComputationManagerBOW::classify(std::map<QString, std::vector<SamaelImage*>> &images, std::vector<QString> &out_classNames)
+{
+  std::map<QString, std::map<QString, int>> confusionMatrix;
+  std::vector<cv::Mat> rawImageData;
+
+  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  {
+    QString className = it->first;
+    std::vector<SamaelImage*> classImages = it->second;
+
+    std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
+    imageKeyPoints.resize(classImages.size());
+
+    for(int i = 0; i < classImages.size(); i++)
+    {
+      rawImageData.push_back(classImages[i]->getMat());
+    }
+
+    switch(m_featureDetector)
+    {
+    case DETECTOR_SIFT:
+      SIFT(rawImageData, imageKeyPoints);
+      break;
+    case DETECTOR_SURF:
+      SURF(rawImageData, imageKeyPoints);
+      break;
+    case DETECTOR_MSER:
+      MSER(rawImageData, imageKeyPoints);
+      break;
+    };
+
+    m_bowExtractor->setVocabulary(m_vocabulary);
+
+    for(int j = 0; j < rawImageData.size(); j++)
+    {
+      cv::Mat histogram;
+      m_bowExtractor->compute(rawImageData[j], imageKeyPoints[j], histogram);
+
+      float minf = FLT_MAX; 
+      QString minClass;
+
+      for(std::map<QString, CvSVM>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++)
+      {
+        float response = cit->second.predict(histogram, true);
+
+        if(response < minf)
+        {
+          minf = response;
+          minClass = cit->first;
+        }
+      
+      }
+      confusionMatrix[minClass][className]++;
+    }
+
+    out_classNames = std::vector<QString>();
+  }
 }
 
 void ComputationManagerBOW::SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SiftFeatureDetector>(new cv::SiftFeatureDetector());
-  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
-  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
+  cv::Ptr<cv::DescriptorMatcher> matcher(new cv::FlannBasedMatcher());
+  cv::Ptr<cv::DescriptorExtractor> extractor(new cv::OpponentColorDescriptorExtractor(cv::Ptr<cv::DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 
@@ -156,8 +255,8 @@ void ComputationManagerBOW::SIFT(std::vector<cv::Mat> &images, std::vector<std::
 void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::SurfFeatureDetector>(new cv::SurfFeatureDetector());
-  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
-  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SurfDescriptorExtractor())));
+  cv::Ptr<cv::DescriptorMatcher> matcher(new cv::FlannBasedMatcher());
+  cv::Ptr<cv::DescriptorExtractor> extractor(new cv::OpponentColorDescriptorExtractor(cv::Ptr<cv::DescriptorExtractor>(new cv::SurfDescriptorExtractor())));
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 
@@ -178,8 +277,8 @@ void ComputationManagerBOW::SURF(std::vector<cv::Mat> &images, std::vector<std::
 void ComputationManagerBOW::MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors)
 {
   cv::Ptr<cv::FeatureDetector> detector = cv::Ptr<cv::MserFeatureDetector>(new cv::MserFeatureDetector());
-  cv::Ptr<cv::DescriptorMatcher> matcher(new BFMatcher(NORM_L2, false));
-  cv::Ptr<cv::DescriptorExtractor> extractor(new OpponentColorDescriptorExtractor(Ptr<DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
+  cv::Ptr<cv::DescriptorMatcher> matcher(new cv::FlannBasedMatcher());
+  cv::Ptr<cv::DescriptorExtractor> extractor(new cv::OpponentColorDescriptorExtractor(cv::Ptr<cv::DescriptorExtractor>(new cv::SiftDescriptorExtractor())));
 
   m_bowExtractor = new cv::BOWImgDescriptorExtractor(extractor, matcher);
 

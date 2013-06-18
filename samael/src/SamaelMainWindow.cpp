@@ -82,13 +82,15 @@ void SamaelMainWindow::createWidgets()
 	this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
 
   QObject::connect(m_ToolBox, SIGNAL(getClassNames(std::vector<QString>&)), m_imageDataBase, SLOT(getClassNames(std::vector<QString>&)));
-  QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(QString, std::vector<SamaelImage*>&)), m_imageDataBase, SLOT(getTrainingImages(QString, std::vector<SamaelImage*>&)));
-  QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(QString, std::vector<SamaelImage*>&)), m_imageDataBase, SLOT(getClassifyImages(QString, std::vector<SamaelImage*>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)));
 
   QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
   QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));
-  QObject::connect(m_ToolBox, SIGNAL(trainClassifier(QString, std::vector<SamaelImage*>&)), m_computationManager, SLOT(trainClassifier(QString, std::vector<SamaelImage*>&)));
-  QObject::connect(m_ToolBox, SIGNAL(classify(std::vector<SamaelImage*>&, std::vector<QString>&)), m_computationManager, SLOT(classify(std::vector<SamaelImage*>&, std::vector<QString>&)));
+  QObject::connect(m_ToolBox, SIGNAL(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)), m_computationManager, SLOT(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)));
+  QObject::connect(m_ToolBox, SIGNAL(trainClassifier(std::map<QString, std::vector<SamaelImage*>>&)), m_computationManager, SLOT(trainClassifier(std::map<QString, std::vector<SamaelImage*>>&)));
+  QObject::connect(m_ToolBox, SIGNAL(trainSVM()), m_computationManager, SLOT(trainSVM()));
+  QObject::connect(m_ToolBox, SIGNAL(classify(std::map<QString, std::vector<SamaelImage*>>&, std::vector<QString>&)), m_computationManager, SLOT(classify(std::map<QString, std::vector<SamaelImage*>>&, std::vector<QString>&)));
 }
 
 void SamaelMainWindow::createActions()

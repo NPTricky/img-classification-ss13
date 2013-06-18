@@ -54,70 +54,80 @@ void ImageDataBase::getClassNames(std::vector<QString> &out_classNames)
   out_classNames = m_classNames;
 }
 
-void ImageDataBase::getTrainingImages(QString className, std::vector<SamaelImage*> &out_images)
+void ImageDataBase::getTrainingImages(std::map<QString, std::vector<SamaelImage*>> &out_images)
 {
-  m_trainingImageIndices[className].clear();
-
-  std::map<int, bool> indices; 
-  int index;
-  int size = m_images[className].size();
-
-  for(int i = 0; i < size / 2 + (size & 1); i++)//choose 50% random images for training and save their indices
+  for(int j = 0; j < m_classNames.size(); j++)
   {
-    index = rand() % size;//random index
+    QString className = m_classNames[j];
+    m_trainingImageIndices[className].clear();
 
-    if(!indices[index])//if the index hasn't been choosen before...
+    std::map<int, bool> indices; 
+    int index;
+    int size = m_images[className].size();
+
+    for(int i = 0; i < size / 2 + (size & 1); i++)//choose 50% random images for training and save their indices
     {
-      indices[index] = true;//... take it now
-    }
-    else
-    {
-      for(; index < size; index++)//... or take the closest index near him
+      index = rand() % size;//random index
+
+      if(!indices[index])//if the index hasn't been choosen before...
       {
-        if(!indices[index])
+        indices[index] = true;//... take it now
+      }
+      else
+      {
+        for(; index < size; index++)//... or take the closest index near him
         {
-          indices[index] = true;
-          break;
-        }
+          if(!indices[index])
+          {
+            indices[index] = true;
+            break;
+          }
 
-        if(index + 1 == size)//if we reached the end, go back to the beginning
-        {
-          index = 0;
+          if(index + 1 == size)//if we reached the end, go back to the beginning
+          {
+            index = 0;
+          }
         }
       }
+
+      m_trainingImageIndices[className].push_back(index);//save the index of the training image
     }
 
-    m_trainingImageIndices[className].push_back(index);//save the index of the training image
-  }
+    out_images[className].resize(m_trainingImageIndices[className].size());
 
-  out_images.resize(m_trainingImageIndices[className].size());
-
-  for(int i = 0; i < m_trainingImageIndices[className].size(); i++)
-  {
-    out_images[i] = m_images[className][m_trainingImageIndices[className][i]];//copy all images from the training into the output
+    for(int i = 0; i < m_trainingImageIndices[className].size(); i++)
+    {
+      out_images[className][i] = m_images[className][m_trainingImageIndices[className][i]];//copy all images from the training into the output
+    }
   }
 }
 
-void ImageDataBase::getClassifyImages(QString className, std::vector<SamaelImage*> &out_images)
+void ImageDataBase::getClassifyImages(std::map<QString, std::vector<SamaelImage*>> &out_images)
 {
-  out_images.resize(m_trainingImageIndices[className].size() - (m_images[className].size() & 1));
-
-  bool copy = true;
-  for(int i = 0; i < m_images[className].size(); i++)
+  for(int j = 0; j < m_classNames.size(); j++)
   {
-    for(int j = 0; j < m_trainingImageIndices[className].size(); j++)
-    {
-      if(m_trainingImageIndices[className][j] == i)
-      {
-        copy = false;
-        break;
-      }
-    }
+    QString className = m_classNames[j];
+    out_images[className].resize(m_trainingImageIndices[className].size() - (m_images[className].size() & 1));
 
-    if(copy)
+    bool copy = true;
+    int offset = 0;
+    for(int i = 0; i < m_images[className].size(); i++)
     {
-      out_images[i] = m_images[className][i];//copy all images which are not used for the training into the output
+      for(int j = 0; j < m_trainingImageIndices[className].size(); j++)
+      {
+        if(m_trainingImageIndices[className][j] == i)
+        {
+          copy = false;
+          offset++;
+          break;
+        }
+      }
+
+      if(copy)
+      {
+        out_images[className][i - offset] = m_images[className][i];//copy all images which are not used for the training into the output
+      }
+      copy = true;
     }
-    copy = true;
   }
 }
