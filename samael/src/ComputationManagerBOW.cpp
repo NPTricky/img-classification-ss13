@@ -20,11 +20,6 @@ ComputationManagerBOW::ComputationManagerBOW(
     SAM::Extractor extractorType,
     SAM::Matcher matcherType
     )
-    : m_detectorAdapterType(detectorAdapterType)
-    , m_detectorType(detectorType)
-    , m_extractorAdapterType(extractorAdapterType)
-    , m_extractorType(extractorType)
-    , m_matcherType(matcherType)
 {
     connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));
