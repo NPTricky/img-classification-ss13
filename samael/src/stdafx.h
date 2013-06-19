@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <QtWidgets>
 #include <opencv2/opencv.hpp>
-#include <tbb/tbb.h>
 
 // pragma warning macro hack
 #define STRINGIZE_HELPER(x) #x
