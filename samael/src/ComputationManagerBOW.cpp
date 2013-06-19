@@ -285,7 +285,7 @@ void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRA
 
 void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLANNBASED*/)
 {
-    if (matcher == m_matcher)
+    if (matcher == m_matcherType)
         return;
 
     if (m_matcher)
