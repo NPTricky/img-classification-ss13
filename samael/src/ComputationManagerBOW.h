@@ -67,15 +67,21 @@ public slots:
   void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_OPPONENT);
   void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
   void setTrainer(int clusterCount, int epsilon = 0.001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
-  void onMethodChanged();
+
 
   void createVocabulary(std::map<QString, std::vector<SamaelImage*>> &images);
   void trainClassifier(std::map<QString, std::vector<SamaelImage*>> &images);//vector of images from one class
   void trainSVM();
   void classify(std::map<QString, std::vector<SamaelImage*>> &images, std::vector<QString> &out_classNames);//classifies a vector of images through returning the class names
 
+private slots:
+  void onDetectorExtractorChanged();
+  void onMatcherExtractorChanged();
+
 signals:
-  void methodChanged();
+  void detectorChanged();
+  void extractorChanged();
+  void matcherChanged();
 };
 
 #endif

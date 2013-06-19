@@ -26,7 +26,10 @@ ComputationManagerBOW::ComputationManagerBOW(
     , m_extractorType(extractorType)
     , m_matcherType(matcherType)
 {
-    connect(this, SIGNAL(methodChanged()), this, SLOT(onMethodChanged()));
+    connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
+    connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));
+    connect(this,SIGNAL(matcherChanged()),this,SLOT(onMatcherExtractorChanged()));
+    connect(this,SIGNAL(extractorChanged()),this,SLOT(onMatcherExtractorChanged()));
 
     m_detector = nullptr;
     m_extractor = nullptr;
@@ -34,10 +37,10 @@ ComputationManagerBOW::ComputationManagerBOW(
     m_bowTrainer = nullptr;
     m_bowExtractor = nullptr;
 
-    setTrainer(clusterCount);
     setDetector(detectorType,detectorAdapterType);
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
+    setTrainer(clusterCount);
 }
 
 ComputationManagerBOW::~ComputationManagerBOW()
@@ -256,6 +259,8 @@ void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR
         delete m_detector;
 
     m_detector = cv::FeatureDetector::create(DetectorToText(adapter,detector));
+
+    emit detectorChanged();
 }
 
 void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
@@ -265,7 +270,7 @@ void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRA
 
     m_extractor = cv::DescriptorExtractor::create(ExtractorToText(adapter,extractor));
 
-    emit methodChanged();
+    emit extractorChanged();
 }
 
 void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLANNBASED*/)
@@ -275,7 +280,7 @@ void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLA
 
     m_matcher = cv::DescriptorMatcher::create(MatcherToText(matcher));
 
-    emit methodChanged();
+    emit matcherChanged();
 }
 
 void ComputationManagerBOW::setTrainer(
@@ -294,14 +299,17 @@ void ComputationManagerBOW::setTrainer(
     m_bowTrainer = new cv::BOWKMeansTrainer(clusterCount, criteria, attempts, flag);
 }
 
-void ComputationManagerBOW::onMethodChanged()
+void ComputationManagerBOW::onMatcherExtractorChanged()
+{
+    if (m_matcher && m_extractor)
+        m_bowExtractor = new cv::BOWImgDescriptorExtractor(m_extractor, m_matcher);
+}
+
+void ComputationManagerBOW::onDetectorExtractorChanged()
 {
     if (m_bowTrainer)
         m_bowTrainer->clear();//clears all previous vocabularies added to the trainer
 
     if(!m_vocabulary.empty())
         m_vocabulary.deallocate();//resets the vocabulary if the method changes
-
-    if (m_extractor && m_matcher)
-        m_bowExtractor = new cv::BOWImgDescriptorExtractor(m_extractor, m_matcher);
 }
