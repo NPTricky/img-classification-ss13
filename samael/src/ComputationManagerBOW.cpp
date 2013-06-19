@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ComputationManagerBOW.h"
+#include "ComputationParallel.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -231,20 +232,14 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)
 {
-    for(int i = 0; i < images.size(); i++)//ToDo: parallelization
-    {
-        m_detector->detect(images[i], out_imageKeyPoints[i]);//create/detect keypoints
-    }
+    tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeKeyPoints(m_detector,images,out_imageKeyPoints));
 }
 
 void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors /*= nullptr*/)
 {
     if(out_imageDescriptors != nullptr)
     {
-        for(int i = 0; i < images.size(); i++)//ToDo: parallelization
-        {
-            m_extractor->compute(images[i], imageKeyPoints[i], (*out_imageDescriptors)[i]);//create keypoint descriptors
-        }
+        tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeDescriptors(m_extractor,images,imageKeyPoints,out_imageDescriptors));
     }
 }
 
