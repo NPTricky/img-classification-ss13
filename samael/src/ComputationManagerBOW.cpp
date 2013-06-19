@@ -70,11 +70,11 @@ void ComputationManagerBOW::getFeatureDetector(int &featureDetector)
   //featureDetector = m_detector;
 }
 
-void ComputationManagerBOW::createVocabulary(std::map<QString, std::vector<SamaelImage*>> &images)
+void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
-  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    QString className = it->first;
+    std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
     std::vector<cv::Mat> rawImageData;
@@ -101,15 +101,15 @@ void ComputationManagerBOW::createVocabulary(std::map<QString, std::vector<Samae
   m_vocabulary = m_bowTrainer->cluster();
 }
 
-void ComputationManagerBOW::trainClassifier(std::map<QString, std::vector<SamaelImage*>> &images)
+void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
   m_classNames.clear();
   
   m_bowExtractor->setVocabulary(m_vocabulary);
 
-  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    QString className = it->first;
+    std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
     std::vector<cv::Mat> rawImageData;
@@ -145,7 +145,7 @@ void ComputationManagerBOW::trainSVM()
 {
   for(int i = 0; i < m_classNames.size(); i++)
   {
-    QString className = m_classNames[i];
+    std::string className = m_classNames[i];
 
     cv::Mat samples(0, m_histograms[className].cols, m_histograms[className].type());
     cv::Mat labels(0, 1, CV_32FC1);
@@ -154,17 +154,17 @@ void ComputationManagerBOW::trainSVM()
     cv::Mat classLabel = cv::Mat::ones(m_histograms[className].rows, 1, CV_32FC1);
     labels.push_back(classLabel);
 
-    for(std::map<QString, cv::Mat>::iterator hit = m_histograms.begin(); hit != m_histograms.end(); hit++)
+    for(std::map<std::string, cv::Mat>::iterator hit = m_histograms.begin(); hit != m_histograms.end(); hit++)
     {
-      QString notClassName = hit->first;
+      std::string notClassName = hit->first;
 
-      if(className == notClassName)
+      if(!className.compare(notClassName))
       {
         continue;
       }
 
       samples.push_back(m_histograms[notClassName]);
-      classLabel = cv::Mat::zeros(m_histograms[className].rows, 1, CV_32FC1);
+      classLabel = cv::Mat::zeros(m_histograms[notClassName].rows, 1, CV_32FC1);
       labels.push_back(classLabel);
     }
 
@@ -180,13 +180,13 @@ void ComputationManagerBOW::trainSVM()
   }
 }
 
-void ComputationManagerBOW::classify(std::map<QString, std::vector<SamaelImage*>> &images, std::vector<QString> &out_classNames)
+void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames)
 {
-  std::map<QString, std::map<QString, int>> confusionMatrix;
+  std::map<std::string, std::map<std::string, int>> confusionMatrix;
 
-  for(std::map<QString, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    QString className = it->first;
+    std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
     std::vector<cv::Mat> rawImageData;
@@ -209,9 +209,9 @@ void ComputationManagerBOW::classify(std::map<QString, std::vector<SamaelImage*>
       m_bowExtractor->compute(rawImageData[j], imageKeyPoints[j], histogram);
 
       float minf = FLT_MAX; 
-      QString minClass;
+      std::string minClass;
 
-      for(std::map<QString, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++)
+      for(std::map<std::string, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++)
       {
         float response = cit->second->predict(histogram, true);
 
@@ -225,7 +225,7 @@ void ComputationManagerBOW::classify(std::map<QString, std::vector<SamaelImage*>
       confusionMatrix[minClass][className]++;
     }
 
-    out_classNames = std::vector<QString>();
+    out_classNames = std::vector<std::string>();
   }
 }
 

@@ -44,8 +44,8 @@ public slots:
 
 signals:
 
-    void saveImage(QString className, SamaelImage *image);
-    void removeImages(QString className);
+    void saveImage(std::string className, SamaelImage *image);
+    void removeImages(std::string className);
 };
 
 #endif // TREEWIDGET_H

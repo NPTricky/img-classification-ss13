@@ -82,8 +82,8 @@ void ToolBox::createActions()
 
 void ToolBox::trainBOW()
 {
-  std::vector<QString> classNames;
-  std::map<QString, std::vector<SamaelImage*>> images;
+  std::vector<std::string> classNames;
+  std::map<std::string, std::vector<SamaelImage*>> images;
 
   emit getClassNames(classNames);
 
@@ -96,9 +96,9 @@ void ToolBox::trainBOW()
 
 void ToolBox::classifyBOW()
 {
-  std::vector<QString> classNames;
-  std::vector<QString> classifiedClassNames;
-  std::map<QString, std::vector<SamaelImage*>> images;
+  std::vector<std::string> classNames;
+  std::vector<std::string> classifiedClassNames;
+  std::map<std::string, std::vector<SamaelImage*>> images;
 
   emit getClassNames(classNames);
 

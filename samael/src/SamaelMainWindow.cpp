@@ -66,24 +66,24 @@ void SamaelMainWindow::createWidgets()
   m_TreeWidget = new TreeWidget(this);
   this->addDockWidget(Qt::LeftDockWidgetArea, m_TreeWidget);
 
-  QObject::connect(m_TreeWidget, SIGNAL(saveImage(QString, SamaelImage*)), m_imageDataBase, SLOT(addImage(QString, SamaelImage*)));
-  QObject::connect(m_TreeWidget, SIGNAL(removeImages(QString)), m_imageDataBase, SLOT(removeImages(QString)));
+  QObject::connect(m_TreeWidget, SIGNAL(saveImage(std::string, SamaelImage*)), m_imageDataBase, SLOT(addImage(std::string, SamaelImage*)));
+  QObject::connect(m_TreeWidget, SIGNAL(removeImages(std::string)), m_imageDataBase, SLOT(removeImages(std::string)));
 
 	// Toolbox Widget
 	m_ToolBox = new ToolBox(this);
 	this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
 
-  QObject::connect(m_ToolBox, SIGNAL(getClassNames(std::vector<QString>&)), m_imageDataBase, SLOT(getClassNames(std::vector<QString>&)));
-  QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)));
-  QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getClassNames(std::vector<std::string>&)), m_imageDataBase, SLOT(getClassNames(std::vector<std::string>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(std::map<std::string, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getTrainingImages(std::map<std::string, std::vector<SamaelImage*>>&)));
+  QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(std::map<std::string, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getClassifyImages(std::map<std::string, std::vector<SamaelImage*>>&)));
 
   #pragma WARNING(TODO: fix getFeatureDetector and related signal connections)
-  QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
-  QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));
-  QObject::connect(m_ToolBox, SIGNAL(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)), m_computationManager, SLOT(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)));
-  QObject::connect(m_ToolBox, SIGNAL(trainClassifier(std::map<QString, std::vector<SamaelImage*>>&)), m_computationManager, SLOT(trainClassifier(std::map<QString, std::vector<SamaelImage*>>&)));
+  //QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
+  //QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));
+  QObject::connect(m_ToolBox, SIGNAL(createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &)), m_computationManager, SLOT(createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &)));
+  QObject::connect(m_ToolBox, SIGNAL(trainClassifier(std::map<std::string, std::vector<SamaelImage*>>&)), m_computationManager, SLOT(trainClassifier(std::map<std::string, std::vector<SamaelImage*>>&)));
   QObject::connect(m_ToolBox, SIGNAL(trainSVM()), m_computationManager, SLOT(trainSVM()));
-  QObject::connect(m_ToolBox, SIGNAL(classify(std::map<QString, std::vector<SamaelImage*>>&, std::vector<QString>&)), m_computationManager, SLOT(classify(std::map<QString, std::vector<SamaelImage*>>&, std::vector<QString>&)));
+  QObject::connect(m_ToolBox, SIGNAL(classify(std::map<std::string, std::vector<SamaelImage*>>&, std::vector<std::string>&)), m_computationManager, SLOT(classify(std::map<std::string, std::vector<SamaelImage*>>&, std::vector<std::string>&)));
 }
 
 void SamaelMainWindow::createActions()

@@ -7,9 +7,8 @@
 #include "FileExplorerListProxyModel.h"
 #include "SamaelApplication.h"
 
-static QString extractClassNameFromPath(QString &path)
+static std::string extractClassNameFromPath(QString &path)
 {
-  QString className;
   std::string imagePath = path.toStdString();//extracting the classname out of the file path
 
   int position = 0;
@@ -26,7 +25,7 @@ static QString extractClassNameFromPath(QString &path)
   imagePath.copy(tmpClassName, len, oldPos);
   tmpClassName[len] = '\0';
 
-  className = tmpClassName;
+  std::string className = tmpClassName;
 
   delete[] tmpClassName;
 
@@ -132,7 +131,7 @@ void TreeWidget::load(QDir directory)
 
     for (int i = 0; i < files.count(); i++)
     {
-        load(files[i]);
+        load(directory.absoluteFilePath(files[i]));
     }
 
     // recurse subdirectories
@@ -144,6 +143,7 @@ void TreeWidget::load(QDir directory)
     for (int i = 0; i < directories.size(); i++)
     {
         QString path = directory.absolutePath().append("/" + directories[i]);
+        std::string tmpPath = path.toStdString();
         load(QDir(path));
     }
 }
@@ -173,7 +173,7 @@ void TreeWidget::load(QString file)
 
     SamaelImage *image = new SamaelImage(info.absoluteFilePath());
 
-    QString className = extractClassNameFromPath(info.absolutePath());
+    std::string className = extractClassNameFromPath(info.absolutePath());
 
     emit saveImage(className, image);
 

@@ -53,11 +53,11 @@ private:
   cv::Ptr<cv::DescriptorMatcher> m_matcher;
   cv::Ptr<cv::DescriptorExtractor> m_extractor;
   cv::BOWImgDescriptorExtractor *m_bowExtractor;
-  std::vector<QString> m_classNames;//the class names
+  std::vector<std::string> m_classNames;//the class names
   
   cv::Mat m_vocabulary;//vocabulary for each class
-  std::map<QString, cv::Mat> m_histograms;//maps a histogram to each class
-  std::map<QString, CvSVM*> m_classifiers;//SVM classifiers of the classes
+  std::map<std::string, cv::Mat> m_histograms;//maps a histogram to each class
+  std::map<std::string, CvSVM*> m_classifiers;//SVM classifiers of the classes
 
 public slots:
 
@@ -69,10 +69,10 @@ public slots:
   void setTrainer(int clusterCount, int epsilon = 0.001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
 
 
-  void createVocabulary(std::map<QString, std::vector<SamaelImage*>> &images);
-  void trainClassifier(std::map<QString, std::vector<SamaelImage*>> &images);//vector of images from one class
+  void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
+  void trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images);//vector of images from one class
   void trainSVM();
-  void classify(std::map<QString, std::vector<SamaelImage*>> &images, std::vector<QString> &out_classNames);//classifies a vector of images through returning the class names
+  void classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames);//classifies a vector of images through returning the class names
 
 private slots:
   void onDetectorExtractorChanged();

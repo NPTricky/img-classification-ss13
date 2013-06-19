@@ -15,7 +15,7 @@ ImageDataBase* ImageDataBase::getInstance()
   return &imageDataBase;
 }
 
-void ImageDataBase::addImage(QString className, SamaelImage *image)
+void ImageDataBase::addImage(std::string className, SamaelImage *image)
 {
   bool contained = false;
   for(int i = 0; i < m_classNames.size(); i++)
@@ -35,11 +35,11 @@ void ImageDataBase::addImage(QString className, SamaelImage *image)
   m_images[className].push_back(image);
 }
 
-void ImageDataBase::removeImages(QString className)
+void ImageDataBase::removeImages(std::string className)
 {
   m_images[className].clear();
 
-  for(std::vector<QString>::iterator it = m_classNames.begin(); it != m_classNames.end(); it++)
+  for(std::vector<std::string>::iterator it = m_classNames.begin(); it != m_classNames.end(); it++)
   {
     if(!it->compare(className))
     {
@@ -49,16 +49,16 @@ void ImageDataBase::removeImages(QString className)
   }
 }
 
-void ImageDataBase::getClassNames(std::vector<QString> &out_classNames)
+void ImageDataBase::getClassNames(std::vector<std::string> &out_classNames)
 {
   out_classNames = m_classNames;
 }
 
-void ImageDataBase::getTrainingImages(std::map<QString, std::vector<SamaelImage*>> &out_images)
+void ImageDataBase::getTrainingImages(std::map<std::string, std::vector<SamaelImage*>> &out_images)
 {
   for(int j = 0; j < m_classNames.size(); j++)
   {
-    QString className = m_classNames[j];
+    std::string className = m_classNames[j];
     m_trainingImageIndices[className].clear();
 
     std::map<int, bool> indices; 
@@ -102,11 +102,11 @@ void ImageDataBase::getTrainingImages(std::map<QString, std::vector<SamaelImage*
   }
 }
 
-void ImageDataBase::getClassifyImages(std::map<QString, std::vector<SamaelImage*>> &out_images)
+void ImageDataBase::getClassifyImages(std::map<std::string, std::vector<SamaelImage*>> &out_images)
 {
   for(int j = 0; j < m_classNames.size(); j++)
   {
-    QString className = m_classNames[j];
+    std::string className = m_classNames[j];
     out_images[className].resize(m_trainingImageIndices[className].size() - (m_images[className].size() & 1));
 
     bool copy = true;
