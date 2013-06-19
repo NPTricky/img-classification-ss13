@@ -34,10 +34,10 @@ ComputationManagerBOW::ComputationManagerBOW(
     m_bowTrainer = nullptr;
     m_bowExtractor = nullptr;
 
+    setTrainer(clusterCount);
     setDetector(detectorType,detectorAdapterType);
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
-    setTrainer(clusterCount);
 }
 
 ComputationManagerBOW::~ComputationManagerBOW()
@@ -90,8 +90,6 @@ void ComputationManagerBOW::createVocabulary(std::map<QString, std::vector<Samae
     {
       rawImageData.push_back(classImages[i]->getMat());
     }
-    
-    //detect(rawImageData, imageKeyPoints, &imageDescriptors);
 
     computeKeyPoints(rawImageData, imageKeyPoints);
     computeDescriptors(rawImageData, imageKeyPoints, &imageDescriptors);
@@ -128,10 +126,7 @@ void ComputationManagerBOW::trainClassifier(std::map<QString, std::vector<Samael
       rawImageData.push_back(classImages[i]->getMat());
     }
 
-    //detect(rawImageData, imageKeyPoints, &imageDescriptors);
-
     computeKeyPoints(rawImageData, imageKeyPoints);
-    computeDescriptors(rawImageData, imageKeyPoints);
 
     cv::Mat histogram;
 
@@ -206,10 +201,7 @@ void ComputationManagerBOW::classify(std::map<QString, std::vector<SamaelImage*>
       rawImageData.push_back(classImages[i]->getMat());
     }
 
-    //detect(rawImageData, imageKeyPoints, &imageDescriptors);
-
     computeKeyPoints(rawImageData, imageKeyPoints);
-    computeDescriptors(rawImageData, imageKeyPoints);
 
     m_bowExtractor->setVocabulary(m_vocabulary);
 
@@ -264,8 +256,6 @@ void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR
         delete m_detector;
 
     m_detector = cv::FeatureDetector::create(DetectorToText(adapter,detector));
-
-    emit methodChanged();
 }
 
 void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
@@ -284,6 +274,8 @@ void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLA
         delete m_matcher;
 
     m_matcher = cv::DescriptorMatcher::create(MatcherToText(matcher));
+
+    emit methodChanged();
 }
 
 void ComputationManagerBOW::setTrainer(

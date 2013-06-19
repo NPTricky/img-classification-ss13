@@ -43,14 +43,6 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_computationManager = ComputationManagerBOW::getInstance(16);
 
-    //testimages[0] = cv::imread("../samael/content/pic.png");
-
-    //std::vector<SamaelImage*> testimages;
-    //m_imageDataBase->getTrainingImages("NotClassified", testimages);
-
-    //m_computationManager->trainClassifier(QString("TestClass"), testimages);
-    //std::vector<QString> classname = m_computationManager->classify(testimages);
-
     this->setMinimumSize(640, 480);
 
     createWidgets();   ///< instantiation of different interface elements, also known as QWidgets
