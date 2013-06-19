@@ -29,19 +29,24 @@ private:
   ~ComputationManagerBOW();
 
   //compute the descriptors and keypoints for the images
-  void SIFT(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
-  void SURF(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
-  void MSER(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
+  void SIFT();
+  void SURF();
+  void MSER();
+
+  void detect(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
 
   Detector m_featureDetector;
 
   cv::BOWKMeansTrainer *m_bowTrainer;
+  cv::Ptr<cv::FeatureDetector> m_detector;
+  cv::Ptr<cv::DescriptorMatcher> m_matcher;
+  cv::Ptr<cv::DescriptorExtractor> m_extractor;
   cv::BOWImgDescriptorExtractor *m_bowExtractor;
   std::vector<QString> m_classNames;//the class names
   
   cv::Mat m_vocabulary;//vocabulary for each class
   std::map<QString, cv::Mat> m_histograms;//maps a histogram to each class
-  std::map<QString, CvSVM> m_classifiers;//SVM classifiers of the classes
+  std::map<QString, CvSVM*> m_classifiers;//SVM classifiers of the classes
 
 public slots:
 
