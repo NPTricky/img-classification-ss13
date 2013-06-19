@@ -255,30 +255,44 @@ void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std
 
 void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_PYRAMID*/)
 {
+    if (detector == m_detectorType && adapter == m_detectorAdapterType)
+        return;
+
     if (m_detector)
         delete m_detector;
 
     m_detector = cv::FeatureDetector::create(DetectorToText(adapter,detector));
+    m_detectorType = detector;
+    m_detectorAdapterType = adapter;
 
     emit detectorChanged();
 }
 
 void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
 {
+    if (extractor == m_extractorType && adapter == m_extractorAdapterType)
+        return;
+
     if (m_extractor)
         delete m_extractor;
 
     m_extractor = cv::DescriptorExtractor::create(ExtractorToText(adapter,extractor));
+    m_extractorType = extractor;
+    m_extractorAdapterType = adapter;
 
     emit extractorChanged();
 }
 
 void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLANNBASED*/)
 {
+    if (matcher == m_matcher)
+        return;
+
     if (m_matcher)
         delete m_matcher;
 
     m_matcher = cv::DescriptorMatcher::create(MatcherToText(matcher));
+    m_matcherType = matcher;
 
     emit matcherChanged();
 }
