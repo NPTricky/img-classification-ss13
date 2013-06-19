@@ -5,7 +5,7 @@
 FileExplorerListView::FileExplorerListView(QWidget *parent)
     : QListView(parent)
 {
-    connect(this,SIGNAL(modelReset()),this,SLOT(onSourceModelChanged()));
+
 }
 
 FileExplorerListView::~FileExplorerListView()
