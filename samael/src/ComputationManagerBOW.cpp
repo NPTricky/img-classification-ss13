@@ -232,14 +232,22 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)
 {
-    tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeKeyPoints(m_detector,images,out_imageKeyPoints));
+    for(int i = 0; i < images.size(); i++)
+    {
+        m_detector->detect(images[i], out_imageKeyPoints[i]);
+    }
+    //tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeKeyPoints(m_detector,images,out_imageKeyPoints));
 }
 
 void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors /*= nullptr*/)
 {
     if(out_imageDescriptors != nullptr)
     {
-        tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeDescriptors(m_extractor,images,imageKeyPoints,out_imageDescriptors));
+        for(int i = 0; i < images.size(); i++)
+        {
+            m_extractor->compute(images[i], imageKeyPoints[i], (*out_imageDescriptors)[i]);
+        }
+        //tbb::parallel_for(tbb::blocked_range<size_t>(0,images.size()),ParallelComputeDescriptors(m_extractor,images,imageKeyPoints,out_imageDescriptors));
     }
 }
 
@@ -289,7 +297,7 @@ void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLA
 
 void ComputationManagerBOW::setTrainer(
     int clusterCount,
-    int epsilon /*= 0.001*/, 
+    double epsilon /*= 0.00001*/, 
     int attempts /*= 3*/, 
     int flag /*= cv::KMEANS_PP_CENTERS*/
     )

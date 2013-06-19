@@ -66,7 +66,7 @@ public slots:
   void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_PYRAMID);
   void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_OPPONENT);
   void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
-  void setTrainer(int clusterCount, int epsilon = 0.001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
+  void setTrainer(int clusterCount, double epsilon = 0.00001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
 
 
   void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);

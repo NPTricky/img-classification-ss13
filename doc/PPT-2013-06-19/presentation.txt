@@ -1,0 +1,28 @@
+Theme: Selection of a classification technique
+* decision on feature space and classifier
+* implementation of a classification technique
+
+erinnerung an sift, surf als selected features nicht vergessen
+
+* Current Status
+
+* Problems
+
+* Test
+
+
+
+1. Vocabulary erstellen indem aus allen deskriptoren aller trainigsimages cluster gebildet werden, welche dann die einzelnen "Wörter" repräsenteiren
+
+Tim: klassenweise oder global?
+global
+
+
+2. mithilfe dieses vocabularies werden dann histogramme aus den deskriptoren der trainingsbilder erstellt. ein histrogramm enthält dabei die anzahl an keypoints pro bild die zu einem bestimmten cluster im vocabulary gehört
+die histogramme werden pro klasse gespeichert
+
+3. SVM classifier trainieren
+die histogramme aller bilder der einzelnen klassen repräsentieren nun feature vektoren, die feature vektoren (histogramme) der klasse die gerade trainiert wird werden als positiv markiert, alle andern als negativ. anschließend wird die SVM trainiert und separiert beide punktwolken voneinander. damit ist es möglich eine  1-vs-all SVM classifier zu erzeugen
+
+4. classification
+wenn jetzt ein bild übergeben wird muss nur noch geschaut werden welcher klassifizierer das histogramm des bildes am besten von allen separiert und zu diesr klasse gehört dann das bild

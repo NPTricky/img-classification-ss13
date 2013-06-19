@@ -46,7 +46,7 @@ public:
         cv::Ptr<cv::DescriptorExtractor> extractor,
         std::vector<cv::Mat> &images, 
         std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, 
-        std::vector<cv::Mat> *out_imageDescriptors /*= nullptr*/
+        std::vector<cv::Mat> *out_imageDescriptors
         )
         : m_extractor(extractor)
         , m_images(images)
