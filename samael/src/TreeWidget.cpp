@@ -171,8 +171,7 @@ void TreeWidget::load(QString file)
     //    .arg(info.isWritable())
     //    .toStdString().c_str();
 
-    /// info.absoluteFilePath()
-    SamaelImage *image = new SamaelImage(info.absolutePath() + QString("/") + info.fileName());
+    SamaelImage *image = new SamaelImage(info.absoluteFilePath());
 
     QString className = extractClassNameFromPath(info.absolutePath());
 

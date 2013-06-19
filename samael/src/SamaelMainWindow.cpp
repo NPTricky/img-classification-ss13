@@ -41,7 +41,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_imageDataBase = ImageDataBase::getInstance();
 
-    m_computationManager = ComputationManagerBOW::getInstance(16, ComputationManagerBOW::DETECTOR_SIFT);
+    m_computationManager = ComputationManagerBOW::getInstance(16);
 
     //testimages[0] = cv::imread("../samael/content/pic.png");
 
@@ -85,6 +85,7 @@ void SamaelMainWindow::createWidgets()
   QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getTrainingImages(std::map<QString, std::vector<SamaelImage*>>&)));
   QObject::connect(m_ToolBox, SIGNAL(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getClassifyImages(std::map<QString, std::vector<SamaelImage*>>&)));
 
+  #pragma WARNING(TODO: fix getFeatureDetector and related signal connections)
   QObject::connect(m_ToolBox, SIGNAL(setFeatureDetector(int)), m_computationManager, SLOT(setFeatureDetector(int)));
   QObject::connect(m_ToolBox, SIGNAL(getFeatureDetector(int&)), m_computationManager, SLOT(getFeatureDetector(int&)));
   QObject::connect(m_ToolBox, SIGNAL(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)), m_computationManager, SLOT(createVocabulary(std::map<QString, std::vector<SamaelImage*>> &)));

@@ -15,11 +15,10 @@ public:
     virtual void setModel(FileExplorerListProxyModel *model);
 
 public slots:
-    virtual void setRootIndexProxy(const QModelIndex &index);
+    void setRootIndexProxy(const QModelIndex &index);
 
 private:
     FileExplorerListProxyModel *m_ListProxyModel;
-
 
 };
 

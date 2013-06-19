@@ -7,35 +7,46 @@
 #include <QObject>
 
 #include "SamaelImage.h"
+#include "Samael.h"
+#include "Logger.h"
 
 class ComputationManagerBOW : public QObject
 {
 public:
 
-  enum Detector
-  {
-    DETECTOR_SIFT,
-    DETECTOR_SURF,
-    DETECTOR_MSER
-  };
-
-  static ComputationManagerBOW* getInstance(int clusterNumber, Detector featureDetector);
-
-  Q_OBJECT
-
+    static ComputationManagerBOW* getInstance(
+        int clusterCount = 2,
+        SAM::DetectorAdapter detectorAdapterType = SAM::DETECTOR_ADAPTER_PYRAMID,
+        SAM::Detector detectorType = SAM::DETECTOR_SIFT, 
+        SAM::ExtractorAdapter extractorAdapterType = SAM::EXTRACTOR_ADAPTER_OPPONENT, 
+        SAM::Extractor extractorType = SAM::EXTRACTOR_SIFT,
+        SAM::Matcher matcherType = SAM::MATCHER_FLANNBASED
+    );
+	
+    Q_OBJECT
+	
 private:
   
-  ComputationManagerBOW(int clusterNumber, Detector featureDetector);
+  ComputationManagerBOW(
+      int clusterCount, 
+      SAM::DetectorAdapter detectorAdapterType,
+      SAM::Detector keypointDetectorType, 
+      SAM::ExtractorAdapter extractorAdapterType,
+      SAM::Extractor extractorType,
+      SAM::Matcher matcherType
+  );
   ~ComputationManagerBOW();
 
-  //compute the descriptors and keypoints for the images
-  void SIFT();
-  void SURF();
-  void MSER();
+  //void detect(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
+  
+  void computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints);
+  void computeDescriptors(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
 
-  void detect(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
-
-  Detector m_featureDetector;
+  SAM::Detector m_detectorType;
+  SAM::DetectorAdapter m_detectorAdapterType;
+  SAM::Extractor m_extractorType;
+  SAM::ExtractorAdapter m_extractorAdapterType;
+  SAM::Matcher m_matcherType;
 
   cv::BOWKMeansTrainer *m_bowTrainer;
   cv::Ptr<cv::FeatureDetector> m_detector;
@@ -50,12 +61,21 @@ private:
 
 public slots:
 
-  void setFeatureDetector(int featureDetector);
   void getFeatureDetector(int &featureDetector);
+
+  void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_PYRAMID);
+  void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_OPPONENT);
+  void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
+  void setTrainer(int clusterCount, int epsilon = 0.001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
+  void onMethodChanged();
+
   void createVocabulary(std::map<QString, std::vector<SamaelImage*>> &images);
   void trainClassifier(std::map<QString, std::vector<SamaelImage*>> &images);//vector of images from one class
   void trainSVM();
   void classify(std::map<QString, std::vector<SamaelImage*>> &images, std::vector<QString> &out_classNames);//classifies a vector of images through returning the class names
+
+signals:
+  void methodChanged();
 };
 
 #endif
