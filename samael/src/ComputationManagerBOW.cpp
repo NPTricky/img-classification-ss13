@@ -252,7 +252,7 @@ void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std
 
 void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_PYRAMID*/)
 {
-    if (!m_detector)
+    if (m_detector)
         delete m_detector;
 
     m_detector = cv::FeatureDetector::create(DetectorToText(adapter,detector));
@@ -260,7 +260,7 @@ void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR
 
 void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
 {
-    if (!m_extractor)
+    if (m_extractor)
         delete m_extractor;
 
     m_extractor = cv::DescriptorExtractor::create(ExtractorToText(adapter,extractor));
@@ -270,7 +270,7 @@ void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRA
 
 void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLANNBASED*/)
 {
-    if (!m_matcher)
+    if (m_matcher)
         delete m_matcher;
 
     m_matcher = cv::DescriptorMatcher::create(MatcherToText(matcher));
@@ -285,7 +285,7 @@ void ComputationManagerBOW::setTrainer(
     int flag /*= cv::KMEANS_PP_CENTERS*/
     )
 {
-    if (!m_bowTrainer)
+    if (m_bowTrainer)
         delete m_bowTrainer;
 
     // CV_TERMCRIT_EPS: only the required precision (epsilon) does matter
@@ -296,7 +296,8 @@ void ComputationManagerBOW::setTrainer(
 
 void ComputationManagerBOW::onMethodChanged()
 {
-    m_bowTrainer->clear();//clears all previous vocabularies added to the trainer
+    if (m_bowTrainer)
+        m_bowTrainer->clear();//clears all previous vocabularies added to the trainer
 
     if(!m_vocabulary.empty())
         m_vocabulary.deallocate();//resets the vocabulary if the method changes
