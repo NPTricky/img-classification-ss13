@@ -96,7 +96,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerListProxyModel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -144,7 +143,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManagerBOW.cpp" />
     <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerListProxyModel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -186,7 +184,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\CommandLineLogDestination.cpp" />
-    <ClCompile Include="src\ComputationManager.cpp" />
     <ClCompile Include="src\ComputationManagerBOW.cpp" />
     <ClCompile Include="src\FileExplorerListProxyModel.cpp" />
     <ClCompile Include="src\FileExplorerListView.cpp" />
@@ -234,7 +231,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\src" "-I$(ICU_DIR)\include" "-I$(TBB_DIR)\include" "-I$(OPENCV_DIR)\include" "-I$(NOINHERIT)\." "-fstdafx.h" "-f../../src/ComputationManagerBOW.h"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp" "-fstdafx.h" "-f../../src/ComputationManagerBOW.h"  -DUNICODE -DWIN32 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\src" "-I$(ICU_DIR)\include" "-I$(TBB_DIR)\include" "-I$(OPENCV_DIR)\include" "-I$(NOINHERIT)\."</Command>
     </CustomBuild>
-    <ClInclude Include="src\ComputationManager.h" />
     <ClInclude Include="src\Creator.h" />
     <ClInclude Include="src\DerivedCreator.h" />
     <ClInclude Include="src\Factory.h" />

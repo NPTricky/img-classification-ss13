@@ -263,20 +263,11 @@
     <ClCompile Include="src\ComputationManagerBOW.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ComputationManager.cpp">
-      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,9 +342,6 @@
     </ClInclude>
     <ClInclude Include="src\UBO.h">
       <Filter>Header Files\visualization</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ComputationManager.h">
-      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
