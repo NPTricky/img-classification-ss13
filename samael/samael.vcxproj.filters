@@ -260,14 +260,23 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_ImageDatabase.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\ComputationManagerBOW.cpp">
-      <Filter>Source Files\core</Filter>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ComputationManager.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_ComputationManagerBOW.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComputationManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ComputationManagerBOW.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +352,9 @@
     <ClInclude Include="src\UBO.h">
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
+    <ClInclude Include="src\ComputationParallel.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SamaelMainWindow.ui">
@@ -394,6 +406,9 @@
       <Filter>Header Files\core</Filter>
     </CustomBuild>
     <CustomBuild Include="src\ComputationManagerBOW.h">
+      <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ComputationManager.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
   </ItemGroup>

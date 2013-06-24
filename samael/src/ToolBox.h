@@ -46,11 +46,13 @@ private slots:
   void trainBOW();
   void classifyBOW();
 
+  void classifierChanged(int i);
+
 signals:
 
-  void getClassNames(std::vector<QString> &out_classNames);
-  void getTrainingImages(QString className, std::vector<SamaelImage*> &out_images);
-  void getClassifyImages(QString className, std::vector<SamaelImage*> &out_images);
+  void getClassNames(std::vector<std::string> &out_classNames);
+  void getTrainingImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
+  void getClassifyImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
 
   void visualizeKeypoints();
   void visualizeImage();
@@ -58,8 +60,10 @@ signals:
 
   void setFeatureDetector(int featureDetector);
   void getFeatureDetector(int &featureDetector); 
-  void trainClassifier(QString className, std::vector<SamaelImage*> &images);
-  void classify(std::vector<SamaelImage*> &images, std::vector<QString> &classNames);
+  void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
+  void trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images);
+  void trainSVM();
+  void classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &classNames);
 };
 
 #endif // TOOLBOX_H

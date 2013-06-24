@@ -45,6 +45,7 @@ ToolBox::ToolBox(QWidget *parent)
     m_GCDescriptorComboBox->addItem(tr("SIFT"));
     m_GCDescriptorComboBox->addItem(tr("SURF"));
     m_GCDescriptorComboBox->addItem(tr("MSER"));
+    connect(m_GCDescriptorComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(classifierChanged(int)));
 
     m_GCTrainingButton = new QPushButton(tr("Train"), m_TrainContent);
     connect(m_GCTrainingButton, SIGNAL(pressed()), this, SLOT(trainBOW()));
@@ -81,32 +82,31 @@ void ToolBox::createActions()
 
 void ToolBox::trainBOW()
 {
-  switch(m_GCDescriptorComboBox->currentIndex())
-  {
-  case 0:
-    emit setFeatureDetector(0);//SIFT
-    break;
-  case 1:
-    emit setFeatureDetector(1);//SURF
-    break;
-  case 2:
-    emit setFeatureDetector(2);//MSER
-    break;
-  }
-
-  std::vector<QString> classNames;
-  std::vector<SamaelImage*> images;
+  std::vector<std::string> classNames;
+  std::map<std::string, std::vector<SamaelImage*>> images;
 
   emit getClassNames(classNames);
 
-  for(int i = 0; i < classNames.size(); i++)
-  {
-    emit getTrainingImages(classNames[i], images);
-    emit trainClassifier(classNames[i], images);
-  }
+  emit getTrainingImages(images);
+
+  emit createVocabulary(images);
+  emit trainClassifier(images);
+  emit trainSVM();
 }
 
 void ToolBox::classifyBOW()
+{
+  std::vector<std::string> classNames;
+  std::vector<std::string> classifiedClassNames;
+  std::map<std::string, std::vector<SamaelImage*>> images;
+
+  emit getClassNames(classNames);
+
+  emit getClassifyImages(images);
+  emit classify(images, classifiedClassNames);
+}
+
+void ToolBox::classifierChanged(int i)
 {
   switch(m_GCDescriptorComboBox->currentIndex())
   {
@@ -119,17 +119,5 @@ void ToolBox::classifyBOW()
   case 2:
     emit setFeatureDetector(2);//MSER
     break;
-  }
-
-  std::vector<QString> classNames;
-  std::vector<QString> classifiedClassNames;
-  std::vector<SamaelImage*> images;
-
-  emit getClassNames(classNames);
-
-  for(int i = 0; i < classNames.size(); i++)
-  {
-    emit getTrainingImages(classNames[i], images);
-    emit classify(images, classifiedClassNames);
   }
 }
