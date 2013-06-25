@@ -20,6 +20,15 @@
 * **Download Library (User Package)** [LATER...]()
 * **Download Glew Library** [GLEW-1.9.0](http://www.file-upload.net/download-7564382/glew-1.9.0.zip.html)
 
+#### Misc (Developer)
+
+* **COMMENT OUT** lib_pkg_project\Qt\5.0.1\msvc2010\include\QtGui\QtGui
+  * ```
+...
+//#include "qopenglfunctions.h"
+...
+```
+
 #### Content
 
 * (From Source) Qt 5.0.1 (09.03.2013)
