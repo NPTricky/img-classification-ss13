@@ -9,13 +9,14 @@ namespace SAM
 
     enum DetectorAdapter
     {
-        DETECTOR_ADAPTER_NONE,
+        DETECTOR_ADAPTER_NONE = -1,
         DETECTOR_ADAPTER_GRID,
         DETECTOR_ADAPTER_PYRAMID
     };
 
     enum Detector
     {
+        DETECTOR_NONE = -1,
         DETECTOR_SIFT,
         DETECTOR_SURF,
         DETECTOR_MSER,
@@ -71,12 +72,13 @@ namespace SAM
 
     enum ExtractorAdapter
     {
-        EXTRACTOR_ADAPTER_NONE,
+        EXTRACTOR_ADAPTER_NONE = -1,
         EXTRACTOR_ADAPTER_OPPONENT
     };
 
     enum Extractor
     {
+        EXTRACTOR_NONE = -1,
         EXTRACTOR_SIFT,
         EXTRACTOR_SURF,
         EXTRACTOR_ORB
