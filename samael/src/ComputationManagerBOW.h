@@ -1,10 +1,10 @@
 #ifndef COMPUTATIONMANAGERBOW_H_
 #define COMPUTATIONMANAGERBOW_H_
 
+#include <QObject>
+
 #include <vector>
 #include <map>
-
-#include <QObject>
 
 #include "SamaelImage.h"
 #include "Samael.h"
@@ -16,9 +16,9 @@ public:
 
     static ComputationManagerBOW* getInstance(
         int clusterCount = 2,
-        SAM::DetectorAdapter detectorAdapterType = SAM::DETECTOR_ADAPTER_PYRAMID,
+        SAM::DetectorAdapter detectorAdapterType = SAM::DETECTOR_ADAPTER_NONE,
         SAM::Detector detectorType = SAM::DETECTOR_SIFT, 
-        SAM::ExtractorAdapter extractorAdapterType = SAM::EXTRACTOR_ADAPTER_OPPONENT, 
+        SAM::ExtractorAdapter extractorAdapterType = SAM::EXTRACTOR_ADAPTER_NONE, 
         SAM::Extractor extractorType = SAM::EXTRACTOR_SIFT,
         SAM::Matcher matcherType = SAM::MATCHER_FLANNBASED
     );
@@ -30,7 +30,7 @@ private:
   ComputationManagerBOW(
       int clusterCount, 
       SAM::DetectorAdapter detectorAdapterType,
-      SAM::Detector keypointDetectorType, 
+      SAM::Detector detectorType,
       SAM::ExtractorAdapter extractorAdapterType,
       SAM::Extractor extractorType,
       SAM::Matcher matcherType
@@ -63,11 +63,10 @@ public slots:
 
   void getFeatureDetector(int &featureDetector);
 
-  void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_PYRAMID);
-  void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_OPPONENT);
+  void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_NONE);
+  void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_NONE);
   void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
   void setTrainer(int clusterCount, double epsilon = 0.00001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
-
 
   void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
   void trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images);//vector of images from one class

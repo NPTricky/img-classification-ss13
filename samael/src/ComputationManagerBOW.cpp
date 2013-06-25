@@ -2,13 +2,6 @@
 #include "ComputationManagerBOW.h"
 #include "ComputationParallel.h"
 
-#include <stdio.h>
-#include <iostream>
-#include "opencv2/core/core.hpp"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/nonfree/features2d.hpp"
-
 #include <QDebug>
 #include <limits>
 #include <QVector4d>
@@ -22,6 +15,9 @@ ComputationManagerBOW::ComputationManagerBOW(
     SAM::Matcher matcherType
     )
 {
+    /// temporary hack
+    cv::SiftFeatureDetector detector(400);
+
     connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(matcherChanged()),this,SLOT(onMatcherExtractorChanged()));
@@ -47,9 +43,9 @@ ComputationManagerBOW::~ComputationManagerBOW()
 
 ComputationManagerBOW* ComputationManagerBOW::getInstance(
     int clusterCount /*= 2*/, 
-    SAM::DetectorAdapter detectorAdapterType /*= DETECTOR_ADAPTER_PYRAMID*/, 
-    SAM::Detector keypointDetectorType /*= DETECTOR_SIFT*/, 
-    SAM::ExtractorAdapter extractorAdapterType /*= EXTRACTOR_ADAPTER_OPPONENT*/, 
+    SAM::DetectorAdapter detectorAdapterType /*= DETECTOR_ADAPTER_NONE*/, 
+    SAM::Detector detectorType /*= DETECTOR_SIFT*/, 
+    SAM::ExtractorAdapter extractorAdapterType /*= EXTRACTOR_ADAPTER_NONE*/, 
     SAM::Extractor extractorType /*= EXTRACTOR_SIFT*/,
     SAM::Matcher matcherType /*= SAM::MATCHER_FLANNBASED*/
     )
@@ -57,7 +53,7 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(
   static ComputationManagerBOW instance(
       clusterCount, 
       detectorAdapterType, 
-      keypointDetectorType, 
+      detectorType, 
       extractorAdapterType, 
       extractorType,
       matcherType
@@ -251,7 +247,7 @@ void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std
     }
 }
 
-void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_PYRAMID*/)
+void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_NONE*/)
 {
     if (detector == m_detectorType && adapter == m_detectorAdapterType)
         return;
@@ -266,7 +262,7 @@ void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR
     emit detectorChanged();
 }
 
-void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
+void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_NONE*/)
 {
     if (extractor == m_extractorType && adapter == m_extractorAdapterType)
         return;
