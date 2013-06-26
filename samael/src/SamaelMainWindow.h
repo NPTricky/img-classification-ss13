@@ -6,10 +6,10 @@
 class TerminalWidget;
 class SamaelItemModel;
 class TreeWidget;
-class ViewerWidget;
 class ToolBox;
 class ComputationManagerBOW;
 class ImageDataBase;
+class CentralWidget;
 
 class SamaelMainWindow : public QMainWindow
 {
@@ -48,9 +48,9 @@ private:
     TerminalWidget *m_TerminalWidget;
     TreeWidget *m_TreeWidget;
     ImageDataBase *m_imageDataBase;
-    ViewerWidget *m_viewerWidget;
-	  ToolBox *m_ToolBox;
+    ToolBox *m_ToolBox;
     ComputationManagerBOW *m_computationManager;
+    CentralWidget *m_CentralWidget;
 
     // QLayouts
     QVBoxLayout *m_DockAlphaVBoxLayout;

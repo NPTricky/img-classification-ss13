@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <limits>
 #include <QVector4d>
+#include "Logger.h"
 
 ComputationManagerBOW::ComputationManagerBOW(
     int clusterCount,
@@ -33,6 +34,8 @@ ComputationManagerBOW::ComputationManagerBOW(
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
     setTrainer(clusterCount);
+
+    QLOG_INFO() << "ComputationManagerBOW - Ready!";
 }
 
 ComputationManagerBOW::~ComputationManagerBOW()

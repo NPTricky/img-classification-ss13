@@ -22,6 +22,8 @@ VisualizerWidget::VisualizerWidget(QWidget *parent) : QGLWidget(QGLFormat(QFlags
   format().setGreenBufferSize(8);
   format().setBlueBufferSize(8);
   format().setAlphaBufferSize(8);
+
+  QLOG_INFO() << "VisualizerWidget - Ready!";
 }
 
 VisualizerWidget::~VisualizerWidget()
