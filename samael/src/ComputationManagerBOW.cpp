@@ -170,7 +170,7 @@ void ComputationManagerBOW::trainSVM()
     }
 
     cv::Mat samples_32f; 
-    samples.convertTo(samples_32f, CV_32FC1);
+    samples.convertTo(samples_32f, CV_32F);
     if(samples.rows == 0) 
     {
       continue; //phantom class?!
