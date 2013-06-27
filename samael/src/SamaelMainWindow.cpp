@@ -39,7 +39,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_imageDataBase = ImageDataBase::getInstance();
 
-    m_computationManager = ComputationManagerBOW::getInstance(16);
+    m_computationManager = ComputationManagerBOW::getInstance(1000);
 
     this->setMinimumSize(640, 480);
 

@@ -182,10 +182,14 @@ void ComputationManagerBOW::trainSVM()
 
 void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames)
 {
+  int correctClassification = 0;
+  int imageSize = 0;
   std::map<std::string, std::map<std::string, int>> confusionMatrix;
 
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
+    imageSize += it->second.size();
+
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -223,10 +227,14 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
       
       }
       confusionMatrix[minClass][className]++;
+      if(!minClass.compare(className))
+      {
+        correctClassification++;
+      }
     }
-
-    out_classNames = std::vector<std::string>();
   }
+
+  QLOG_ERROR_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)

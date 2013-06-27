@@ -139,11 +139,9 @@ void TreeWidget::load(QDir directory)
     directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
     QStringList directories = directory.entryList();
-
     for (int i = 0; i < directories.size(); i++)
     {
         QString path = directory.absolutePath().append("/" + directories[i]);
-        std::string tmpPath = path.toStdString();
         load(QDir(path));
     }
 }
