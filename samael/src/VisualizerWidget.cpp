@@ -23,6 +23,8 @@ VisualizerWidget::VisualizerWidget(QWidget *parent) : QGLWidget(QGLFormat(QFlags
   format().setBlueBufferSize(8);
   format().setAlphaBufferSize(8);
 
+  m_initialized = false;
+
   QLOG_INFO() << "VisualizerWidget - Ready!";
 }
 
@@ -34,15 +36,19 @@ VisualizerWidget::~VisualizerWidget()
 
   removeAllBoundingBoxes();
 
-  glDeleteBuffers(1, &m_keyPointVBO);
-  glDeleteBuffers(1, &m_bBoxVBO);
+  if(m_initialized)
+  {
+    glDeleteBuffers(1, &m_keyPointVBO);
+    glDeleteBuffers(1, &m_bBoxVBO);
+  
 
-  delete m_parallelCoordinates;
+    delete m_parallelCoordinates;
 
-  delete m_imageVisualizer;
-  delete m_keypointVisualizer;
-  delete m_bBoxVisualizer;
-  delete m_renderQuad;
+    delete m_imageVisualizer;
+    delete m_keypointVisualizer;
+    delete m_bBoxVisualizer;
+    delete m_renderQuad;
+  }
 }
 ///////////////////////////////////////////////////////////////
 
@@ -183,6 +189,8 @@ void VisualizerWidget::removeAllBoundingBoxes()
 ///////////////////////////////////////////////////////////////
 void VisualizerWidget::initializeGL()
 {
+  m_initialized = true;
+
   GLenum err = glewInit();
   
   if(err != GLEW_OK)
