@@ -8,6 +8,7 @@ class FileExplorerListView;
 class FileExplorerTreeProxyModel;
 class FileExplorerListProxyModel;
 class SamaelImage;
+class ThumbnailIconProvider;
 
 class TreeWidget : public SamaelDockWidget
 {
@@ -32,6 +33,7 @@ private:
     FileExplorerListView* m_ListView;
 
     QFileSystemModel* m_FileSystemModel;
+    ThumbnailIconProvider* m_IconProvider;
     FileExplorerTreeProxyModel* m_TreeProxyModel;
     FileExplorerListProxyModel* m_ListProxyModel;
     QFileInfo* m_Info;

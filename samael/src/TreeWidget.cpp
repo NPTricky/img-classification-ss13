@@ -6,6 +6,7 @@
 #include "FileExplorerTreeProxyModel.h"
 #include "FileExplorerListProxyModel.h"
 #include "SamaelApplication.h"
+#include "ThumbnailIconProvider.h"
 
 static std::string extractClassNameFromPath(QString &path)
 {
@@ -41,9 +42,14 @@ TreeWidget::TreeWidget(QWidget *parent)
 {
     this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
+    m_Filters = QStringList() << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg" << "*.jpe" << "*.jp2" << "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
+
     // create the data model
     m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
-    m_FileSystemModel->setRootPath("");
+
+    // create the icon provider
+    m_IconProvider = new ThumbnailIconProvider();
+    m_FileSystemModel->setIconProvider(m_IconProvider);
 
     // create the respective proxy models
     m_TreeProxyModel = new FileExplorerTreeProxyModel(m_ContentWidget);
@@ -97,7 +103,7 @@ TreeWidget::TreeWidget(QWidget *parent)
     
     //m_TreeView->scrollTo(m_TreeView->currentIndex(),QAbstractItemView::EnsureVisible);
 
-
+    m_FileSystemModel->setRootPath("");
 
     QLOG_INFO() << "TreeWidget - Ready!";
 }
