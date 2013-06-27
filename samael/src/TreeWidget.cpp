@@ -105,6 +105,8 @@ void TreeWidget::load(QDir directory)
         load(directory.absoluteFilePath(files[i]));
     }
 
+    QLOG_INFO_NOCONTEXT() << "load(QDir) loaded" << files.size() << "files from" << directory.dirName();
+
     // recurse subdirectories
     directory.setNameFilters(QStringList());
     directory.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
@@ -201,9 +203,6 @@ void TreeWidget::openDirectory()
         tr("Open Folder(s)"),
         QDir::currentPath()
         );
-
-    if (directory.isEmpty())
-        return;
 
     load(QDir(directory));
 }
