@@ -8,31 +8,6 @@
 #include "SamaelApplication.h"
 #include "ThumbnailIconProvider.h"
 
-static std::string extractClassNameFromPath(QString &path)
-{
-  std::string imagePath = path.toStdString();//extracting the classname out of the file path
-
-  int position = 0;
-  int oldPos;
-  do
-  {
-    oldPos = position + 1;
-    position = imagePath.find('/', position + 1);
-  }
-  while(position != std::string::npos);
-
-  int len = imagePath.size() - oldPos;
-  char *tmpClassName = new char[len + 1];
-  imagePath.copy(tmpClassName, len, oldPos);
-  tmpClassName[len] = '\0';
-
-  std::string className = tmpClassName;
-
-  delete[] tmpClassName;
-
-  return className;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,13 +17,18 @@ TreeWidget::TreeWidget(QWidget *parent)
 {
     this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    m_Filters = QStringList() << "*.bmp" << "*.dib" << "*.jpeg" << "*.jpg" << "*.jpe" << "*.jp2" << "*.png" << "*.pbm" << "*.pgm" << "*.ppm" << "*.tiff" << "*.tif";
+    m_FiltersRegExp = QRegExp("(bmp|dib|jpeg|jpg|jpe|jp2|png|pbm|pgm|ppm|tiff|tif)$", Qt::CaseInsensitive);
+    m_FiltersByName = QStringList() \
+        << "*.bmp" << "*.dib" << "*.jpeg" \
+        << "*.jpg" << "*.jpe" << "*.jp2" \
+        << "*.png" << "*.pbm" << "*.pgm" \
+        << "*.ppm" << "*.tiff" << "*.tif";
 
     // create the data model
     m_FileSystemModel = new QFileSystemModel(m_ContentWidget);
 
     // create the icon provider
-    m_IconProvider = new ThumbnailIconProvider();
+    m_IconProvider = new ThumbnailIconProvider(m_FiltersRegExp);
     m_FileSystemModel->setIconProvider(m_IconProvider);
 
     // create the respective proxy models
@@ -59,9 +39,6 @@ TreeWidget::TreeWidget(QWidget *parent)
 
     // configure the tree view
     m_TreeView = new QTreeView(m_ContentWidget);
-    //m_TreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_TreeView->setIndentation(20);
     m_TreeView->setModel(m_TreeProxyModel);
     m_TreeView->setRootIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index("")));
     m_TreeView->setCurrentIndex(m_TreeProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
@@ -69,11 +46,6 @@ TreeWidget::TreeWidget(QWidget *parent)
 
     // configure the list view
     m_ListView = new FileExplorerListView(m_ContentWidget);
-    //m_ListView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_ListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    m_ListView->setViewMode(QListView::IconMode);
-    m_ListView->setIconSize(QSize(60, 60));
-    m_ListView->setSpacing(10);
     m_ListView->setModel(m_ListProxyModel);
     m_ListView->setRootIndexProxy(m_ListProxyModel->mapFromSource(m_FileSystemModel->index(GetApp()->applicationDirPath())));
 
@@ -120,17 +92,10 @@ TreeWidget::~TreeWidget()
 void TreeWidget::load(QDir directory)
 {
     if (!directory.exists())
-    {
         return;
-    }
-
-    //auto root = m_SamaelItemModel->index(0,0);
-    //QModelIndexList matches = m_SamaelItemModel->match(root, Qt::DisplayRole, directory.dirName(), 1, Qt::MatchRecursive);
-    //
-    //QModelIndex parent = matches.isEmpty() ? insertNodeReturnIndex(directory.dirName()) : matches[0];
 
     // load all files within the directory
-    directory.setNameFilters(m_Filters);
+    directory.setNameFilters(m_FiltersByName);
     directory.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
     QStringList files = directory.entryList();
@@ -147,19 +112,22 @@ void TreeWidget::load(QDir directory)
     QStringList directories = directory.entryList();
     for (int i = 0; i < directories.size(); i++)
     {
+        QLOG_INFO_NOCONTEXT() << "load(QDir) is recursing into the subdirectory" << directories[i] << "from" << directory.dirName();
         QString path = directory.absolutePath().append("/" + directories[i]);
         load(QDir(path));
     }
 }
 
-void TreeWidget::load(QString file)
+void TreeWidget::load(QString path)
 {
-    if(file.isEmpty())
-    {
-      return;
-    }
+    QFileInfo file(path);
 
-    QFileInfo info(file);
+    if (!file.exists())
+        return;
+
+    // check for supported file format by opencv/imread
+    if (!m_FiltersRegExp.exactMatch(file.suffix()))
+        return;
 
     // print some general information
     //QLOG_INFO() << QString("NAME: %1 [SUFFIX: %2] - BYTES: %3")
@@ -175,17 +143,11 @@ void TreeWidget::load(QString file)
     //    .arg(info.isWritable())
     //    .toStdString().c_str();
 
-    SamaelImage *image = new SamaelImage(info.absoluteFilePath());
+    SamaelImage *image = new SamaelImage(path);
 
-    std::string className = extractClassNameFromPath(info.absolutePath());
+    std::string className = file.dir().dirName().toStdString();
 
-    emit saveImage(className, image);
-
-    // do the loading
-    //QVector<QVariant> data;
-    //data.append(QVariant::fromValue(SamaelNodeMetadata()));
-    //data.append(QVariant::fromValue(SamaelImage(file)));
-    //m_SamaelItemModel->insertColumns(0,data,parent);
+    emit addImageToDatabase(className, image);
 }
 
 void TreeWidget::createActions()
@@ -225,8 +187,6 @@ void TreeWidget::openFiles()
 
     if (files.isEmpty())
         return;
-
-    QString dir = QFileInfo(files[0]).dir().dirName();
 
     for (QStringList::const_iterator iter = files.cbegin(); iter != files.cend(); ++iter)
     {

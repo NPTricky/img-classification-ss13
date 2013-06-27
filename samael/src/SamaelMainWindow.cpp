@@ -67,8 +67,8 @@ void SamaelMainWindow::createWidgets()
   m_TreeWidget = new TreeWidget(this);
   this->addDockWidget(Qt::LeftDockWidgetArea, m_TreeWidget);
 
-  QObject::connect(m_TreeWidget, SIGNAL(saveImage(std::string, SamaelImage*)), m_imageDataBase, SLOT(addImage(std::string, SamaelImage*)));
-  QObject::connect(m_TreeWidget, SIGNAL(removeImages(std::string)), m_imageDataBase, SLOT(removeImages(std::string)));
+  QObject::connect(m_TreeWidget, SIGNAL(addImageToDatabase(std::string, SamaelImage*)), m_imageDataBase, SLOT(addImage(std::string, SamaelImage*)));
+  QObject::connect(m_TreeWidget, SIGNAL(removeClassFromDatabase(std::string)), m_imageDataBase, SLOT(removeImages(std::string)));
 
   // Toolbox Widget
   m_ToolBox = new ToolBox(this);

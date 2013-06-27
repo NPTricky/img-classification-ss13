@@ -3,10 +3,11 @@
 #include "Logger.h"
 #include <QIcon>
 
-ThumbnailIconProvider::ThumbnailIconProvider()
+ThumbnailIconProvider::ThumbnailIconProvider(QRegExp &imageextensions)
     : QFileIconProvider()
+    , m_Filters(imageextensions)
 {
-    m_Filters = QRegExp("(bmp|dib|jpeg|jpg|jpe|jp2|png|pbm|pgm|ppm|tiff|tif)", Qt::CaseInsensitive);
+
 }
 
 ThumbnailIconProvider::~ThumbnailIconProvider()

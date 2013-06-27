@@ -8,13 +8,13 @@ class QFileInfo;
 class ThumbnailIconProvider : public QFileIconProvider
 {
 public:
-    ThumbnailIconProvider();
+    ThumbnailIconProvider(QRegExp &imageextensions);
     ~ThumbnailIconProvider();
 
-    virtual QIcon icon( const QFileInfo &info ) const;
+    virtual QIcon icon(const QFileInfo &info) const;
 
 private:
-    QRegExp m_Filters;
+    QRegExp &m_Filters;
 };
 
 #endif // THUMBNAILICONPROVIDER_H

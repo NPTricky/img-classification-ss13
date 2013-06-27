@@ -20,7 +20,7 @@ public:
 
 private:
     void load(QDir directory);
-    void load(QString file);
+    void load(QString path);
     void createActions();
 
     // QActions
@@ -36,8 +36,8 @@ private:
     ThumbnailIconProvider* m_IconProvider;
     FileExplorerTreeProxyModel* m_TreeProxyModel;
     FileExplorerListProxyModel* m_ListProxyModel;
-    QFileInfo* m_Info;
-    QStringList m_Filters;
+    QRegExp m_FiltersRegExp;
+    QStringList m_FiltersByName;
 
 public slots:
 
@@ -46,8 +46,8 @@ public slots:
 
 signals:
 
-    void saveImage(std::string className, SamaelImage *image);
-    void removeImages(std::string className);
+    void addImageToDatabase(std::string className, SamaelImage *image);
+    void removeClassFromDatabase(std::string className);
 };
 
 #endif // TREEWIDGET_H
