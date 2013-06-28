@@ -9,6 +9,7 @@
 
 ComputationManagerBOW::ComputationManagerBOW(
     int clusterCount,
+    SAM::FeatureAlgorithm algorithmType,
     SAM::DetectorAdapter detectorAdapterType,
     SAM::Detector detectorType,
     SAM::ExtractorAdapter extractorAdapterType,
@@ -16,20 +17,29 @@ ComputationManagerBOW::ComputationManagerBOW(
     SAM::Matcher matcherType
     )
 {
-    /// temporary hack
-    cv::SiftFeatureDetector detector(400);
+    cv::initModule_features2d();
+    cv::initModule_nonfree();
 
     connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(matcherChanged()),this,SLOT(onMatcherExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onMatcherExtractorChanged()));
 
+    m_algorithmType = SAM::FeatureAlgorithm(-1);
+    m_detectorType = SAM::Detector(-1);
+    m_detectorAdapterType = SAM::DetectorAdapter(-1);
+    m_extractorType = SAM::Extractor(-1);
+    m_extractorAdapterType = SAM::ExtractorAdapter(-1);
+    m_matcherType = SAM::Matcher(-1);
+
+    m_algorithm = nullptr;
     m_detector = nullptr;
     m_extractor = nullptr;
     m_matcher = nullptr;
     m_bowTrainer = nullptr;
     m_bowExtractor = nullptr;
 
+    //setAlgorithm(algorithmType);
     setDetector(detectorType,detectorAdapterType);
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
@@ -40,21 +50,22 @@ ComputationManagerBOW::ComputationManagerBOW(
 
 ComputationManagerBOW::~ComputationManagerBOW()
 {
-  delete m_bowTrainer;
-  delete m_bowExtractor;
+
 }
 
 ComputationManagerBOW* ComputationManagerBOW::getInstance(
-    int clusterCount /*= 2*/, 
+    int clusterCount /*= 2*/,
+    SAM::FeatureAlgorithm algorithmType /*= FEATURE_ALGORITHM_SIFT*/,
     SAM::DetectorAdapter detectorAdapterType /*= DETECTOR_ADAPTER_NONE*/, 
-    SAM::Detector detectorType /*= DETECTOR_SIFT*/, 
+    SAM::Detector detectorType /*= DETECTOR_SIFT*/,
     SAM::ExtractorAdapter extractorAdapterType /*= EXTRACTOR_ADAPTER_NONE*/, 
     SAM::Extractor extractorType /*= EXTRACTOR_SIFT*/,
     SAM::Matcher matcherType /*= SAM::MATCHER_FLANNBASED*/
     )
 {
   static ComputationManagerBOW instance(
-      clusterCount, 
+      clusterCount,
+      algorithmType,
       detectorAdapterType, 
       detectorType, 
       extractorAdapterType, 
@@ -316,6 +327,18 @@ void ComputationManagerBOW::setTrainer(
     // (many algorithms limit the number of iterations anyway)
     cv::TermCriteria criteria = cv::TermCriteria(CV_TERMCRIT_EPS, 0, epsilon);
     m_bowTrainer = new cv::BOWKMeansTrainer(clusterCount, criteria, attempts, flag);
+}
+
+void ComputationManagerBOW::setAlgorithm(SAM::FeatureAlgorithm algorithm /*= SAM::FEATURE_ALGORITHM_SIFT*/)
+{
+    if (algorithm == m_algorithmType)
+        return;
+
+    if (m_algorithm)
+        delete m_algorithm;
+
+    m_algorithm = cv::Algorithm::create<cv::Feature2D>(AlgorithmToText(algorithm));
+    m_algorithmType = algorithm;
 }
 
 void ComputationManagerBOW::onMatcherExtractorChanged()
