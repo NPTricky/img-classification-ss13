@@ -66,6 +66,8 @@ protected:
 
   GLuint m_bBoxVBO;
   GLuint m_bBoxNumber;
+
+  bool m_initialized;
 };
 
 #endif

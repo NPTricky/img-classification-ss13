@@ -2,19 +2,14 @@
 #include "ComputationManagerBOW.h"
 #include "ComputationParallel.h"
 
-#include <stdio.h>
-#include <iostream>
-#include "opencv2/core/core.hpp"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/nonfree/features2d.hpp"
-
 #include <QDebug>
 #include <limits>
 #include <QVector4d>
+#include "Logger.h"
 
 ComputationManagerBOW::ComputationManagerBOW(
     int clusterCount,
+    SAM::FeatureAlgorithm algorithmType,
     SAM::DetectorAdapter detectorAdapterType,
     SAM::Detector detectorType,
     SAM::ExtractorAdapter extractorAdapterType,
@@ -22,42 +17,57 @@ ComputationManagerBOW::ComputationManagerBOW(
     SAM::Matcher matcherType
     )
 {
+    cv::initModule_features2d();
+    cv::initModule_nonfree();
+
     connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(matcherChanged()),this,SLOT(onMatcherExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onMatcherExtractorChanged()));
 
+    m_algorithmType = SAM::FeatureAlgorithm(-1);
+    m_detectorType = SAM::Detector(-1);
+    m_detectorAdapterType = SAM::DetectorAdapter(-1);
+    m_extractorType = SAM::Extractor(-1);
+    m_extractorAdapterType = SAM::ExtractorAdapter(-1);
+    m_matcherType = SAM::Matcher(-1);
+
+    m_algorithm = nullptr;
     m_detector = nullptr;
     m_extractor = nullptr;
     m_matcher = nullptr;
     m_bowTrainer = nullptr;
     m_bowExtractor = nullptr;
 
+    //setAlgorithm(algorithmType);
     setDetector(detectorType,detectorAdapterType);
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
     setTrainer(clusterCount);
+
+    QLOG_INFO() << "ComputationManagerBOW - Ready!";
 }
 
 ComputationManagerBOW::~ComputationManagerBOW()
 {
-  delete m_bowTrainer;
-  delete m_bowExtractor;
+
 }
 
 ComputationManagerBOW* ComputationManagerBOW::getInstance(
-    int clusterCount /*= 2*/, 
-    SAM::DetectorAdapter detectorAdapterType /*= DETECTOR_ADAPTER_PYRAMID*/, 
-    SAM::Detector keypointDetectorType /*= DETECTOR_SIFT*/, 
-    SAM::ExtractorAdapter extractorAdapterType /*= EXTRACTOR_ADAPTER_OPPONENT*/, 
+    int clusterCount /*= 2*/,
+    SAM::FeatureAlgorithm algorithmType /*= FEATURE_ALGORITHM_SIFT*/,
+    SAM::DetectorAdapter detectorAdapterType /*= DETECTOR_ADAPTER_NONE*/, 
+    SAM::Detector detectorType /*= DETECTOR_SIFT*/,
+    SAM::ExtractorAdapter extractorAdapterType /*= EXTRACTOR_ADAPTER_NONE*/, 
     SAM::Extractor extractorType /*= EXTRACTOR_SIFT*/,
     SAM::Matcher matcherType /*= SAM::MATCHER_FLANNBASED*/
     )
 {
   static ComputationManagerBOW instance(
-      clusterCount, 
+      clusterCount,
+      algorithmType,
       detectorAdapterType, 
-      keypointDetectorType, 
+      detectorType, 
       extractorAdapterType, 
       extractorType,
       matcherType
@@ -170,7 +180,7 @@ void ComputationManagerBOW::trainSVM()
     }
 
     cv::Mat samples_32f; 
-    samples.convertTo(samples_32f, CV_32FC1);
+    samples.convertTo(samples_32f, CV_32F);
     if(samples.rows == 0) 
     {
       continue; //phantom class?!
@@ -183,10 +193,14 @@ void ComputationManagerBOW::trainSVM()
 
 void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames)
 {
+  int correctClassification = 0;
+  int imageSize = 0;
   std::map<std::string, std::map<std::string, int>> confusionMatrix;
 
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
+    imageSize += it->second.size();
+
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -224,10 +238,14 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
       
       }
       confusionMatrix[minClass][className]++;
+      if(!minClass.compare(className))
+      {
+        correctClassification++;
+      }
     }
-
-    out_classNames = std::vector<std::string>();
   }
+
+  QLOG_ERROR_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)
@@ -251,7 +269,7 @@ void ComputationManagerBOW::computeDescriptors(std::vector<cv::Mat> &images, std
     }
 }
 
-void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_PYRAMID*/)
+void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR_SIFT*/, SAM::DetectorAdapter adapter /*= SAM::DETECTOR_ADAPTER_NONE*/)
 {
     if (detector == m_detectorType && adapter == m_detectorAdapterType)
         return;
@@ -266,7 +284,7 @@ void ComputationManagerBOW::setDetector(SAM::Detector detector /*= SAM::DETECTOR
     emit detectorChanged();
 }
 
-void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_OPPONENT*/)
+void ComputationManagerBOW::setExtractor(SAM::Extractor extractor /*= SAM::EXTRACTOR_SIFT*/, SAM::ExtractorAdapter adapter /*= SAM::EXTRACTOR_ADAPTER_NONE*/)
 {
     if (extractor == m_extractorType && adapter == m_extractorAdapterType)
         return;
@@ -309,6 +327,18 @@ void ComputationManagerBOW::setTrainer(
     // (many algorithms limit the number of iterations anyway)
     cv::TermCriteria criteria = cv::TermCriteria(CV_TERMCRIT_EPS, 0, epsilon);
     m_bowTrainer = new cv::BOWKMeansTrainer(clusterCount, criteria, attempts, flag);
+}
+
+void ComputationManagerBOW::setAlgorithm(SAM::FeatureAlgorithm algorithm /*= SAM::FEATURE_ALGORITHM_SIFT*/)
+{
+    if (algorithm == m_algorithmType)
+        return;
+
+    if (m_algorithm)
+        delete m_algorithm;
+
+    m_algorithm = cv::Algorithm::create<cv::Feature2D>(AlgorithmToText(algorithm));
+    m_algorithmType = algorithm;
 }
 
 void ComputationManagerBOW::onMatcherExtractorChanged()

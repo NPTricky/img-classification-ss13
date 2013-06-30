@@ -5,7 +5,12 @@
 FileExplorerListView::FileExplorerListView(QWidget *parent)
     : QListView(parent)
 {
-
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setViewMode(QListView::IconMode);
+    setIconSize(QSize(100, 100));
+    setSpacing(10);
+    setUniformItemSizes(true);
+    //setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 FileExplorerListView::~FileExplorerListView()

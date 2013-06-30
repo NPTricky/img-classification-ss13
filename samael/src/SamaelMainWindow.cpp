@@ -9,9 +9,9 @@
 #include "SamaelImage.h"
 #include "TreeWidget.h"
 #include "ToolBox.h"
-#include "ViewerWidget.h"
 #include "ComputationManagerBOW.h"
 #include "ImageDatabase.h"
+#include "CentralWidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -37,11 +37,9 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_TerminalWidget = terminal;
 
-    m_viewerWidget = new ViewerWidget(this);
-
     m_imageDataBase = ImageDataBase::getInstance();
 
-    m_computationManager = ComputationManagerBOW::getInstance(16);
+    m_computationManager = ComputationManagerBOW::getInstance(1000);
 
     this->setMinimumSize(640, 480);
 
@@ -55,8 +53,11 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
 void SamaelMainWindow::createWidgets()
 {
+  // Central Widget
+  m_CentralWidget = new CentralWidget(this);
+
   // Viewer Widget
-  this->setCentralWidget(m_viewerWidget);
+  this->setCentralWidget(m_CentralWidget);
 
   // Terminal Widget
   m_TerminalWidget->setParent(this);
@@ -66,12 +67,12 @@ void SamaelMainWindow::createWidgets()
   m_TreeWidget = new TreeWidget(this);
   this->addDockWidget(Qt::LeftDockWidgetArea, m_TreeWidget);
 
-  QObject::connect(m_TreeWidget, SIGNAL(saveImage(std::string, SamaelImage*)), m_imageDataBase, SLOT(addImage(std::string, SamaelImage*)));
-  QObject::connect(m_TreeWidget, SIGNAL(removeImages(std::string)), m_imageDataBase, SLOT(removeImages(std::string)));
+  QObject::connect(m_TreeWidget, SIGNAL(addImageToDatabase(std::string, SamaelImage*)), m_imageDataBase, SLOT(addImage(std::string, SamaelImage*)));
+  QObject::connect(m_TreeWidget, SIGNAL(removeClassFromDatabase(std::string)), m_imageDataBase, SLOT(removeImages(std::string)));
 
-	// Toolbox Widget
-	m_ToolBox = new ToolBox(this);
-	this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
+  // Toolbox Widget
+  m_ToolBox = new ToolBox(this);
+  this->addDockWidget(Qt::RightDockWidgetArea, m_ToolBox);
 
   QObject::connect(m_ToolBox, SIGNAL(getClassNames(std::vector<std::string>&)), m_imageDataBase, SLOT(getClassNames(std::vector<std::string>&)));
   QObject::connect(m_ToolBox, SIGNAL(getTrainingImages(std::map<std::string, std::vector<SamaelImage*>>&)), m_imageDataBase, SLOT(getTrainingImages(std::map<std::string, std::vector<SamaelImage*>>&)));

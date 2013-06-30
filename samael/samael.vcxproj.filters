@@ -60,12 +60,6 @@
     <Filter Include="Source Files\mvc">
       <UniqueIdentifier>{f24b15c2-e522-4b32-8242-c74a319e36ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\data">
-      <UniqueIdentifier>{1b5cb49a-4d11-4f38-8b81-cda00487cffa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\data">
-      <UniqueIdentifier>{5e146ede-0b0f-48dd-871b-2a50fd929505}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\gui\base">
       <UniqueIdentifier>{60c89bce-4fb1-4d8a-877f-e4eabb1c5774}</UniqueIdentifier>
     </Filter>
@@ -136,9 +130,6 @@
     </ClCompile>
     <ClCompile Include="src\TerminalWidgetLogDestination.cpp">
       <Filter>Source Files\log\destination</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SamaelImage.cpp">
-      <Filter>Source Files\data</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_TreeWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -269,6 +260,27 @@
     <ClCompile Include="src\ComputationManagerBOW.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\DataViewerWidget.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DataViewerWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DataViewerWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_CentralWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_CentralWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CentralWidget.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SamaelImage.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_SamaelMainWindow.h">
@@ -313,12 +325,6 @@
     <ClInclude Include="src\TerminalWidgetLogDestination.h">
       <Filter>Header Files\log\destination</Filter>
     </ClInclude>
-    <ClInclude Include="src\SamaelImage.h">
-      <Filter>Header Files\data</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Samael.h">
-      <Filter>Header Files\mvc</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -344,6 +350,12 @@
       <Filter>Header Files\visualization</Filter>
     </ClInclude>
     <ClInclude Include="src\ComputationParallel.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Samael.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SamaelImage.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -398,6 +410,12 @@
     </CustomBuild>
     <CustomBuild Include="src\ComputationManagerBOW.h">
       <Filter>Header Files\core</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\DataViewerWidget.h">
+      <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\CentralWidget.h">
+      <Filter>Header Files\gui</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
