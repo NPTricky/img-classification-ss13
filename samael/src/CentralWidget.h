@@ -18,6 +18,9 @@ private:
     QStackedLayout *m_Layout;
     ViewerWidget *m_ViewerWidget;
     DataViewerWidget *m_DataViewerWidget;
+
+public slots:
+    void toggleWidget();
 };
 
 #endif // CENTRALWIDGET_H

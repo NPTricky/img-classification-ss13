@@ -25,6 +25,8 @@ private:
 
     // QActions
     QAction *m_CollapseAction;
+    QAction *m_ScrollToSelectionAction;
+    QAction *m_ScrollToProjectAction;
 
     // QWidgets
     QTreeView* m_TreeView;
@@ -40,12 +42,12 @@ private:
     QStringList m_FiltersByName;
 
 public slots:
-
     void openFiles();
     void openDirectory();
+    void scrollToProject();
+    void scrollToSelection();
 
 signals:
-
     void addImageToDatabase(std::string className, SamaelImage *image);
     void removeClassFromDatabase(std::string className);
 };

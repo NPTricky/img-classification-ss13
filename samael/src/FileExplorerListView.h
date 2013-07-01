@@ -2,7 +2,7 @@
 #define FILEEXPLORERLISTVIEW_H
 
 #include <QListView>
-#include "FileExplorerListProxyModel.h"
+class FileExplorerListProxyModel;
 
 class FileExplorerListView : public QListView
 {
@@ -12,10 +12,11 @@ public:
     FileExplorerListView(QWidget *parent);
     ~FileExplorerListView();
 
-    virtual void setModel(FileExplorerListProxyModel *model);
+    void setModel(FileExplorerListProxyModel *model);
 
 public slots:
     void setRootIndexProxy(const QModelIndex &index);
+    void onCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
 
 private:
     FileExplorerListProxyModel *m_ListProxyModel;

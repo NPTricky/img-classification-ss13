@@ -16,6 +16,7 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     // Layout
     m_Layout = new QStackedLayout(this);
+    m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_ViewerWidget);
     m_Layout->addWidget(m_DataViewerWidget);
     m_Layout->setCurrentIndex(0);
@@ -28,4 +29,10 @@ CentralWidget::CentralWidget(QWidget *parent)
 CentralWidget::~CentralWidget()
 {
 
+}
+
+void CentralWidget::toggleWidget()
+{
+    int result = (m_Layout->currentIndex() + 1) % m_Layout->count();
+    m_Layout->setCurrentIndex(result);
 }

@@ -5,6 +5,7 @@
 
 class QTableView;
 class QGridLayout;
+class OpenCVMatrixModel;
 
 class DataViewerWidget : public QWidget
 {
@@ -17,6 +18,10 @@ public:
 private:
     QGridLayout *m_Layout;
     QTableView *m_TableView;
+    OpenCVMatrixModel *m_Model;
+
+public slots:
+    void displayMatrix(cv::Mat& matrix);
 };
 
 #endif // DATAWIDGET_H

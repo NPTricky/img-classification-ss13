@@ -236,15 +236,6 @@
     <ClCompile Include="src\FileExplorerListView.cpp">
       <Filter>Source Files\mvc</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_FileExplorerTreeView.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_FileExplorerTreeView.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FileExplorerTreeView.cpp">
-      <Filter>Source Files\mvc</Filter>
-    </ClCompile>
     <ClCompile Include="src\ImageDatabase.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
@@ -280,6 +271,15 @@
     </ClCompile>
     <ClCompile Include="src\SamaelImage.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_OpenCVMatrixModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_OpenCVMatrixModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenCVMatrixModel.cpp">
+      <Filter>Source Files\mvc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,9 +324,6 @@
     </ClInclude>
     <ClInclude Include="src\TerminalWidgetLogDestination.h">
       <Filter>Header Files\log\destination</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ViewerWidget.h">
       <Filter>Header Files\gui</Filter>
@@ -402,9 +399,6 @@
     <CustomBuild Include="src\FileExplorerListView.h">
       <Filter>Header Files\mvc</Filter>
     </CustomBuild>
-    <CustomBuild Include="src\FileExplorerTreeView.h">
-      <Filter>Header Files\mvc</Filter>
-    </CustomBuild>
     <CustomBuild Include="src\ImageDatabase.h">
       <Filter>Header Files\core</Filter>
     </CustomBuild>
@@ -416,6 +410,9 @@
     </CustomBuild>
     <CustomBuild Include="src\CentralWidget.h">
       <Filter>Header Files\gui</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\OpenCVMatrixModel.h">
+      <Filter>Header Files\mvc</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
