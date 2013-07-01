@@ -19,6 +19,13 @@ private:
     QGridLayout *m_Layout;
     QTableView *m_TableView;
     OpenCVMatrixModel *m_Model;
+	
+	// Toolbar
+	QToolBar *m_ToolBar;
+	QLabel *m_RowLabel;
+	QSpinBox *m_RowSpinBox;
+	QLabel *m_ColumnLabel;
+	QSpinBox *m_ColumnSpinBox;
 
 public slots:
     void displayMatrix(cv::Mat& matrix);
