@@ -15,6 +15,7 @@ public:
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
 private:
     cv::Mat m_Mat;
