@@ -21,6 +21,7 @@ private:
 
 public slots:
     void toggleWidget();
+    void displayMatrix(cv::Mat &matrix);
 };
 
 #endif // CENTRALWIDGET_H

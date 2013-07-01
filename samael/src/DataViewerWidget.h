@@ -15,6 +15,8 @@ public:
     DataViewerWidget(QWidget *parent);
     ~DataViewerWidget();
 
+    void displayMatrix(cv::Mat &matrix);
+
 private:
     QGridLayout *m_Layout;
     QTableView *m_TableView;
@@ -26,9 +28,6 @@ private:
 	QSpinBox *m_RowSpinBox;
 	QLabel *m_ColumnLabel;
 	QSpinBox *m_ColumnSpinBox;
-
-public slots:
-    void displayMatrix(cv::Mat& matrix);
 };
 
 #endif // DATAWIDGET_H

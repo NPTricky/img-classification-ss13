@@ -36,3 +36,8 @@ void CentralWidget::toggleWidget()
     int result = (m_Layout->currentIndex() + 1) % m_Layout->count();
     m_Layout->setCurrentIndex(result);
 }
+
+void CentralWidget::displayMatrix(cv::Mat& matrix)
+{
+    m_DataViewerWidget->displayMatrix(matrix);
+}

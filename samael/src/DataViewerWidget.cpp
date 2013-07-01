@@ -12,9 +12,13 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
 
 	// Toolbar
 	m_ToolBar = new QToolBar(this);
-	m_RowLabel = new QLabel(tr("Row:"),m_ToolBar);
+
+    int margin = 6;
+	m_RowLabel = new QLabel(tr("ROW"),m_ToolBar);
+    m_RowLabel->setContentsMargins(0,0,margin,0);
 	m_RowSpinBox = new QSpinBox(m_ToolBar);
-	m_ColumnLabel = new QLabel(tr("Column:"),m_ToolBar);
+	m_ColumnLabel = new QLabel(tr("COLUMN"),m_ToolBar);
+    m_ColumnLabel->setContentsMargins(margin,0,margin,0);
 	m_ColumnSpinBox = new QSpinBox(m_ToolBar);
 
 	m_ToolBar->addWidget(m_RowLabel);
