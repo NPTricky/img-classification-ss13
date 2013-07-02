@@ -85,6 +85,7 @@ signals:
   void detectorChanged();
   void extractorChanged();
   void matcherChanged();
+  void displayMatrix(cv::Mat &matrix);
 };
 
 #endif

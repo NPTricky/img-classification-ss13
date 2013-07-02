@@ -196,9 +196,11 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
 {
   int correctClassification = 0;
   int imageSize = 0;
-  std::map<std::string, std::map<std::string, int>> confusionMatrix;
+  //std::map<std::string, std::map<std::string, int>> confusionMatrix;
+  cv::Mat confusionMatrix = cv::Mat::zeros(m_classNames.size(), m_classNames.size(), CV_32FC1);
 
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  int matRow = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, matRow++)
   {
     imageSize += it->second.size();
 
@@ -227,18 +229,23 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
       float minf = FLT_MAX; 
       std::string minClass;
 
-      for(std::map<std::string, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++)
+      int matCol = 0;
+      int winnerCol;
+      for(std::map<std::string, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++, matCol++)
       {
         float response = cit->second->predict(histogram, true);
 
         if(response < minf)
         {
+          winnerCol = matCol;
           minf = response;
           minClass = cit->first;
         }
       
       }
-      confusionMatrix[minClass][className]++;
+      //confusionMatrix[minClass][className]++;
+      confusionMatrix.at<float>(winnerCol, matRow)++;
+
       if(!minClass.compare(className))
       {
         correctClassification++;
@@ -246,7 +253,9 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
     }
   }
 
-  QLOG_ERROR_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
+  displayMatrix(confusionMatrix);
+
+  QLOG_INFO_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)

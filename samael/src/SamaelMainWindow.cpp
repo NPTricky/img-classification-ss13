@@ -58,6 +58,7 @@ void SamaelMainWindow::createWidgets()
 
   // Viewer Widget
   this->setCentralWidget(m_CentralWidget);
+  QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat&)), m_CentralWidget, SLOT(displayMatrix(cv::Mat&)));
 
   // Terminal Widget
   m_TerminalWidget->setParent(this);
