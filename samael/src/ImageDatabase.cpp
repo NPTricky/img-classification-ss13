@@ -63,7 +63,7 @@ void ImageDataBase::getTrainingImages(std::map<std::string, std::vector<SamaelIm
 
     std::map<int, bool> indices; 
     int index;
-    int size = m_images[className].size();
+    int size = int(m_images[className].size());
 
     for(int i = 0; i < size / 2 + (size & 1); i++)//choose 50% random images for training and save their indices
     {

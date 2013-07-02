@@ -107,7 +107,7 @@ void VisualizerWidget::addKeyPoints(std::vector<cv::Point2f*> &keyPoints)
   glBufferSubData(GL_ARRAY_BUFFER, m_keyPointNumber * sizeof(cv::Point2f), keyPoints.size() * sizeof(cv::Point2f), &keyPoints[0]->x);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  m_keyPointNumber += keyPoints.size();
+  m_keyPointNumber += GLuint(keyPoints.size());
 }
 
 void VisualizerWidget::removeKeyPoint(cv::Point2f *keyPoint)

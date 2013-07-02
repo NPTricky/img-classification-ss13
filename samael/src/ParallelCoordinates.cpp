@@ -35,9 +35,9 @@ void ParallelCoordinates::setKeyPoints(cv::Mat keyPoints)
 
   float dataMin = std::numeric_limits<float>::max(), dataMax = std::numeric_limits<float>::min();
 
-  for(int i = 0; i < m_featureNumber; i++)
+  for(unsigned int i = 0; i < m_featureNumber; i++)
   {
-    for(int j = 0; j < m_dimensionNumber; j++)
+    for(unsigned int j = 0; j < m_dimensionNumber; j++)
     {
       dataMax = std::max(dataMax, ((float*)keyPoints.data)[i * m_dimensionNumber + j]);
       dataMin = std::min(dataMin, ((float*)keyPoints.data)[i * m_dimensionNumber + j]);
@@ -50,12 +50,12 @@ void ParallelCoordinates::setKeyPoints(cv::Mat keyPoints)
   int index;
   float r,g,b;
 
-  for(int i = 0; i < m_featureNumber; i++)
+  for(unsigned int i = 0; i < m_featureNumber; i++)
   {
     r = float(rand() % 256) * COLORNORM;
     g = float(rand() % 256) * COLORNORM;
     b = float(rand() % 256) * COLORNORM;
-    for(int j = 0; j < m_dimensionNumber; j++)
+    for(unsigned int j = 0; j < m_dimensionNumber; j++)
     {
       index = 5 * i * m_dimensionNumber + 5 * j;
       data[index + 0] = (float(j) / float(m_dimensionNumber) * 2) * m_scale;
@@ -75,7 +75,7 @@ void ParallelCoordinates::setKeyPoints(cv::Mat keyPoints)
   data = new float[m_dimensionNumber * 10];
 
   //Dimension Axes
-  for(int j = 0; j < m_dimensionNumber; j++)
+  for(unsigned int j = 0; j < m_dimensionNumber; j++)
   {
     data[10 * j + 0] = (float(j) / float(m_dimensionNumber) * 2) * m_scale;
     data[10 * j + 1] = 0.0f;

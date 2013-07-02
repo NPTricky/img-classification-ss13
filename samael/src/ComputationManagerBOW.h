@@ -43,6 +43,13 @@ private:
   void computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints);
   void computeDescriptors(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &imageKeyPoints, std::vector<cv::Mat> *out_imageDescriptors = nullptr);
   
+  void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
+  void histogramCreation(std::map<std::string, std::vector<SamaelImage*>> &images);//vector of images from one class
+  void trainSVM();
+  void classify(std::map<std::string, std::vector<SamaelImage*>> &images);//classifies a vector of images through returning the class names
+
+  void printProgress(std::string stepName, unsigned int actually, unsigned int maximum);
+
   SAM::FeatureAlgorithm m_algorithmType;
   SAM::Detector m_detectorType;
   SAM::DetectorAdapter m_detectorAdapterType;
@@ -62,9 +69,12 @@ private:
   std::map<std::string, cv::Mat> m_histograms;//maps a histogram to each class
   std::map<std::string, CvSVM*> m_classifiers;//SVM classifiers of the classes
 
-public slots:
+  cv::Mat m_confusionMatrix;//confusion Matrix of all Classes
 
-  void getFeatureDetector(int &featureDetector);
+  unsigned int m_run;//actual run of the test
+  static const unsigned int TESTRUNS = 20;//maximum number of runs per test
+
+public slots:
 
   void setAlgorithm(SAM::FeatureAlgorithm algorithm = SAM::FEATURE_ALGORITHM_SIFT);
   void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_NONE);
@@ -72,16 +82,18 @@ public slots:
   void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
   void setTrainer(int clusterCount, double epsilon = 0.00001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
 
-  void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
-  void trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images);//vector of images from one class
-  void trainSVM();
-  void classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames);//classifies a vector of images through returning the class names
+  void doClassification();
 
 private slots:
   void onDetectorExtractorChanged();
   void onMatcherExtractorChanged();
 
 signals:
+
+  void getClassNames(std::vector<std::string> &out_classNames);
+  void getTrainingImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
+  void getClassifyImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
+
   void detectorChanged();
   void extractorChanged();
   void matcherChanged();

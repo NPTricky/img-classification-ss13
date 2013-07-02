@@ -76,16 +76,13 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(
   return &instance;
 }
 
-#pragma WARNING(TODO: fix getFeatureDetector and related signal connections)
-void ComputationManagerBOW::getFeatureDetector(int &featureDetector)
-{
-  //featureDetector = m_detector;
-}
-
 void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  unsigned int stepCounter = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, stepCounter++)
   {
+    printProgress("Create Descriptors", stepCounter, unsigned int(images.size()));
+
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -110,17 +107,22 @@ void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<S
     }
   }
 
+  printProgress("Create Cluster (Vocabulary)", 0, 1);
+
   m_vocabulary = m_bowTrainer->cluster();
+
+  printProgress("Create Cluster (Vocabulary)", 1, 1);
 }
 
-void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images)
+void ComputationManagerBOW::histogramCreation(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
-  m_classNames.clear();
-  
   m_bowExtractor->setVocabulary(m_vocabulary);
 
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  unsigned int stepCounter = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, stepCounter++)
   {
+    printProgress("Create Histograms", stepCounter, unsigned int(images.size()));
+
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -128,8 +130,6 @@ void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<Sa
     std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
 
     imageKeyPoints.resize(classImages.size());
-
-    m_classNames.push_back(className);
 
     for(int i = 0; i < classImages.size(); i++)
     {
@@ -155,8 +155,11 @@ void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<Sa
 
 void ComputationManagerBOW::trainSVM()
 {
-  for(int i = 0; i < m_classNames.size(); i++)
+  unsigned int stepCounter = 0;
+  for(int i = 0; i < m_classNames.size(); i++, stepCounter++)
   {
+    printProgress("Train SVM", stepCounter, unsigned int(m_classNames.size()));
+
     std::string className = m_classNames[i];
 
     cv::Mat samples(0, m_histograms[className].cols, m_histograms[className].type());
@@ -192,17 +195,17 @@ void ComputationManagerBOW::trainSVM()
   }
 }
 
-void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames)
+void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
   int correctClassification = 0;
   int imageSize = 0;
-  //std::map<std::string, std::map<std::string, int>> confusionMatrix;
-  cv::Mat confusionMatrix = cv::Mat::zeros(m_classNames.size(), m_classNames.size(), CV_32FC1);
 
   int matRow = 0;
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, matRow++)
   {
-    imageSize += it->second.size();
+    printProgress("Classify Images", matRow, unsigned int(images.size()));
+
+    imageSize += int(it->second.size());
 
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
@@ -241,10 +244,9 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
           minf = response;
           minClass = cit->first;
         }
-      
       }
-      //confusionMatrix[minClass][className]++;
-      confusionMatrix.at<float>(winnerCol, matRow)++;
+
+      m_confusionMatrix.at<float>(winnerCol, matRow)++;
 
       if(!minClass.compare(className))
       {
@@ -253,9 +255,38 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
     }
   }
 
-  displayMatrix(confusionMatrix);
-
   QLOG_INFO_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
+}
+
+void ComputationManagerBOW::doClassification()
+{
+  std::map<std::string, std::vector<SamaelImage*>> trainingImages, classifyImages;
+  m_classNames.clear();
+
+  emit getClassNames(m_classNames);
+
+  emit getTrainingImages(trainingImages);
+  emit getClassifyImages(classifyImages);
+
+  m_confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);
+
+  for(m_run = 0; m_run < TESTRUNS; m_run++)
+  {
+    createVocabulary(trainingImages);
+    histogramCreation(trainingImages);
+    trainSVM();
+  
+    classify(classifyImages);
+  }
+
+  m_confusionMatrix /= float(TESTRUNS);
+
+  displayMatrix(m_confusionMatrix);
+}
+
+void ComputationManagerBOW::printProgress(std::string stepName, unsigned int actually, unsigned int maximum)
+{
+  QLOG_INFO_NOCONTEXT() << "Run: (" << m_run + 1 << "/" << TESTRUNS << ")" << stepName.c_str() << float(actually) / float(maximum) * 100.0f << "%\n";
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)
