@@ -1,0 +1,4 @@
+\select@language {ngerman}
+\contentsline {section}{Abstrakt}{2}
+\contentsline {section}{\numberline {1}Einleitung}{2}
+\contentsline {section}{Referenzen}{VI}
