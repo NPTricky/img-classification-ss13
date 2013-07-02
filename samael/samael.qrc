@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>content/icons/treewidget_collapse.svg</file>
         <file>content/icons/treewidget_expand.svg</file>
+        <file>content/icons/treewidget_scrolltoproject.svg</file>
+        <file>content/icons/treewidget_scrolltoselection.svg</file>
     </qresource>
 </RCC>

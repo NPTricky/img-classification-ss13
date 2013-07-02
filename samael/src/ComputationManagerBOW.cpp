@@ -19,6 +19,7 @@ ComputationManagerBOW::ComputationManagerBOW(
 {
     cv::initModule_features2d();
     cv::initModule_nonfree();
+    cv::initModule_ml();
 
     connect(this,SIGNAL(detectorChanged()),this,SLOT(onDetectorExtractorChanged()));
     connect(this,SIGNAL(extractorChanged()),this,SLOT(onDetectorExtractorChanged()));

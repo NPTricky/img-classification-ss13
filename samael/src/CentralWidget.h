@@ -18,6 +18,10 @@ private:
     QStackedLayout *m_Layout;
     ViewerWidget *m_ViewerWidget;
     DataViewerWidget *m_DataViewerWidget;
+
+public slots:
+    void toggleWidget();
+    void displayMatrix(cv::Mat &matrix);
 };
 
 #endif // CENTRALWIDGET_H

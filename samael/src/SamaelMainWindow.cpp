@@ -90,17 +90,17 @@ void SamaelMainWindow::createWidgets()
 void SamaelMainWindow::createActions()
 {
     // "Open" Action
-    m_OpenAction = new QAction(tr("&Open"), this);
+    m_OpenAction = new QAction(tr("&Open File(s)"), this);
     m_OpenAction->setShortcut(Qt::CTRL + Qt::Key_O);
     m_OpenAction->setToolTip(tr("Open File(s)"));
     m_OpenAction->setStatusTip(tr("Open File(s)"));
     connect(m_OpenAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openFiles()));
 
     // "Open Folder" Action
-    m_OpenFolderAction = new QAction(tr("Open &Folder"), this);
+    m_OpenFolderAction = new QAction(tr("Open &Folder (Recursive)"), this);
     m_OpenFolderAction->setShortcut(Qt::CTRL + Qt::Key_F);
-    m_OpenFolderAction->setToolTip(tr("Open Folder(s)"));
-    m_OpenFolderAction->setStatusTip(tr("Open Folder(s)"));
+    m_OpenFolderAction->setToolTip(tr("Open Folder (Recursive)"));
+    m_OpenFolderAction->setStatusTip(tr("Open Folder (Recursive)"));
     connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openDirectory()));
 
     // "Exit" Action
@@ -115,6 +115,13 @@ void SamaelMainWindow::createActions()
     m_AboutAction->setToolTip(tr("About Application"));
     m_AboutAction->setStatusTip(tr("About Application"));
     connect(m_AboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+    // "Toggle Main View" Action
+    m_ToggleMainViewAction = new QAction(tr("Toggle Main View"), this);
+    m_ToggleMainViewAction->setShortcut(Qt::CTRL + Qt::Key_Space);
+    m_ToggleMainViewAction->setToolTip(tr("Toggle Main View"));
+    m_ToggleMainViewAction->setStatusTip(tr("Toggle Main View"));
+    connect(m_ToggleMainViewAction, SIGNAL(triggered()), m_CentralWidget, SLOT(toggleWidget()));
 }
 
 void SamaelMainWindow::createMenus()
@@ -131,6 +138,7 @@ void SamaelMainWindow::createMenus()
 
     // "View" Menu
     m_ViewMenu = menuBar()->addMenu(tr("&View"));
+        m_ViewMenu->addAction(m_ToggleMainViewAction);
         m_ViewMenu->addAction(m_TreeWidget->toggleViewAction());
         m_ViewMenu->addAction(m_TerminalWidget->toggleViewAction());
         m_ViewMenu->addAction(m_ToolBox->toggleViewAction());

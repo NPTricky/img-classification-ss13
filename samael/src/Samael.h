@@ -97,7 +97,6 @@ namespace SAM
             break;
         default:
             {
-                QLOG_INFO_NOCONTEXT() << "DetectorToText() DETECTOR_ADAPTER_NONE";
                 break;
             }
         }
@@ -151,7 +150,6 @@ namespace SAM
             break;
         default:
             {
-                QLOG_INFO_NOCONTEXT() << "ExtractorToText() EXTRACTOR_ADAPTER_NONE";
                 break;
             }
         }

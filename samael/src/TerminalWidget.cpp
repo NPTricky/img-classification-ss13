@@ -14,6 +14,7 @@ TerminalWidget::TerminalWidget(QWidget *parent)
     m_Terminal->setFont(QFont("Courier",9));
     m_Terminal->setLineWrapMode(QPlainTextEdit::NoWrap);
     m_Terminal->setMaximumBlockCount(100);
+
     // background & text color
     auto p = m_Terminal->palette();
     p.setColor(QPalette::Base,QColor(qRgb(28,32,36)));

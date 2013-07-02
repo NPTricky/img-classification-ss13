@@ -32,11 +32,13 @@ private:
     QAction *m_OpenFolderAction;
     QAction *m_ExitAction;
     QAction *m_AboutAction;
+    QAction *m_ToggleMainViewAction;
 
     // QMenus
     QMenu *m_FileMenu;
     QMenu *m_EditMenu;
     QMenu *m_ViewMenu;
+    QMenu *m_MainViewMenu;
     QMenu *m_HelpMenu;
 
     // QWidgets 
