@@ -74,7 +74,7 @@ private:
   unsigned int m_trainingImageNumber;//number of training images
   unsigned int m_classifyImageNumber;//number of classifying images
   unsigned int m_run;//actual run of the test
-  static const unsigned int TESTRUNS = 20;//maximum number of runs per test
+  static const unsigned int TESTRUNS = 1;//maximum number of runs per test
 
 public slots:
 
@@ -85,6 +85,9 @@ public slots:
   void setTrainer(int clusterCount, double epsilon = 0.00001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
 
   void doClassification();
+
+  void saveConfusionMatrix();
+  void loadConfusionMatrix();
 
 private slots:
   void onDetectorExtractorChanged();

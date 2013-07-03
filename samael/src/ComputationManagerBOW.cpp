@@ -410,3 +410,19 @@ void ComputationManagerBOW::onDetectorExtractorChanged()
     if(!m_vocabulary.empty())
         m_vocabulary.deallocate();//resets the vocabulary if the method changes
 }
+
+void ComputationManagerBOW::saveConfusionMatrix()
+{
+  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::WRITE);
+  file << "Confusion_Matrix" << m_confusionMatrix;
+  file.release();
+}
+
+void ComputationManagerBOW::loadConfusionMatrix()
+{
+  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::READ);
+  file["Confusion_Matrix"] >> m_confusionMatrix;
+  file.release();
+
+  emit displayMatrix(m_confusionMatrix);
+}

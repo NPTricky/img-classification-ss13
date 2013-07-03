@@ -96,6 +96,20 @@ void SamaelMainWindow::createActions()
     m_OpenFolderAction->setStatusTip(tr("Open Folder (Recursive)"));
     connect(m_OpenFolderAction, SIGNAL(triggered()), m_TreeWidget, SLOT(openDirectory()));
 
+    // "Open Confusion Matrix" Action
+    m_OpenConfusionMatrixAction = new QAction(tr("Open Confusion &Matrix"), this);
+    m_OpenConfusionMatrixAction->setShortcut(Qt::CTRL + Qt::Key_M);
+    m_OpenConfusionMatrixAction->setToolTip(tr("Open Confusion Matrix"));
+    m_OpenConfusionMatrixAction->setStatusTip(tr("Open Confusion Matrix"));
+    connect(m_OpenConfusionMatrixAction, SIGNAL(triggered()), m_computationManager, SLOT(loadConfusionMatrix()));
+
+    // "Save Confusion Matrix" Action
+    m_SaveConfusionMatrixAction = new QAction(tr("Save Confusion &Matrix"), this);
+    m_SaveConfusionMatrixAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_M);
+    m_SaveConfusionMatrixAction->setToolTip(tr("Save Confusion Matrix"));
+    m_SaveConfusionMatrixAction->setStatusTip(tr("Save Confusion Matrix"));
+    connect(m_SaveConfusionMatrixAction, SIGNAL(triggered()), m_computationManager, SLOT(saveConfusionMatrix()));
+
     // "Exit" Action
     m_ExitAction = new QAction(tr("&Exit"), this);
     m_ExitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
@@ -123,6 +137,9 @@ void SamaelMainWindow::createMenus()
     m_FileMenu = menuBar()->addMenu(tr("&File"));
         m_FileMenu->addAction(m_OpenAction);
         m_FileMenu->addAction(m_OpenFolderAction);
+        m_FileMenu->addSeparator();
+        m_FileMenu->addAction(m_OpenConfusionMatrixAction);
+        m_FileMenu->addAction(m_SaveConfusionMatrixAction);
         m_FileMenu->addSeparator();
         m_FileMenu->addAction(m_ExitAction);
 

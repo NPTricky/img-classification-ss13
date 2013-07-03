@@ -30,6 +30,8 @@ private:
     // QActions
     QAction *m_OpenAction;
     QAction *m_OpenFolderAction;
+    QAction *m_OpenConfusionMatrixAction;
+    QAction *m_SaveConfusionMatrixAction;
     QAction *m_ExitAction;
     QAction *m_AboutAction;
     QAction *m_ToggleMainViewAction;
