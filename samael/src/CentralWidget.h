@@ -22,6 +22,7 @@ private:
 public slots:
     void toggleWidget();
     void displayMatrix(cv::Mat &matrix);
+    void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 };
 
 #endif // CENTRALWIDGET_H

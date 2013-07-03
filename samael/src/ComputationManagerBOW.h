@@ -100,6 +100,7 @@ signals:
   void extractorChanged();
   void matcherChanged();
   void displayMatrix(cv::Mat &matrix);
+  void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 };
 
 #endif

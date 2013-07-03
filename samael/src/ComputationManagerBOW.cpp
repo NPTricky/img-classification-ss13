@@ -295,12 +295,13 @@ void ComputationManagerBOW::doClassification()
 
   m_confusionMatrix /= float(TESTRUNS);
 
+  setConfusionMatrixHeaderData(m_classNames);
   displayMatrix(m_confusionMatrix);
 }
 
 void ComputationManagerBOW::printProgress(std::string stepName, unsigned int actually, unsigned int maximum)
 {
-  QLOG_INFO_NOCONTEXT() << "Run: (" << m_run + 1 << "/" << TESTRUNS << ")" << stepName.c_str() << float(actually) / float(maximum) * 100.0f << "%\n";
+  QLOG_TRACE_NOCONTEXT() << "Run: (" << m_run + 1 << "/" << TESTRUNS << ")" << stepName.c_str() << float(actually) / float(maximum) * 100.0f;
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)

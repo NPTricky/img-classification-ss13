@@ -19,7 +19,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     m_Layout->setContentsMargins(0,0,0,0);
     m_Layout->addWidget(m_ViewerWidget);
     m_Layout->addWidget(m_DataViewerWidget);
-    m_Layout->setCurrentIndex(0);
+    m_Layout->setCurrentIndex(1);
 
     this->setLayout(m_Layout);
 
@@ -40,4 +40,9 @@ void CentralWidget::toggleWidget()
 void CentralWidget::displayMatrix(cv::Mat& matrix)
 {
     m_DataViewerWidget->displayMatrix(matrix);
+}
+
+void CentralWidget::setConfusionMatrixHeaderData(std::vector<std::string> &classNames)
+{
+    m_DataViewerWidget->setConfusionMatrixHeaderData(classNames);
 }

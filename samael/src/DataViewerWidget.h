@@ -16,6 +16,7 @@ public:
     ~DataViewerWidget();
 
     void displayMatrix(cv::Mat &matrix);
+    void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 
 private:
     QGridLayout *m_Layout;
@@ -31,6 +32,10 @@ private:
     QLabel *m_SortLabel;
     QCheckBox *m_SortCheckBox;
 
+    // Actions
+    QAction *m_CopyAction;
+
+    void createActions();
     void onSelectionChanged(int row, int column, int flags);
 
 public slots:
@@ -38,6 +43,7 @@ public slots:
     void onColumnChanged(int i);
     void onRowClicked(int i);
     void onColumnClicked(int i);
+    void copyToClipboard();
 };
 
 #endif // DATAWIDGET_H

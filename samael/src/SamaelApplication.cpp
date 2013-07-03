@@ -4,7 +4,7 @@
 #include "CommandLineLogDestination.h"
 #include "FileLogDestination.h"
 #include "TerminalWidgetLogDestination.h"
-#include "Logger.h"
+#include "SamaelMainWindow.h"
 
 static const bool LOGGER_WELCOME = false;
 static const bool LOGGER_FUNCTIONALITY_CHECK = false; 
