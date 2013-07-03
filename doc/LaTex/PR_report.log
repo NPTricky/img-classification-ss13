@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=latex 2012.11.1)  25 JUN 2013 20:53
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=latex 2012.11.1)  3 JUL 2013 15:44
 entering extended mode
 **PR_report.tex
-("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\LaTex\PR_report.tex"
+("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\img-classification-ss13\doc\LaTex\PR_report.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, arabic, armenian, assamese, basque, bengali
 , bokmal, bulgarian, catalan, coptic, croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, galic
@@ -477,7 +477,7 @@ Package: capt-of 2009/12/29 v0.2 standard captions outside of floats
 LaTeX Warning: Unused global option(s):
     [liststotoc].
 
-("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\LaTex\PR_report.aux")
+("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\img-classification-ss13\doc\LaTex\PR_report.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
 LaTeX Font Info:    ... okay on input line 19.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
@@ -557,8 +557,9 @@ Overfull \hbox (75.02747pt too wide) in paragraph at lines 24--25
 
 [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <C:/Users/Sarah Pauksch/Desktop/Uni/Master/PatRec/Projekt/LaTex/ovg
-u_logo_fak_inf.jpg>] ("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\LaTex\PR_report.toc")
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <C:/Users/Sarah Pauksch/Desktop/Uni/Master/PatRec/Projekt/img-class
+ification-ss13/doc/LaTex/ovgu_logo_fak_inf.jpg>]
+("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\img-classification-ss13\doc\LaTex\PR_report.toc")
 \tf@toc=\write4
  [1]
 ! Undefined control sequence.
@@ -570,16 +571,16 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-LaTeX Font Info:    Try loading font information for OMS+lmr on input line 117.
+LaTeX Font Info:    Try loading font information for OMS+lmr on input line 122.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\omslmr.fd"
 File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 117.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 122.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\lm\omslmsy.fd"
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 117.
+(Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 122.
 
 
 ! LaTeX Error: There's no line here to end.
@@ -588,43 +589,33 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.131 \scshape \\S
-                  tate of the Art\\
+l.134 \newline
+              
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 131--134
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 131--134
-
- []
-
-[2] ("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\LaTex\PR_report.bbl"
+[2] ("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\img-classification-ss13\doc\LaTex\PR_report.bbl"
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-) [6] ("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\LaTex\PR_report.aux") ) 
+) [6] ("C:\Users\Sarah Pauksch\Desktop\Uni\Master\PatRec\Projekt\img-classification-ss13\doc\LaTex\PR_report.aux") ) 
 Here is how much of TeX's memory you used:
- 3260 strings out of 494046
- 42910 string characters out of 3148386
+ 3258 strings out of 494046
+ 43191 string characters out of 3148386
  126078 words of memory out of 3000000
- 6501 multiletter control sequences out of 15000+200000
- 31799 words of font info for 26 fonts, out of 3000000 for 9000
+ 6500 multiletter control sequences out of 15000+200000
+ 29004 words of font info for 25 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  27i,7n,24p,290b,275s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fon
-ts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathsy.enc}<C:/Program Files/MiKTeX 2.9/fon
-ts/type1/public/lm/lmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx12.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/lm/lmcsc10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX
- 2.9/fonts/type1/public/lm/lmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy10.pfb>
-Output written on PR_report.pdf (4 pages, 252136 bytes).
+{C:/
+Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc}<C:/
+Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx12.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr12.pf
+b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy10.pfb>
+Output written on PR_report.pdf (4 pages, 231901 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
+ 38 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
