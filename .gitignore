@@ -40,9 +40,7 @@
 /doc/LaTex/*.lof
 /doc/LaTex/*.log
 /doc/LaTex/*.lot
+/doc/LaTex/*.gz
+/doc/LaTex/*.pdf
 
 # Custom Ignores - Files
-
-
-
-/doc/LaTex/*.gz
