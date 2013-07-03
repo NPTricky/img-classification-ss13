@@ -32,5 +32,15 @@
 /build-x64/data/Annotations
 /samael/log
 
-# Custom Ignores - Files
+# Custom Ignores - LaTeX Generated Files
+/doc/LaTex/*.aux
+/doc/LaTex/*.toc
+/doc/LaTex/*.bbl
+/doc/LaTex/*.blg
+/doc/LaTex/*.lof
+/doc/LaTex/*.log
+/doc/LaTex/*.lot
+/doc/LaTex/*.gz
+/doc/LaTex/*.pdf
 
+# Custom Ignores - Files

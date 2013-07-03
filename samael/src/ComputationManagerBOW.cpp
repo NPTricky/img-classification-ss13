@@ -76,14 +76,9 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(
   return &instance;
 }
 
-#pragma WARNING(TODO: fix getFeatureDetector and related signal connections)
-void ComputationManagerBOW::getFeatureDetector(int &featureDetector)
-{
-  //featureDetector = m_detector;
-}
-
 void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
+  unsigned int stepCounter = 0;
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
     std::string className = it->first;
@@ -108,17 +103,23 @@ void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<S
     {
       m_bowTrainer->add(imageDescriptors[i]);
     }
+
+    stepCounter += classImages.size();
+    printProgress("Create Descriptors", stepCounter, m_trainingImageNumber);
   }
 
+  printProgress("Create Cluster (Vocabulary)", 0, 1);
+
   m_vocabulary = m_bowTrainer->cluster();
+
+  printProgress("Create Cluster (Vocabulary)", 1, 1);
 }
 
-void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images)
+void ComputationManagerBOW::histogramCreation(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
-  m_classNames.clear();
-  
   m_bowExtractor->setVocabulary(m_vocabulary);
 
+  unsigned int stepCounter = 0;
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
     std::string className = it->first;
@@ -128,8 +129,6 @@ void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<Sa
     std::vector<std::vector<cv::KeyPoint>> imageKeyPoints;
 
     imageKeyPoints.resize(classImages.size());
-
-    m_classNames.push_back(className);
 
     for(int i = 0; i < classImages.size(); i++)
     {
@@ -149,12 +148,15 @@ void ComputationManagerBOW::trainClassifier(std::map<std::string, std::vector<Sa
         m_histograms[className].create(0, histogram.cols, histogram.type());
       }
       m_histograms[className].push_back(histogram);
+
+      printProgress("Create Histograms", ++stepCounter, m_trainingImageNumber);
     }
   }
 }
 
 void ComputationManagerBOW::trainSVM()
 {
+  unsigned int stepCounter = 0;
   for(int i = 0; i < m_classNames.size(); i++)
   {
     std::string className = m_classNames[i];
@@ -189,18 +191,21 @@ void ComputationManagerBOW::trainSVM()
     CvSVM *classifier = new CvSVM; 
     classifier->train(samples_32f, labels);
     m_classifiers[className] = classifier;
+
+    printProgress("Train SVM", ++stepCounter, unsigned int(m_classNames.size()));
   }
 }
 
-void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &out_classNames)
+void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
   int correctClassification = 0;
   int imageSize = 0;
-  std::map<std::string, std::map<std::string, int>> confusionMatrix;
 
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
+  int matRow = 0;
+  unsigned int stepCounter = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, matRow++)
   {
-    imageSize += it->second.size();
+    imageSize += int(it->second.size());
 
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
@@ -227,26 +232,75 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
       float minf = FLT_MAX; 
       std::string minClass;
 
-      for(std::map<std::string, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++)
+      int matCol = 0;
+      int winnerCol;
+      for(std::map<std::string, CvSVM*>::iterator cit = m_classifiers.begin(); cit != m_classifiers.end(); cit++, matCol++)
       {
         float response = cit->second->predict(histogram, true);
 
         if(response < minf)
         {
+          winnerCol = matCol;
           minf = response;
           minClass = cit->first;
         }
-      
       }
-      confusionMatrix[minClass][className]++;
+
+      m_confusionMatrix.at<float>(winnerCol, matRow)++;
+
       if(!minClass.compare(className))
       {
         correctClassification++;
       }
+
+      printProgress("Classify Images", ++stepCounter, m_classifyImageNumber);
     }
   }
 
-  QLOG_ERROR_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
+  QLOG_INFO_NOCONTEXT() << float(correctClassification) / float(imageSize) * 100 << "% correct classification.\n";
+}
+
+void ComputationManagerBOW::doClassification()
+{
+  std::map<std::string, std::vector<SamaelImage*>> trainingImages, classifyImages;
+  m_classNames.clear();
+
+  emit getClassNames(m_classNames);
+
+  emit getTrainingImages(trainingImages);
+  emit getClassifyImages(classifyImages);
+
+  m_trainingImageNumber = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = trainingImages.begin(); it != trainingImages.end(); it++)
+  {
+    m_trainingImageNumber += it->second.size();
+  }
+
+  m_classifyImageNumber = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = classifyImages.begin(); it != classifyImages.end(); it++)
+  {
+    m_classifyImageNumber += it->second.size();
+  }
+
+  m_confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);
+
+  for(m_run = 0; m_run < TESTRUNS; m_run++)
+  {
+    createVocabulary(trainingImages);
+    histogramCreation(trainingImages);
+    trainSVM();
+  
+    classify(classifyImages);
+  }
+
+  m_confusionMatrix /= float(TESTRUNS);
+
+  displayMatrix(m_confusionMatrix);
+}
+
+void ComputationManagerBOW::printProgress(std::string stepName, unsigned int actually, unsigned int maximum)
+{
+  QLOG_INFO_NOCONTEXT() << "Run: (" << m_run + 1 << "/" << TESTRUNS << ")" << stepName.c_str() << float(actually) / float(maximum) * 100.0f << "%\n";
 }
 
 void ComputationManagerBOW::computeKeyPoints(std::vector<cv::Mat> &images, std::vector<std::vector<cv::KeyPoint>> &out_imageKeyPoints)

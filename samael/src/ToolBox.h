@@ -20,12 +20,6 @@ private:
     QToolBox *m_ToolBox;
 	  QVBoxLayout *m_Layout;
 
-    // ToolBox Group "Compute" (GC = Group Compute)
-    QWidget *m_ComputeContent;
-    QGridLayout *m_ComputeContentLayout;
-
-    QPushButton *m_GCClassifyButton;
-
     // ToolBox Group "Analyze" (GA = Group Analyze)
     QWidget *m_AnalyzeContent;
     QGridLayout *m_AnalyzeContentLayout;
@@ -34,36 +28,28 @@ private:
     QPushButton *m_GCVisualizeImageButton;
     QPushButton *m_GCVisualizeParallelCoordinatesButton;
 
-    // ToolBox Group "Training" (GT = Group Training)
-    QWidget *m_TrainContent;
-    QGridLayout *m_TrainContentLayout;
+    // ToolBox Group "Testing" (GT = Group Testing)
+    QWidget *m_TestContent;
+    QGridLayout *m_TestContentLayout;
 
     QComboBox *m_GCDescriptorComboBox;
-    QPushButton *m_GCTrainingButton;
+    QPushButton *m_GCTestingButton;
 
 private slots:
 
-  void trainBOW();
-  void classifyBOW();
+  void TestClassification();
 
   void classifierChanged(int i);
 
 signals:
-
-  void getClassNames(std::vector<std::string> &out_classNames);
-  void getTrainingImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
-  void getClassifyImages(std::map<std::string, std::vector<SamaelImage*>> &out_images);
-
   void visualizeKeypoints();
   void visualizeImage();
   void visualizeParallelCoordinates();
 
   void setFeatureDetector(int featureDetector);
   void getFeatureDetector(int &featureDetector); 
-  void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
-  void trainClassifier(std::map<std::string, std::vector<SamaelImage*>> &images);
-  void trainSVM();
-  void classify(std::map<std::string, std::vector<SamaelImage*>> &images, std::vector<std::string> &classNames);
+
+  void doClassification();
 };
 
 #endif // TOOLBOX_H
