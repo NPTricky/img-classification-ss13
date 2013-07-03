@@ -104,7 +104,7 @@ void OpenCVMatrixModel::setConfusionMatrixHeaderData(std::vector<std::string> &c
     if (m_Mat.cols != m_Mat.rows)
         return;
 
-    for (int i = 0; i <= classNames.size(); i++)
+    for (int i = 0; i < classNames.size(); i++)
     {
         setHeaderData(i,QString::fromStdString(classNames[i]));
     }

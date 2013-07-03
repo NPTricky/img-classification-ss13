@@ -2,6 +2,8 @@
 #include "ComputationManagerBOW.h"
 #include "ComputationParallel.h"
 
+#include <sstream>
+
 #include <QDebug>
 #include <limits>
 #include <QVector4d>
@@ -295,8 +297,8 @@ void ComputationManagerBOW::doClassification()
 
   m_confusionMatrix /= float(TESTRUNS);
 
-  setConfusionMatrixHeaderData(m_classNames);
-  displayMatrix(m_confusionMatrix);
+  emit displayMatrix(m_confusionMatrix);
+  emit setConfusionMatrixHeaderData(m_classNames);
 }
 
 void ComputationManagerBOW::printProgress(std::string stepName, unsigned int actually, unsigned int maximum)
@@ -416,6 +418,19 @@ void ComputationManagerBOW::saveConfusionMatrix()
 {
   cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::WRITE);
   file << "Confusion_Matrix" << m_confusionMatrix;
+
+  int classNumber = (int)m_classNames.size();
+  file << "class_number" << classNumber;
+
+  for(unsigned int i = 0; i < m_classNames.size(); i++)
+  {
+    std::ostringstream converter;
+    std::string tmpTest = "FieldName";
+    converter << i;
+    tmpTest.append(converter.str());
+    file << tmpTest.c_str() << m_classNames[i].c_str();
+  }
+
   file.release();
 }
 
@@ -423,7 +438,24 @@ void ComputationManagerBOW::loadConfusionMatrix()
 {
   cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::READ);
   file["Confusion_Matrix"] >> m_confusionMatrix;
+
+  int classNumber;
+  file["class_number"] >> classNumber;
+
+  m_classNames.clear();
+  m_classNames.resize(classNumber);
+
+  for(unsigned int i = 0; i < m_classNames.size(); i++)
+  {
+    std::ostringstream converter;
+    std::string tmpTest = "FieldName";
+    converter << i;
+    tmpTest.append(converter.str());
+    file[tmpTest] >> m_classNames[i];
+  }
+
   file.release();
 
   emit displayMatrix(m_confusionMatrix);
+  emit setConfusionMatrixHeaderData(m_classNames);
 }
