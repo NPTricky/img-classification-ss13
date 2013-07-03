@@ -4,5 +4,6 @@
         <file>content/icons/treewidget_expand.svg</file>
         <file>content/icons/treewidget_scrolltoproject.svg</file>
         <file>content/icons/treewidget_scrolltoselection.svg</file>
+        <file>content/icons/dataviewerwidget_clipboard.svg</file>
     </qresource>
 </RCC>

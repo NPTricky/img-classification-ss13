@@ -1,8 +1,9 @@
 #ifndef SAMAELAPPLICATION_H
 #define SAMAELAPPLICATION_H
 
-#include "SamaelMainWindow.h"
 #include "Logger.h"
+#include <QApplication>
+class SamaelMainWindow;
 
 class SamaelApplication : public QApplication
 {

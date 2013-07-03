@@ -41,6 +41,7 @@
 /doc/LaTex/*.log
 /doc/LaTex/*.lot
 /doc/LaTex/*.gz
-/doc/LaTex/*.pdf
+/doc/LaTex/PR_report.pdf
 
 # Custom Ignores - Files
+

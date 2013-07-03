@@ -145,9 +145,9 @@ void TreeWidget::load(QString path)
 void TreeWidget::createActions()
 {
     // "Collapse" Action
-    m_CollapseAction = new QAction(tr("&Collapse Tree"), this);
+    m_CollapseAction = new QAction(tr("Collapse &Tree"), this);
     m_CollapseAction->setObjectName(QStringLiteral("m_CollapseAction"));
-    m_CollapseAction->setShortcut(Qt::CTRL + Qt::Key_C);
+    //m_CollapseAction->setShortcut(Qt::CTRL + Qt::Key_T);
     m_CollapseAction->setText(tr("Collapse Tree"));
     m_CollapseAction->setToolTip(tr("Collapse Tree"));
     m_CollapseAction->setStatusTip(tr("Collapse Tree"));
@@ -160,7 +160,7 @@ void TreeWidget::createActions()
     // "Scroll To Selection" Action
     m_ScrollToSelectionAction = new QAction(tr("&Focus On Selection"),this);
     m_ScrollToSelectionAction->setObjectName(QStringLiteral("m_ScrollToSelectionAction"));
-    m_ScrollToSelectionAction->setShortcut(Qt::CTRL + Qt::Key_S);
+    //m_ScrollToSelectionAction->setShortcut(Qt::CTRL + Qt::Key_S);
     m_ScrollToSelectionAction->setText(tr("Focus On Selection"));
     m_ScrollToSelectionAction->setToolTip(tr("Focus On Selection"));
     m_ScrollToSelectionAction->setStatusTip(tr("Focus On Selection"));
@@ -173,7 +173,7 @@ void TreeWidget::createActions()
     // "Scroll To Project Directory" Action
     m_ScrollToProjectAction = new QAction(tr("&Scroll To Project Directory"),this);
     m_ScrollToProjectAction->setObjectName(QStringLiteral("m_ScrollToProjectAction"));
-    m_ScrollToProjectAction->setShortcut(Qt::CTRL + Qt::Key_P);
+    //m_ScrollToProjectAction->setShortcut(Qt::CTRL + Qt::Key_P);
     m_ScrollToProjectAction->setText(tr("Scroll To Project Directory"));
     m_ScrollToProjectAction->setToolTip(tr("Scroll To Project Directory"));
     m_ScrollToProjectAction->setStatusTip(tr("Scroll To Project Directory"));

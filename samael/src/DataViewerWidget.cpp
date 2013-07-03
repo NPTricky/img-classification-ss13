@@ -3,6 +3,7 @@
 #include <QTableView>
 #include <QGridLayout>
 #include "OpenCVMatrixModel.h"
+#include "SamaelApplication.h"
 
 DataViewerWidget::DataViewerWidget(QWidget *parent)
     : QWidget(parent)
@@ -13,6 +14,8 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
 	// Toolbar
 	m_ToolBar = new QToolBar(this);
     
+    createActions();
+
     int margin = 6;
 
     m_RowLabel = new QLabel(tr("ROW"),m_ToolBar);
@@ -25,8 +28,8 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     m_ColumnSpinBox->setMinimum(1);
     m_SortLabel = new QLabel(tr("SORT"),m_ToolBar);
     m_SortLabel->setContentsMargins(margin,0,margin,0);
-    m_SortCheckBox = new QCheckBox(tr("[DO NOT USE \"SORT\" OR YOU'LL DIE A SLOW AND PAINFUL DEATH!]"), m_ToolBar);
-    m_SortCheckBox->setToolTip(tr("[YES, I MEAN IT. NOT IF YOUR MATRIX CONTAINS ANYTHING OF RELEVANCE!]"));
+    m_SortCheckBox = new QCheckBox(tr("DO NOT USE"),m_ToolBar);
+    m_SortCheckBox->setToolTip(tr("Sort Column By Selection"));
 
 	m_ToolBar->addWidget(m_RowLabel);
 	m_ToolBar->addWidget(m_RowSpinBox);
@@ -34,11 +37,12 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
 	m_ToolBar->addWidget(m_ColumnSpinBox);
     m_ToolBar->addWidget(m_SortLabel);
     m_ToolBar->addWidget(m_SortCheckBox);
+    m_ToolBar->addAction(m_CopyAction);
 
     // View
     m_TableView = new QTableView(this);
     m_TableView->setModel(m_Model);
-    cv::Mat matrix = cv::Mat::eye(128, 128, CV_32F);
+    cv::Mat matrix = cv::Mat::eye(101, 101, CV_32F);
     displayMatrix(matrix);
 
     // Layout
@@ -65,9 +69,6 @@ void DataViewerWidget::displayMatrix(cv::Mat& matrix)
 {
     if (!matrix.empty())
         m_Model->setSourceMatrix(matrix);
-
-    //m_TableView->resizeColumnsToContents();
-    //m_TableView->resizeRowsToContents();
 
     m_RowSpinBox->setMaximum(matrix.rows);
     m_ColumnSpinBox->setMaximum(matrix.cols);
@@ -109,4 +110,100 @@ void DataViewerWidget::onColumnClicked(int i)
     }
 
     m_ColumnSpinBox->setValue(i + 1);
+}
+
+void DataViewerWidget::copyToClipboard()
+{
+    if (m_TableView->selectionModel()->selectedIndexes().size() <= 1)
+        m_TableView->selectAll();
+
+    QItemSelectionModel * selection = m_TableView->selectionModel();
+    QModelIndexList indices = selection->selectedIndexes();
+    int columnCount = indices.last().column() - indices.first().column();
+    int headerWidth = 16;
+
+    // QModelIndex::operator < sorts first by row, then by column.
+    // this is what we need
+    //std::sort(indices.begin(), indices.end());
+    std::sort(indices.begin(),indices.end());
+
+    // You need a pair of indexes to find the row changes
+    QModelIndex previous = indices.takeFirst();
+
+    // create the latex column alignment string
+    QString columnAlignment;
+    for (int i = 0; i <= columnCount + 1; i++) // +1 for row header
+    {
+        columnAlignment.append(" c");
+    }
+    columnAlignment.append(" ");
+
+    QString selected_text;
+    QModelIndex current;
+
+    // add first elements
+    selected_text.append("\\scalebox{0.1}{\n");
+    selected_text.append("\\begin{tabular}{" + columnAlignment + "}\n");
+    //selected_text.append("\\hline\n");
+
+    // header rows beginning
+    selected_text.append(QString("%1 & ").arg("",headerWidth));
+
+    // header rows
+    int i = previous.column();
+    for (i; i < indices.last().column(); i++)
+    {
+            selected_text.append(QString("%1 & ").arg(m_TableView->model()->headerData(i,Qt::Vertical).toString()));
+    }
+    selected_text.append(QString("%1 \\\\ \\hline \n").arg(m_TableView->model()->headerData(i,Qt::Vertical).toString()));
+
+    // first row beginning
+    selected_text.append(QString("%1 &").arg(m_TableView->model()->headerData(previous.row(),Qt::Vertical).toString(),headerWidth));
+
+    Q_FOREACH(current, indices)
+    {
+        // At this point `text` contains the text in one cell
+
+        // If you are at the start of the row the row number of the previous index
+        // isn't the same.  Text is followed by a row separator, which is a newline.
+        if (current.row() != previous.row())
+        {
+            selected_text.append(QString("%1 \\\\ \\hline \n").arg(m_TableView->model()->data(previous).toString(),4));
+            selected_text.append(QString("%1 &").arg(m_TableView->model()->headerData(current.row(),Qt::Vertical).toString(),headerWidth));
+        }
+        else
+        {
+            selected_text.append(QString("%1 &").arg(m_TableView->model()->data(previous).toString(),4));
+        }
+
+        // Otherwise it's the same row, so append a column separator, which is a tab.
+        previous = current;
+    }
+
+    // add last elements
+    selected_text.append(QString("%1 \\\\\n").arg(m_TableView->model()->data(current).toString(),4));
+    selected_text.append("\\hline\n");
+    selected_text.append("\\end{tabular}\n");
+    selected_text.append("}");
+
+    GetApp()->clipboard()->setText(selected_text);
+}
+
+void DataViewerWidget::createActions()
+{
+    // "Copy To Clipboard" Action
+    m_CopyAction = new QAction(tr("&Copy To Clipboard"), this);
+    m_CopyAction->setShortcut(Qt::CTRL + Qt::Key_C);
+    m_CopyAction->setToolTip(tr("Copy To Clipboard (LaTeX Tabular)"));
+    m_CopyAction->setStatusTip(tr("Copy To Clipboard (LaTeX Tabular)"));
+    connect(m_CopyAction, SIGNAL(triggered()), this, SLOT(copyToClipboard()));
+
+    QIcon iconClipboard;
+    iconClipboard.addFile(":/content/icons/dataviewerwidget_clipboard.svg", QSize(), QIcon::Normal, QIcon::Off);
+    m_CopyAction->setIcon(iconClipboard);
+}
+
+void DataViewerWidget::setConfusionMatrixHeaderData(std::vector<std::string> &classNames)
+{
+    m_Model->setConfusionMatrixHeaderData(classNames);
 }

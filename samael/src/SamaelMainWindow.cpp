@@ -39,7 +39,7 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_imageDataBase = ImageDataBase::getInstance();
 
-    m_computationManager = ComputationManagerBOW::getInstance(1000);
+    m_computationManager = ComputationManagerBOW::getInstance(16);
 
     this->setMinimumSize(640, 480);
 
@@ -63,6 +63,7 @@ void SamaelMainWindow::createWidgets()
   // Viewer Widget
   this->setCentralWidget(m_CentralWidget);
   QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat&)), m_CentralWidget, SLOT(displayMatrix(cv::Mat&)));
+  QObject::connect(m_computationManager, SIGNAL(setConfusionMatrixHeaderData(std::vector<std::string>&)), m_CentralWidget, SLOT(setConfusionMatrixHeaderData(std::vector<std::string>&)));
 
   // Terminal Widget
   m_TerminalWidget->setParent(this);
