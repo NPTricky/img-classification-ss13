@@ -79,10 +79,8 @@ ComputationManagerBOW* ComputationManagerBOW::getInstance(
 void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images)
 {
   unsigned int stepCounter = 0;
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, stepCounter++)
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    printProgress("Create Descriptors", stepCounter, unsigned int(images.size()));
-
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -105,6 +103,9 @@ void ComputationManagerBOW::createVocabulary(std::map<std::string, std::vector<S
     {
       m_bowTrainer->add(imageDescriptors[i]);
     }
+
+    stepCounter += classImages.size();
+    printProgress("Create Descriptors", stepCounter, m_trainingImageNumber);
   }
 
   printProgress("Create Cluster (Vocabulary)", 0, 1);
@@ -119,10 +120,8 @@ void ComputationManagerBOW::histogramCreation(std::map<std::string, std::vector<
   m_bowExtractor->setVocabulary(m_vocabulary);
 
   unsigned int stepCounter = 0;
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, stepCounter++)
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++)
   {
-    printProgress("Create Histograms", stepCounter, unsigned int(images.size()));
-
     std::string className = it->first;
     std::vector<SamaelImage*> classImages = it->second;
 
@@ -149,6 +148,8 @@ void ComputationManagerBOW::histogramCreation(std::map<std::string, std::vector<
         m_histograms[className].create(0, histogram.cols, histogram.type());
       }
       m_histograms[className].push_back(histogram);
+
+      printProgress("Create Histograms", ++stepCounter, m_trainingImageNumber);
     }
   }
 }
@@ -156,10 +157,8 @@ void ComputationManagerBOW::histogramCreation(std::map<std::string, std::vector<
 void ComputationManagerBOW::trainSVM()
 {
   unsigned int stepCounter = 0;
-  for(int i = 0; i < m_classNames.size(); i++, stepCounter++)
+  for(int i = 0; i < m_classNames.size(); i++)
   {
-    printProgress("Train SVM", stepCounter, unsigned int(m_classNames.size()));
-
     std::string className = m_classNames[i];
 
     cv::Mat samples(0, m_histograms[className].cols, m_histograms[className].type());
@@ -192,6 +191,8 @@ void ComputationManagerBOW::trainSVM()
     CvSVM *classifier = new CvSVM; 
     classifier->train(samples_32f, labels);
     m_classifiers[className] = classifier;
+
+    printProgress("Train SVM", ++stepCounter, unsigned int(m_classNames.size()));
   }
 }
 
@@ -201,10 +202,9 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
   int imageSize = 0;
 
   int matRow = 0;
+  unsigned int stepCounter = 0;
   for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = images.begin(); it != images.end(); it++, matRow++)
   {
-    printProgress("Classify Images", matRow, unsigned int(images.size()));
-
     imageSize += int(it->second.size());
 
     std::string className = it->first;
@@ -252,6 +252,8 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
       {
         correctClassification++;
       }
+
+      printProgress("Classify Images", ++stepCounter, m_classifyImageNumber);
     }
   }
 
@@ -267,6 +269,18 @@ void ComputationManagerBOW::doClassification()
 
   emit getTrainingImages(trainingImages);
   emit getClassifyImages(classifyImages);
+
+  m_trainingImageNumber = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = trainingImages.begin(); it != trainingImages.end(); it++)
+  {
+    m_trainingImageNumber += it->second.size();
+  }
+
+  m_classifyImageNumber = 0;
+  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = classifyImages.begin(); it != classifyImages.end(); it++)
+  {
+    m_classifyImageNumber += it->second.size();
+  }
 
   m_confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);
 
