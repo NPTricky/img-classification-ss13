@@ -288,6 +288,10 @@ void ComputationManagerBOW::doClassification()
 
   for(m_run = 0; m_run < TESTRUNS; m_run++)
   {
+    m_histograms.clear();
+    m_classifiers.clear();
+    m_bowTrainer->clear();
+
     createVocabulary(trainingImages);
     histogramCreation(trainingImages);
     trainSVM();
