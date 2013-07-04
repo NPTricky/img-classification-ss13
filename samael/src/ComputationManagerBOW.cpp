@@ -198,7 +198,7 @@ void ComputationManagerBOW::trainSVM()
   }
 }
 
-void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images)
+void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelImage*>> &images, cv::Mat &confusionMatrix)
 {
   int correctClassification = 0;
   int imageSize = 0;
@@ -248,7 +248,7 @@ void ComputationManagerBOW::classify(std::map<std::string, std::vector<SamaelIma
         }
       }
 
-      m_confusionMatrix.at<float>(winnerCol, matRow)++;
+      confusionMatrix.at<float>(winnerCol, matRow)++;
 
       if(!minClass.compare(className))
       {
@@ -284,10 +284,12 @@ void ComputationManagerBOW::doClassification()
     m_classifyImageNumber += it->second.size();
   }
 
-  m_confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);
+  cv::Mat confusionMatrix;
 
   for(m_run = 0; m_run < TESTRUNS; m_run++)
   {
+    confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);//reset the confusion matrix
+
     m_histograms.clear();
     m_classifiers.clear();
     m_bowTrainer->clear();
@@ -296,13 +298,11 @@ void ComputationManagerBOW::doClassification()
     histogramCreation(trainingImages);
     trainSVM();
   
-    classify(classifyImages);
+    classify(classifyImages, confusionMatrix);
+
+    emit setConfusionMatrixHeaderData(m_classNames);//send the class names to the viewer
+    emit displayMatrix(confusionMatrix);//send the actual confusion matrix to the viewer
   }
-
-  m_confusionMatrix /= float(TESTRUNS);
-
-  emit displayMatrix(m_confusionMatrix);
-  emit setConfusionMatrixHeaderData(m_classNames);
 }
 
 void ComputationManagerBOW::printProgress(std::string stepName, unsigned int actually, unsigned int maximum)
@@ -377,7 +377,7 @@ void ComputationManagerBOW::setMatcher(SAM::Matcher matcher /*= SAM::MATCHER_FLA
 
 void ComputationManagerBOW::setTrainer(
     int clusterCount,
-    double epsilon /*= 0.00001*/, 
+    double epsilon /*= 0.0001*/, 
     int attempts /*= 3*/, 
     int flag /*= cv::KMEANS_PP_CENTERS*/
     )
@@ -416,50 +416,4 @@ void ComputationManagerBOW::onDetectorExtractorChanged()
 
     if(!m_vocabulary.empty())
         m_vocabulary.deallocate();//resets the vocabulary if the method changes
-}
-
-void ComputationManagerBOW::saveConfusionMatrix()
-{
-  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::WRITE);
-  file << "Confusion_Matrix" << m_confusionMatrix;
-
-  int classNumber = (int)m_classNames.size();
-  file << "class_number" << classNumber;
-
-  for(unsigned int i = 0; i < m_classNames.size(); i++)
-  {
-    std::ostringstream converter;
-    std::string tmpTest = "FieldName";
-    converter << i;
-    tmpTest.append(converter.str());
-    file << tmpTest.c_str() << m_classNames[i].c_str();
-  }
-
-  file.release();
-}
-
-void ComputationManagerBOW::loadConfusionMatrix()
-{
-  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::READ);
-  file["Confusion_Matrix"] >> m_confusionMatrix;
-
-  int classNumber;
-  file["class_number"] >> classNumber;
-
-  m_classNames.clear();
-  m_classNames.resize(classNumber);
-
-  for(unsigned int i = 0; i < m_classNames.size(); i++)
-  {
-    std::ostringstream converter;
-    std::string tmpTest = "FieldName";
-    converter << i;
-    tmpTest.append(converter.str());
-    file[tmpTest] >> m_classNames[i];
-  }
-
-  file.release();
-
-  emit displayMatrix(m_confusionMatrix);
-  emit setConfusionMatrixHeaderData(m_classNames);
 }

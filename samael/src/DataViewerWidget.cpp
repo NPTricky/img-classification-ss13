@@ -67,6 +67,8 @@ DataViewerWidget::~DataViewerWidget()
 
 void DataViewerWidget::displayMatrix(cv::Mat& matrix)
 {
+  m_confusionMatrices.push_back(matrix);
+
     if (!matrix.empty())
         m_Model->setSourceMatrix(matrix);
 
@@ -206,4 +208,64 @@ void DataViewerWidget::createActions()
 void DataViewerWidget::setConfusionMatrixHeaderData(std::vector<std::string> &classNames)
 {
     m_Model->setConfusionMatrixHeaderData(classNames);
+}
+
+void DataViewerWidget::saveConfusionMatrices()
+{
+  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::WRITE);
+  
+  int runNumber = m_confusionMatrices.size();//number of runs
+  file << "run_number" << runNumber;
+
+  std::string confusionMatrixName = "Confusion_Matrix";
+  for(int i = 0; i < runNumber; i++)
+  {
+    std::ostringstream converter;
+    converter << i;
+    file << (confusionMatrixName + converter.str()).c_str() << m_confusionMatrices[i];
+  }
+
+  int classNumber = m_Model->rowCount();//number of classes
+  file << "class_number" << classNumber;
+
+  std::string fieldName = "FieldName";
+  for(int i = 0; i < classNumber; i++)
+  {
+    std::ostringstream converter;
+    converter << i;
+    file << (fieldName + converter.str()).c_str() << m_Model->headerData(i, Qt::Vertical).toString().toStdString().c_str();
+  }
+
+  file.release();
+}
+
+void DataViewerWidget::loadConfusionMatrices()
+{
+  cv::FileStorage file("confusionMatrix.xml", cv::FileStorage::READ);
+
+  int runNumber;
+  file["run_number"] >> runNumber;
+
+  std::string confusionMatrixName = "Confusion_Matrix";
+  for(int i = 0; i < runNumber; i++)
+  {
+    std::ostringstream converter;
+    converter << i;
+    file[(confusionMatrixName + converter.str()).c_str()] >> m_confusionMatrices[i];
+  }
+
+  int classNumber;
+  file["class_number"] >> classNumber;
+
+  std::string className;
+  std::string fieldName = "FieldName";
+  for(int i = 0; i < classNumber; i++)
+  {
+    std::ostringstream converter;
+    converter << i;
+    file[(fieldName + converter.str()).c_str()] >> className;
+    m_Model->setHeaderData(i, QString(className.c_str()));
+  }
+
+  file.release();
 }

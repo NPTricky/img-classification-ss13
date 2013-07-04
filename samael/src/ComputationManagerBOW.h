@@ -46,7 +46,7 @@ private:
   void createVocabulary(std::map<std::string, std::vector<SamaelImage*>> &images);
   void histogramCreation(std::map<std::string, std::vector<SamaelImage*>> &images);//vector of images from one class
   void trainSVM();
-  void classify(std::map<std::string, std::vector<SamaelImage*>> &images);//classifies a vector of images through returning the class names
+  void classify(std::map<std::string, std::vector<SamaelImage*>> &images, cv::Mat &confusionMatrix);//classifies a vector of images through returning the class names
 
   void printProgress(std::string stepName, unsigned int actually, unsigned int maximum);
 
@@ -69,8 +69,6 @@ private:
   std::map<std::string, cv::Mat> m_histograms;//maps a histogram to each class
   std::map<std::string, CvSVM*> m_classifiers;//SVM classifiers of the classes
 
-  cv::Mat m_confusionMatrix;//confusion Matrix of all Classes
-
   unsigned int m_trainingImageNumber;//number of training images
   unsigned int m_classifyImageNumber;//number of classifying images
   unsigned int m_run;//actual run of the test
@@ -82,12 +80,9 @@ public slots:
   void setDetector(SAM::Detector detector = SAM::DETECTOR_SIFT, SAM::DetectorAdapter adapter = SAM::DETECTOR_ADAPTER_NONE);
   void setExtractor(SAM::Extractor extractor = SAM::EXTRACTOR_SIFT, SAM::ExtractorAdapter adapter = SAM::EXTRACTOR_ADAPTER_NONE);
   void setMatcher(SAM::Matcher matcher = SAM::MATCHER_FLANNBASED);
-  void setTrainer(int clusterCount, double epsilon = 0.00001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
+  void setTrainer(int clusterCount, double epsilon = 0.0001, int attempts = 3, int flag = cv::KMEANS_PP_CENTERS);
 
   void doClassification();
-
-  void saveConfusionMatrix();
-  void loadConfusionMatrix();
 
 private slots:
   void onDetectorExtractorChanged();

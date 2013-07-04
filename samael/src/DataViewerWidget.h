@@ -19,6 +19,8 @@ public:
     void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 
 private:
+  std::vector<cv::Mat> m_confusionMatrices;//confusion Matrices of all Classes
+
     QGridLayout *m_Layout;
     QTableView *m_TableView;
     OpenCVMatrixModel *m_Model;
@@ -37,6 +39,9 @@ private:
 
     void createActions();
     void onSelectionChanged(int row, int column, int flags);
+
+    void saveConfusionMatrices();
+    void loadConfusionMatrices();
 
 public slots:
     void onRowChanged(int i);
