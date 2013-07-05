@@ -2,6 +2,8 @@
 #include "DataViewerWidget.h"
 #include <QTableView>
 #include <QGridLayout>
+#include <QComboBox>
+#include <QModelIndex>
 #include "OpenCVMatrixModel.h"
 #include "SamaelApplication.h"
 
@@ -30,6 +32,7 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     m_SortLabel->setContentsMargins(margin,0,margin,0);
     m_SortCheckBox = new QCheckBox(tr("DO NOT USE"),m_ToolBar);
     m_SortCheckBox->setToolTip(tr("Sort Column By Selection"));
+	m_MatrixComboBox = new QComboBox(m_ToolBar);
 
 	m_ToolBar->addWidget(m_RowLabel);
 	m_ToolBar->addWidget(m_RowSpinBox);
@@ -38,6 +41,7 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     m_ToolBar->addWidget(m_SortLabel);
     m_ToolBar->addWidget(m_SortCheckBox);
     m_ToolBar->addAction(m_CopyAction);
+	m_ToolBar->addWidget(m_MatrixComboBox);
 
     // View
     m_TableView = new QTableView(this);
@@ -56,6 +60,7 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     connect(m_ColumnSpinBox,SIGNAL(valueChanged(int)),this,SLOT(onColumnChanged(int)));
     connect(m_TableView->verticalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(onRowClicked(int)));
     connect(m_TableView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(onColumnClicked(int)));
+	connect(m_TableView->selectionModel(),SIGNAL(currentChanged(const QModelIndex,const QModelIndex)),this,SLOT(onCurrentChanged(const QModelIndex,const QModelIndex)));
 
     this->setLayout(m_Layout);
 }
@@ -67,7 +72,7 @@ DataViewerWidget::~DataViewerWidget()
 
 void DataViewerWidget::displayMatrix(cv::Mat& matrix)
 {
-  m_confusionMatrices.push_back(matrix);
+	m_confusionMatrices.push_back(matrix);
 
     if (!matrix.empty())
         m_Model->setSourceMatrix(matrix);
@@ -97,6 +102,15 @@ void DataViewerWidget::onColumnChanged(int i)
 
 void DataViewerWidget::onRowClicked(int i)
 {
+	int state = Qt::CheckState(m_SortCheckBox->checkState());
+
+    if (state == 2) // checked
+    {
+		m_TableView->verticalHeader()->setSortIndicator(i, Qt::AscendingOrder);
+        m_TableView->sortByColumn(i);
+        return;
+    }
+
     m_RowSpinBox->setValue(i + 1);
 }
 
@@ -268,4 +282,14 @@ void DataViewerWidget::loadConfusionMatrices()
   }
 
   file.release();
+}
+
+void DataViewerWidget::onCurrentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+	m_RowSpinBox->blockSignals(true);
+	m_ColumnSpinBox->blockSignals(true);
+	onRowClicked(current.row());
+	onColumnClicked(current.column());
+	m_RowSpinBox->blockSignals(false);
+	m_ColumnSpinBox->blockSignals(false);
 }

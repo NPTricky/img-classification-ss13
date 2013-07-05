@@ -37,12 +37,7 @@ void CentralWidget::toggleWidget()
     m_Layout->setCurrentIndex(result);
 }
 
-void CentralWidget::displayMatrix(cv::Mat& matrix)
+DataViewerWidget* CentralWidget::getDataViewerWidget()
 {
-    m_DataViewerWidget->displayMatrix(matrix);
-}
-
-void CentralWidget::setConfusionMatrixHeaderData(std::vector<std::string> &classNames)
-{
-    m_DataViewerWidget->setConfusionMatrixHeaderData(classNames);
+	return m_DataViewerWidget;
 }

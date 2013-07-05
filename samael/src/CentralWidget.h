@@ -14,6 +14,8 @@ public:
     CentralWidget(QWidget *parent);
     ~CentralWidget();
 
+	DataViewerWidget* getDataViewerWidget();
+
 private:
     QStackedLayout *m_Layout;
     ViewerWidget *m_ViewerWidget;
@@ -21,8 +23,6 @@ private:
 
 public slots:
     void toggleWidget();
-    void displayMatrix(cv::Mat &matrix);
-    void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 };
 
 #endif // CENTRALWIDGET_H

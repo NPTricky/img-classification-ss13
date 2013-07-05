@@ -15,11 +15,8 @@ public:
     DataViewerWidget(QWidget *parent);
     ~DataViewerWidget();
 
-    void displayMatrix(cv::Mat &matrix);
-    void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
-
 private:
-  std::vector<cv::Mat> m_confusionMatrices;//confusion Matrices of all Classes
+	std::vector<cv::Mat> m_confusionMatrices;//confusion Matrices of all Classes
 
     QGridLayout *m_Layout;
     QTableView *m_TableView;
@@ -33,6 +30,7 @@ private:
 	QSpinBox *m_ColumnSpinBox;
     QLabel *m_SortLabel;
     QCheckBox *m_SortCheckBox;
+	QComboBox *m_MatrixComboBox;
 
     // Actions
     QAction *m_CopyAction;
@@ -40,15 +38,20 @@ private:
     void createActions();
     void onSelectionChanged(int row, int column, int flags);
 
-    void saveConfusionMatrices();
-    void loadConfusionMatrices();
-
 public slots:
     void onRowChanged(int i);
     void onColumnChanged(int i);
     void onRowClicked(int i);
     void onColumnClicked(int i);
+	void onCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
+
     void copyToClipboard();
+
+	void displayMatrix(cv::Mat &matrix);
+	void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
+
+	void saveConfusionMatrices();
+    void loadConfusionMatrices();
 };
 
 #endif // DATAWIDGET_H

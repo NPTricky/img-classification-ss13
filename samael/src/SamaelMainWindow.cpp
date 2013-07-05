@@ -12,6 +12,7 @@
 #include "ComputationManagerBOW.h"
 #include "ImageDatabase.h"
 #include "CentralWidget.h"
+#include "DataViewerWidget.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors & Destructor
@@ -25,6 +26,7 @@ SamaelMainWindow::SamaelMainWindow(QWidget *parent)
 
 SamaelMainWindow::~SamaelMainWindow()
 {
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,8 +64,8 @@ void SamaelMainWindow::createWidgets()
 
   // Viewer Widget
   this->setCentralWidget(m_CentralWidget);
-  QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat&)), m_CentralWidget, SLOT(displayMatrix(cv::Mat&)));
-  QObject::connect(m_computationManager, SIGNAL(setConfusionMatrixHeaderData(std::vector<std::string>&)), m_CentralWidget, SLOT(setConfusionMatrixHeaderData(std::vector<std::string>&)));
+  QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat&)), m_CentralWidget->getDataViewerWidget(), SLOT(displayMatrix(cv::Mat&)));
+  QObject::connect(m_computationManager, SIGNAL(setConfusionMatrixHeaderData(std::vector<std::string>&)), m_CentralWidget->getDataViewerWidget(), SLOT(setConfusionMatrixHeaderData(std::vector<std::string>&)));
 
   // Terminal Widget
   m_TerminalWidget->setParent(this);
@@ -102,14 +104,14 @@ void SamaelMainWindow::createActions()
     m_OpenConfusionMatrixAction->setShortcut(Qt::CTRL + Qt::Key_M);
     m_OpenConfusionMatrixAction->setToolTip(tr("Open Confusion Matrix"));
     m_OpenConfusionMatrixAction->setStatusTip(tr("Open Confusion Matrix"));
-    connect(m_OpenConfusionMatrixAction, SIGNAL(triggered()), m_computationManager, SLOT(loadConfusionMatrix()));
+	connect(m_OpenConfusionMatrixAction, SIGNAL(triggered()), m_CentralWidget->getDataViewerWidget(), SLOT(loadConfusionMatrices()));
 
     // "Save Confusion Matrix" Action
     m_SaveConfusionMatrixAction = new QAction(tr("Save Confusion &Matrix"), this);
     m_SaveConfusionMatrixAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_M);
     m_SaveConfusionMatrixAction->setToolTip(tr("Save Confusion Matrix"));
     m_SaveConfusionMatrixAction->setStatusTip(tr("Save Confusion Matrix"));
-    connect(m_SaveConfusionMatrixAction, SIGNAL(triggered()), m_computationManager, SLOT(saveConfusionMatrix()));
+    connect(m_SaveConfusionMatrixAction, SIGNAL(triggered()), m_CentralWidget->getDataViewerWidget(), SLOT(saveConfusionMatrices()));
 
     // "Exit" Action
     m_ExitAction = new QAction(tr("&Exit"), this);
