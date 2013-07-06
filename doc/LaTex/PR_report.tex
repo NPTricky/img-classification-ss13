@@ -125,26 +125,43 @@ Kurs: \>Advanced Topics in Image Understanding\\
 \normalsize \mdseries
 \addcontentsline{toc}{section}{Abstrakt}
 \normalfont
-\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Das Ziel der Arbeit ist es, mehrere tausend Bilder einzulesen, zu verarbeiten und als Ergebnis eine korrekte Einteilung in verschiedene Klassen zu erhalten. Es wurde mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 gearbeitet. Grundlage für die Evaluierung der Arbeit ist der Datensatz der Caltech101. 
+\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Das Ziel der Arbeit ist es, mehrere tausend Bilder einzulesen, zu verarbeiten und als Ergebnis eine korrekte Einteilung in verschiedene Klassen zu erhalten. Für die Umsetzung wurde mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 gearbeitet. In dem entwickelten Verfahren kommen Methoden wie zum Beispiel 'Bag of Words', 'K-Mean Clustering' und 'Support Vector Machine' zum Einsatz. %vielleicht schon genauer?
+Grundlage für die Evaluierung der Arbeit ist der Datensatz der Caltech101. 
 
-
-\section{Problembeschreibung}
-\label{firstSec}
-\normalfont
-101 Kategorien
-30-80 Samples pro Kategorie
-Das Ziel ist es, mindestens zehn Prozent der Bilder korrekt zu klassifizieren.
-
-
+\section{Einleitung}
+In dem Kurs 'Advanced Topics in Image Understanding' an der Universität Magdeburg stand im Sommersemester 2013 das Thema der Bildklassifikation im Mittelpunkt. Dazu gab es ein studentisches Projekt, zu dem sich aufgeteilte Teams mit dem nicht-trivialen Analyseproblem beschäftigen sollten. Die Aufgabe bestand darin, die Bilder eines vorgegebenen Datensatzes mit mindestens zehnprozentiger Korrektheit zu klassifizieren. 
+Um das zu erreichen, muss ein sinnvoller feature-Descriptor und eine geeignete Klassifikationsmethode ausgewählt und implementiert werden. 50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden.
 
 \section{Verfahren}
+Für die Umsetzung wurde ein Algorithmus mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 implementiert. Qt eignet sich gut für die Erstellung eines User Interface und OpenCV bietet viele hilfreiche Funktionen für die Bildverarbeitung.\\Um die Bedienung zu erleichtern, wurde ein Bedienoberfläche, wie in Abbildung 1 zu sehen, erstellt.
+
+% Abbildung 1 User Interface
+
+Auf der linken Seite können die Bilder über einen Filebrowser geladen werden. Die mittlere Anzeige bringt Aufschluss darüber, wie die Bilder nach Start der Klassifizierung aufgeteilt wurden. Rechts besteht die Möglichkeit zwischen drei Keypoint Detektoren zu wählen, um anschließend den Verarbeitungsprozess zu starten. % to do: besser, mehr 
+
+\subsection{Algorithmus}
+Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden.
+- BOW Trainer, -KMeansTrainer in OpenCV
+- Es wird ein Vokabular von Features erstellt...
+- BOW-Descriptor Extraktor in OpenCV
+- Clustering der Key-Points
+- Histogramm für alle Bilder mit 1000er Vektor
+
+- SVM überprüft die Feature der Bilder auf das nächste Cluster im Vokabular.
+
 •Decision on features (justification, the measure itself)
 •Classification details
 
-\subsection{Algorithmus}
 \subsection{Probleme}
 
 \section{Evaluierung}
+Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Samplebilder. 
+50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden. Das Verfahren wird 20-mal mit einer zufälligen Einteilung in Trainings- und Testdaten wiederholt.
+
+
+%Tabelle mit Vergleichwerten??? zB zwischen SIFT/SURF/MSER 
+
+
 •How the classifier was trained
 –Training details
 –Results (i.e. how good on training data, hints for subgroups, validity of features,…)
@@ -152,8 +169,13 @@ Das Ziel ist es, mindestens zehn Prozent der Bilder korrekt zu klassifizieren.
 –Description of the test scenario
 –Results and any conclusions from that
 
+
 \section{Zusammenfassung}
 •Conclusions (how would you rate your approach)
+
+Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. 
+
+
 
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
