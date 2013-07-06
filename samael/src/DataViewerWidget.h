@@ -38,6 +38,9 @@ private:
     void createActions();
     void onSelectionChanged(int row, int column, int flags);
 
+private slots:
+    void displayMatrix(int i = 0);
+
 public slots:
     void onRowChanged(int i);
     void onColumnChanged(int i);

@@ -33,6 +33,7 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     m_SortCheckBox = new QCheckBox(tr("DO NOT USE"),m_ToolBar);
     m_SortCheckBox->setToolTip(tr("Sort Column By Selection"));
 	m_MatrixComboBox = new QComboBox(m_ToolBar);
+    m_MatrixComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
 	m_ToolBar->addWidget(m_RowLabel);
 	m_ToolBar->addWidget(m_RowSpinBox);
@@ -40,14 +41,23 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
 	m_ToolBar->addWidget(m_ColumnSpinBox);
     m_ToolBar->addWidget(m_SortLabel);
     m_ToolBar->addWidget(m_SortCheckBox);
-    m_ToolBar->addAction(m_CopyAction);
 	m_ToolBar->addWidget(m_MatrixComboBox);
+    m_ToolBar->addAction(m_CopyAction);
 
     // View
     m_TableView = new QTableView(this);
     m_TableView->setModel(m_Model);
-    cv::Mat matrix = cv::Mat::eye(101, 101, CV_32F);
-    displayMatrix(matrix);
+
+    cv::Mat matrix1 = cv::Mat(101, 101, CV_32F);
+    randn(matrix1,cv::Scalar(0),cv::Scalar(100));
+    displayMatrix(matrix1);
+
+    cv::Mat matrix2 = cv::Mat(28, 28, CV_32F);
+    randu(matrix2,cv::Scalar(0),cv::Scalar(100));
+    displayMatrix(matrix2);
+
+    cv::Mat matrix3 = cv::Mat::eye(120, 28, CV_32F);
+    displayMatrix(matrix3);
 
     // Layout
     m_Layout = new QGridLayout(this);
@@ -61,6 +71,7 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     connect(m_TableView->verticalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(onRowClicked(int)));
     connect(m_TableView->horizontalHeader(),SIGNAL(sectionClicked(int)),this,SLOT(onColumnClicked(int)));
 	connect(m_TableView->selectionModel(),SIGNAL(currentChanged(const QModelIndex,const QModelIndex)),this,SLOT(onCurrentChanged(const QModelIndex,const QModelIndex)));
+    connect(m_MatrixComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(displayMatrix(int)));
 
     this->setLayout(m_Layout);
 }
@@ -70,15 +81,26 @@ DataViewerWidget::~DataViewerWidget()
 
 }
 
-void DataViewerWidget::displayMatrix(cv::Mat& matrix)
+void DataViewerWidget::displayMatrix(int i /* = 0 */)
 {
-	m_confusionMatrices.push_back(matrix);
+    cv::Mat matrix = m_confusionMatrices[i];
 
     if (!matrix.empty())
         m_Model->setSourceMatrix(matrix);
 
     m_RowSpinBox->setMaximum(matrix.rows);
     m_ColumnSpinBox->setMaximum(matrix.cols);
+}
+
+void DataViewerWidget::displayMatrix(cv::Mat& matrix)
+{
+	m_confusionMatrices.push_back(matrix);
+    m_MatrixComboBox->addItem(QString("Matrix %1").arg(m_confusionMatrices.size()));
+    displayMatrix(m_confusionMatrices.size()-1);
+
+    m_MatrixComboBox->blockSignals(true);
+    m_MatrixComboBox->setCurrentIndex(m_confusionMatrices.size()-1);
+    m_MatrixComboBox->blockSignals(false);
 }
 
 void DataViewerWidget::onSelectionChanged(int row, int column, int flags)
