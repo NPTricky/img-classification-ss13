@@ -114,11 +114,10 @@ Kurs: \>Advanced Topics in Image Understanding\\
 %-----------------------------------------Verzeichnisse-----------------------------------------------------------------
 %------------------------------                                   ------------------------------------------------------
 \tableofcontents                % automatisches Inhaltsverzeichnis
-\pagenumbering{Roman}	% römische Seitenzahlen
-\newpage
+\pagenumbering{Roman}
 \setcounter{page}{1}
 \pagenumbering{arabic}
-
+\newpage
 %------------------------------------------------ eigentlicher Text -----------------------------------------------------
 
 \Large \bfseries Abstrakt\\
@@ -140,19 +139,21 @@ Für die Umsetzung wurde ein Algorithmus mit Visual Studio 2010 bzw. 2012 in Ver
 Auf der linken Seite können die Bilder über einen Filebrowser geladen werden. Die mittlere Anzeige bringt Aufschluss darüber, wie die Bilder nach Start der Klassifizierung aufgeteilt wurden. Rechts besteht die Möglichkeit zwischen drei Keypoint Detektoren zu wählen, um anschließend den Verarbeitungsprozess zu starten. % to do: besser, mehr 
 
 \subsection{Algorithmus}
-Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden.
-- BOW Trainer, -KMeansTrainer in OpenCV
-- Es wird ein Vokabular von Features erstellt...
-- BOW-Descriptor Extraktor in OpenCV
-- Clustering der Key-Points
-- Histogramm für alle Bilder mit 1000er Vektor
+Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. 
+- BOW Trainer, -KMeansTrainer in OpenCV\\
+In dieser Klasse werden die Keypoints anhand, SIFT, SURF oder MSER detektiert. \\
+- Es wird ein Vokabular von Features erstellt...\\ %anderes Wort für Vokabular?
+- BOW-Descriptor Extraktor in OpenCV\\
+- Clustering der Key-Points\\
+- Histogramm für alle Bilder mit 1000er Feature-Vektor\\
 
-- SVM überprüft die Feature der Bilder auf das nächste Cluster im Vokabular.
+- SVM überprüft die Feature der Bilder auf das nächstliegende Cluster im Vokabular.\\
 
-•Decision on features (justification, the measure itself)
-•Classification details
+%•Decision on features (justification, the measure itself)
+%•Classification details
 
 \subsection{Probleme}
+one word - OpenGL
 
 \section{Evaluierung}
 Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Samplebilder. 
@@ -162,30 +163,27 @@ Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Daten
 %Tabelle mit Vergleichwerten??? zB zwischen SIFT/SURF/MSER 
 
 
-•How the classifier was trained
-–Training details
-–Results (i.e. how good on training data, hints for subgroups, validity of features,…)
-•Tests on independent test data
-–Description of the test scenario
-–Results and any conclusions from that
+%•How the classifier was trained
+%–Training details
+%–Results (i.e. how good on training data, hints for subgroups, validity of features,…)
+%•Tests on independent test data
+%–Description of the test scenario
+%–Results and any conclusions from that
 
 
 \section{Zusammenfassung}
-•Conclusions (how would you rate your approach)
-
+%•Conclusions (how would you rate your approach)
 Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. 
-
-
 
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
 \newpage
-\pagenumbering{Roman}	% römische Seitenzahlen
+\pagenumbering{Roman}
 \setcounter{page}{3}
 \renewcommand{\refname}{Referenzen}
 \bibliographystyle{gerplain}
 \addcontentsline{toc}{section}{Referenzen}
-\bibliography{referenzen}
+\bibliography{referenzen} %notwendig?
 
 
 \end{document}
