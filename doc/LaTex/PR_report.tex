@@ -69,7 +69,6 @@ Matrikelnr.: 187768\\
 tim.jagla@st.ovgu.de\\
 \end{flushleft}
 \end{minipage}
-%\hfill
 \begin{minipage}[t]{4.8cm}
 \begin{flushleft}
 Christoph Lämmerhirt\\
@@ -112,51 +111,59 @@ Kurs: \>Advanced Topics in Image Understanding\\
 
 \thispagestyle{empty}
 \newpage
-\setcounter{page}{1}
-\pagenumbering{arabic}
 %-----------------------------------------Verzeichnisse-----------------------------------------------------------------
 %------------------------------                                   ------------------------------------------------------
 \tableofcontents                % automatisches Inhaltsverzeichnis
+\pagenumbering{Roman}	% römische Seitenzahlen
 \newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
 
 %------------------------------------------------ eigentlicher Text -----------------------------------------------------
 
-% ---------------------------------------------------- Einleitung ----------------------------------------------------- %
 \Large \bfseries Abstrakt\\
 \normalsize \mdseries
 \addcontentsline{toc}{section}{Abstrakt}
-\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Grundlage für die Evaluierung der Arbeit ist der Datensatz der Caltech101. 
+\normalfont
+\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Das Ziel der Arbeit ist es, mehrere tausend Bilder einzulesen, zu verarbeiten und als Ergebnis eine korrekte Einteilung in verschiedene Klassen zu erhalten. Es wurde mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 gearbeitet. Grundlage für die Evaluierung der Arbeit ist der Datensatz der Caltech101. 
+
+
+\section{Problembeschreibung}
+\label{firstSec}
+\normalfont
 101 Kategorien
 30-80 Samples pro Kategorie
 Das Ziel ist es, mindestens zehn Prozent der Bilder korrekt zu klassifizieren.
 
 
-Description of the problem (based on the sample images)
+
+\section{Verfahren}
 •Decision on features (justification, the measure itself)
 •Classification details
+
+\subsection{Algorithmus}
+\subsection{Probleme}
+
+\section{Evaluierung}
 •How the classifier was trained
 –Training details
 –Results (i.e. how good on training data, hints for subgroups, validity of features,…)
 •Tests on independent test data
 –Description of the test scenario
 –Results and any conclusions from that
-•Conclusions (how would you rate your approach)
-\section{Einleitung}
-\label{firstSec}
 
-%\subsection{Softwarevalidation}
-%\scshape State of the Art\\ 
-\newline 
-\normalfont
+\section{Zusammenfassung}
+•Conclusions (how would you rate your approach)
+
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
 \newpage
 \pagenumbering{Roman}	% römische Seitenzahlen
-\setcounter{page}{6}
+\setcounter{page}{3}
 \renewcommand{\refname}{Referenzen}
 \bibliographystyle{gerplain}
 \addcontentsline{toc}{section}{Referenzen}
-\bibliography{literatur}
+\bibliography{referenzen}
 
 
 \end{document}
