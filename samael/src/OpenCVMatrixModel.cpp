@@ -3,7 +3,7 @@
 
 OpenCVMatrixModel::OpenCVMatrixModel(QObject *parent)
     : QAbstractTableModel(parent)
-    , m_Mat(cv::Mat::eye(16, 16, CV_32F))
+    , m_Mat(cv::Mat::eye(101, 101, CV_32F))
     , m_HorizontalHeader(QList<QVariant>())
     , m_VerticalHeader(QList<QVariant>())
 {
@@ -44,10 +44,8 @@ QVariant OpenCVMatrixModel::data(const QModelIndex &index, int role /*= Qt::Disp
 void OpenCVMatrixModel::setSourceMatrix(cv::Mat &mat)
 {
     beginResetModel();
-
     m_Mat = mat;
     clearHeader();
-
     endResetModel();
 }
 
@@ -101,7 +99,9 @@ bool OpenCVMatrixModel::setHeaderData(int section, Qt::Orientation orientation, 
 
 void OpenCVMatrixModel::setConfusionMatrixHeaderData(std::vector<std::string> &classNames)
 {
-    if (m_Mat.cols != m_Mat.rows)
+    clearHeader();
+
+    if ((classNames.size() > m_Mat.rows) || (classNames.size() > m_Mat.cols))
         return;
 
     for (int i = 0; i < classNames.size(); i++)

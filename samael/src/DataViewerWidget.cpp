@@ -48,16 +48,16 @@ DataViewerWidget::DataViewerWidget(QWidget *parent)
     m_TableView = new QTableView(this);
     m_TableView->setModel(m_Model);
 
-    cv::Mat matrix1 = cv::Mat(101, 101, CV_32F);
-    randn(matrix1,cv::Scalar(0),cv::Scalar(100));
-    displayMatrix(matrix1);
+    //cv::Mat matrix1 = cv::Mat(101, 101, CV_32F);
+    //randn(matrix1,cv::Scalar(0),cv::Scalar(100));
+    //displayMatrix(matrix1);
 
-    cv::Mat matrix2 = cv::Mat(28, 28, CV_32F);
-    randu(matrix2,cv::Scalar(0),cv::Scalar(100));
-    displayMatrix(matrix2);
+    //cv::Mat matrix2 = cv::Mat(28, 28, CV_32F);
+    //randu(matrix2,cv::Scalar(0),cv::Scalar(100));
+    //displayMatrix(matrix2);
 
-    cv::Mat matrix3 = cv::Mat::eye(120, 28, CV_32F);
-    displayMatrix(matrix3);
+    //cv::Mat matrix3 = cv::Mat::eye(120, 28, CV_32F);
+    //displayMatrix(matrix3);
 
     // Layout
     m_Layout = new QGridLayout(this);
@@ -287,21 +287,26 @@ void DataViewerWidget::loadConfusionMatrices()
   {
     std::ostringstream converter;
     converter << i;
-    file[(confusionMatrixName + converter.str()).c_str()] >> m_confusionMatrices[i];
+    cv::Mat matrix;
+    file[confusionMatrixName + converter.str()] >> matrix;
+    displayMatrix(matrix);
   }
 
   int classNumber;
   file["class_number"] >> classNumber;
 
-  std::string className;
+  std::vector<std::string> classNames;
   std::string fieldName = "FieldName";
   for(int i = 0; i < classNumber; i++)
   {
     std::ostringstream converter;
     converter << i;
-    file[(fieldName + converter.str()).c_str()] >> className;
-    m_Model->setHeaderData(i, QString(className.c_str()));
+    std::string className;
+    file[fieldName + converter.str()] >> className;
+    classNames.push_back(className);
   }
+  
+  setConfusionMatrixHeaderData(classNames);
 
   file.release();
 }
