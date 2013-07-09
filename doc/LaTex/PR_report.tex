@@ -139,7 +139,23 @@ Für die Umsetzung wurde ein Algorithmus mit Visual Studio 2010 bzw. 2012 in Ver
 Auf der linken Seite können die Bilder über einen Filebrowser geladen werden. Die mittlere Anzeige bringt Aufschluss darüber, wie die Bilder nach Start der Klassifizierung aufgeteilt wurden. Rechts besteht die Möglichkeit zwischen drei Keypoint Detektoren zu wählen, um anschließend den Verarbeitungsprozess zu starten. % to do: besser, mehr 
 
 \subsection{Algorithmus}
+
+% bild pipeline --> tim
+
 Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. 
+- indem man KP detektiert
+- desciptoren (für jeden KP) die daraus entstehen, sind features
+- clustering --> clusterzentren
+- für alle klassen
+- speicherung in einem Vokabular (BoW Steurung des Vokabulary -- Wörterbuch)
+- für jede einzelne klasse svm trainiert --> trainingsbilder ---> KP --> D --> features --> clusterzentren zugeordnet --> histogramm über clusterzentren 
+histogramme an svm zum trainieren --> traininge fertig (svm pro klasse)
+- klassifizierung : KP berechnen --> D berechnen --> histogramm --> response aller svms wird angeschaut 1-vs-all --> welches am besten passt
+
+vorteile der algos raussuchen
+BOW: sonst untersch dimensionen... jedes bild une´tersch # KP, um limitierung aufzuheben, dass man unterschiedliche # hat
+
+
 - BOW Trainer, -KMeansTrainer in OpenCV\\
 In dieser Klasse werden die Keypoints anhand, SIFT, SURF oder MSER detektiert. \\
 - Es wird ein Vokabular von Features erstellt...\\ %anderes Wort für Vokabular?
@@ -155,10 +171,21 @@ In dieser Klasse werden die Keypoints anhand, SIFT, SURF oder MSER detektiert. \
 \subsection{Probleme}
 one word - OpenGL
 
+- lange rechenzeit - bilder laden QtdirnetryList ist langsam --> Q Filesystem Modell gelöst, testen
+- ein Durchlauf mit 20 Testläufen ~ 48h 
+- sonst vielleicht pca mit drin
+- kleine tests mit Surf/Sift...
+- OpenGL: Idee: Descriptoren als Koordinatenvisualisierung anschauen, und Histogramme... alle multivariate Daten
+zu komplex einzubauen.. mit Gui verbinden, Scrolling, scalierung.... 
+Lösung: komplett drauf verzichtet
+- Qt 5.0.1: directory & performance..., qt-opengl wird komplett neu gemacht... also inkompatibel zu normalen opengl,
+
 \section{Evaluierung}
 Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Samplebilder. 
 50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden. Das Verfahren wird 20-mal mit einer zufälligen Einteilung in Trainings- und Testdaten wiederholt.
 
+sift für daten--- beste kp-detektion --> dauert lang
+surf hat 3-fache anzahl descriptoren geliefert
 
 %Tabelle mit Vergleichwerten??? zB zwischen SIFT/SURF/MSER 
 
@@ -174,7 +201,15 @@ Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Daten
 \section{Zusammenfassung}
 %•Conclusions (how would you rate your approach)
 Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. 
+- pca, ica
+- threading einbauen --> schneller
+- opengl einbinden, auswerten welche klassen woran scheitern und um das dann auszugleichen
+ und dann eben andere features einbauen
 
+erstaunlich wie viel man mit nur sift erreichen kann.. 
+
+
+% Paper von Pizza als Quelle....
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
 \newpage
