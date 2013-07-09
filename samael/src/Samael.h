@@ -77,7 +77,8 @@ namespace SAM
         DETECTOR_SIFT,
         DETECTOR_SURF,
         DETECTOR_MSER,
-        DETECTOR_ORB
+        DETECTOR_ORB,
+		DETECTOR_FAST
     };
 
     static std::string DetectorToText(DetectorAdapter adapter, Detector detector)
@@ -115,6 +116,9 @@ namespace SAM
         case DETECTOR_MSER:
             result.append("MSER");
             break;
+		case DETECTOR_FAST:
+            result.append("FAST");
+            break;
         default:
             {
                 QLOG_WARN_NOCONTEXT() << "DetectorToText() DETECTOR_NONE";
@@ -136,7 +140,8 @@ namespace SAM
         EXTRACTOR_NONE = -1,
         EXTRACTOR_SIFT,
         EXTRACTOR_SURF,
-        EXTRACTOR_ORB
+        EXTRACTOR_ORB,
+		EXTRACTOR_FREAK
     };
 
     static std::string ExtractorToText(ExtractorAdapter adapter, Extractor extractor)
@@ -164,6 +169,9 @@ namespace SAM
             break;
         case EXTRACTOR_ORB:
             result.append("ORB");
+            break;
+		case EXTRACTOR_FREAK:
+            result.append("FREAK");
             break;
         default:
             {
