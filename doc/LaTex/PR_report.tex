@@ -115,9 +115,9 @@ Kurs: \>Advanced Topics in Image Understanding\\
 %------------------------------                                   ------------------------------------------------------
 \tableofcontents                % automatisches Inhaltsverzeichnis
 \pagenumbering{Roman}
+\newpage
 \setcounter{page}{1}
 \pagenumbering{arabic}
-\newpage
 %------------------------------------------------ eigentlicher Text -----------------------------------------------------
 
 \Large \bfseries Abstrakt\\
@@ -144,30 +144,27 @@ Die folgende Abbildung zeigt den Aufbau des Verfahrens zur Lösung des Klassifiz
 
 % bild pipeline --> tim
 
-Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. Dafür werden für jedes Bild Keypoints detektiert, die widerum für Descriptoren stehen. Der User bekommt zur Auswahl, ob die Methode von SIFT, SURF oder MSER angewendet werden soll. Dadurch konnten Vergleiche zwischen den verschiedenen Verfahren aufgestellt werden. (Mehrere Informationen dazu in Abschnitt 'Evaluation')
-Sobald die Features berechnet sind, geht es an das Clustering. Die Cluster samt Clusterzentren werden in einem Wörterbuch gespeichert, welches von der Bag-of-Words - Klasse in OpenCV gesteuert wird. Für jedes Bild wird der SVM (Support Vector Machine) mit den berechneten Daten trainiert. Dazu bekommt er ein Histogramm über die Clusterzentren. Für die Klassifizierung durchläuft das Bild die gleiche Pipeline wie die Trainingsdaten. Anschließend wird das Response aller SVMs betrachtet. Dabei gilt das Prinzip 1-versus-all, das bedeutet, dass das aktuelle Bild allen anderen Datensätzen gegenüber gestellt wird. Somit wird herausgefunden, welches das nächstliegende Cluster im Wörterbuch ist.
-
-
-vorteile der algos raussuchen
-
+Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. Dafür werden für jedes Bild Keypoints detektiert, die widerum für Descriptoren stehen. Der User bekommt zur Auswahl, welche der Methoden SIFT, SURF oder MSER angewendet werden soll. Dadurch konnten Vergleiche zwischen den verschiedenen Verfahren aufgestellt werden. SIFT wurde gewählt, da es ein sehr robustes Verfahren ist. Zum Vergleich wurde SURF genutzt, um Unterschiede zu der langsameren Methode zu finden. MSER ist noch einfacher und schneller als SIFT und SURF und ebenfalls interessant bei der Ergebnisuntersuchung. (Mehrere Informationen dazu in Abschnitt 'Evaluation')
+\\Sobald die Features berechnet sind, geht es an das Clustering. Die maximal 101 Cluster samt Clusterzentren werden in einem Wörterbuch gespeichert, welches von der Bag-of-Words - Klasse in OpenCV gesteuert wird. Für jedes Bild wird der SVM (Support Vector Machine) mit den berechneten Daten trainiert. Dazu bekommt er ein Histogramm über die Clusterzentren. Als Grundlage für das Verfahren wurde ein Paper von Gabriella Csurka, Christopher R. Dance, Lixin Fan, Jutta Willamowski und Cédric Bray %et al. ?
+gelesen. \cite{pizza} Darin werden verschiedene Möglichkeiten beschrieben Fotos zu klassifizieren. Dabei wird auf den Bag-of-Words Algorithmus eingegangen. Außerdem wird der SVM mit dem naiven Bayes-Klassifizierer verglichen, wobei SVM die Fehlerrate gegenüber Bayes enorm senkt.
+\\Für die Klassifizierung durchläuft das Bild die gleiche Pipeline wie die Trainingsdaten. Anschließend wird das Response aller SVMs betrachtet. Dabei gilt das Prinzip 1-versus-all, das bedeutet, dass das aktuelle Bild allen trainierten Datensätzen gegenüber gestellt wird. Somit wird herausgefunden, welches das nächstliegende Cluster im Wörterbuch und somit die zugehörige Klasse ist.
 
 %•Decision on features (justification, the measure itself)
 %•Classification details
 
 \subsection{Probleme}
 Alles in Allem, war dieses Projekt frei von größeren Problemen. Trotzdem funktionierte nicht alles perfekt. Eine Schwierigkeit war die lange Rechenzeit. Ein Durchlauf mit 20 Testläufen benötigte rund 48 Stunden.%todo genaue Zahl von Tim
-Dadurch wurde im Projekt auf größere Optimierungen, wie zum Beispiel eine Principal Component Analyse, verzichtet. Ebenso wurde der Testlauf mit nur einem der drei zur Wahl stehenden Algorithmen komplett durchgeführt. Die Entscheidung viel auf das SIFT-Verfahren, da dabei die beste Keypointdetektion stattfand. (Zum Vergleich, SURF hat die dreifache Anzahl an Keypoints geliefert.) MSER und SURF wurden nur in kleinere Tests zum Vergleich einbezogen. 
-\\Außerdem gab es Probleme mit OpenGL. Die Idee war verschiedene multivariate Daten, wie zum Beispiel Descriptoren oder Histogramme, als Koordinatenvisualisierungen darzustellen. Das stellte sich jedoch als zu komplex für den Zeitrahmen der Lehrveranstaltung heraus und deshalb wurde darauf verzichtet.
-Zuletzt sind noch Beschränkungen durch Qt 5.0.1 zu erwähnen. Zum Einen gab es Performanceprobleme sobald die Bilder über ein Directory geladen wurden. Zum Anderen wird derzeit OpenGL in Qt neu aufgesetzt, wodurch es zu Problemen beim üblichen OpenGL gab. Qt war inkompatibel zu der Bibliothek.
+Dadurch wurde im Projekt auf größere Optimierungen, wie zum Beispiel eine Principal Component Analyse, verzichtet. Ebenso wurde der Testlauf mit nur einem der drei zur Wahl stehenden Algorithmen komplett durchgeführt. Die Entscheidung viel auf das SIFT-Verfahren, da dabei die beste Keypointdetektion stattfand. (Zum Vergleich, SURF hat die dreifache Anzahl an Keypoints geliefert.) MSER und SURF wurden nur in kleinere Tests für den Vergleich einbezogen. 
+\\Außerdem gab es Probleme mit OpenGL. Die Idee war verschiedene multivariate Daten, wie zum Beispiel Descriptoren oder Histogramme, als Koordinatenvisualisierungen darzustellen, um Schwachstellen des Verfahrens leicht zu erkennen. Das stellte sich jedoch als zu komplex für den Zeitrahmen der Lehrveranstaltung heraus und deshalb wurde darauf verzichtet.
+\\Zuletzt sind noch Beschränkungen durch Qt 5.0.1 zu erwähnen. Zum Einen gab es Performanceprobleme sobald die Bilder über ein Directory geladen wurden. Zum Anderen wird derzeit OpenGL in Qt neu aufgesetzt, wodurch es zu Problemen beim üblichen OpenGL gab. Qt war inkompatibel zu der Bibliothek.
 
 \section{Evaluierung}
-Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Samplebilder. 
-50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden. Das Verfahren wird 20-mal mit einer zufälligen Einteilung in Trainings- und Testdaten wiederholt.
+Für die Validierung des Programmes wurden die xxx %todo
+Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Sampelbilder. 
+50 Prozent des Datensatzes sollen für das Training des Klassifizierers genutzt werden, der Rest für die Evaluierung. Das Verfahren wird 20-mal mit einer zufälligen Einteilung in Trainings- und Testdaten wiederholt.
+Diese Testreihe wurde, aus bereits oben erwähnten Gründen, mit dem SIFT-Verfahren durchgeführt.
 
-
-%Tabelle mit Vergleichwerten??? zB zwischen SIFT/SURF/MSER 
-
-
+ 
 %•How the classifier was trained
 %–Training details
 %–Results (i.e. how good on training data, hints for subgroups, validity of features,…)
@@ -178,10 +175,10 @@ Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Daten
 
 \section{Zusammenfassung}
 %•Conclusions (how would you rate your approach)
-Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. Threading könnte die Performance verbessern und die gesamte Anwendung beschleunigen. Dadurch könnte man wiederum die Principal Component Analyse oder die Independent Component Analyse. 
-Wird zusätzlich OpenGL eingebunden, kann einfach ausgewertet werden, welche Klassen woran scheitern und zum Ausgleich könnten andere Features eingebaut werden.
-Als Hilfe wurde ein Paper von Gabriella Csurka, Christopher R. Dance, Lixin Fan, Jutta Willamowski und Cédric Bray gelesen.\cite{pizza}
-Als Fazit lässt sich sagen, dass es erstaunlich ist, mit welch hoher Korrektheit Bilder klassifiziert werden können, mithilfe nur weniger Algoithmen.
+Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse zufriedenstellend sind und die Anforderungen erfüllen. Es gibt jedoch noch Raum für Optimierungen. Threading könnte die Performance verbessern und die gesamte Anwendung beschleunigen. Dadurch könnte man wiederum die Principal Component Analyse oder die Independent Component Analyse einbauen. 
+Wird zusätzlich OpenGL eingebunden, kann einfach ausgewertet werden, welche Klassen woran scheitern und zum Ausgleich könnten weitere Features eingebaut werden.
+\\Die hohe Rate der korrekt klassifizierten Bilder ist erstaunlich, wenn bedacht wird, dass lediglich SIFT als Feature-Detektor eingesetzt wurde.
+
 
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
