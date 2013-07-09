@@ -269,25 +269,28 @@ void ComputationManagerBOW::doClassification()
 
   emit getClassNames(m_classNames);
 
-  emit getTrainingImages(trainingImages);
-  emit getClassifyImages(classifyImages);
-
-  m_trainingImageNumber = 0;
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = trainingImages.begin(); it != trainingImages.end(); it++)
-  {
-    m_trainingImageNumber += it->second.size();
-  }
-
-  m_classifyImageNumber = 0;
-  for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = classifyImages.begin(); it != classifyImages.end(); it++)
-  {
-    m_classifyImageNumber += it->second.size();
-  }
-
   cv::Mat confusionMatrix;
 
   for(m_run = 0; m_run < TESTRUNS; m_run++)
   {
+    trainingImages.clear();
+    classifyImages.clear();
+
+    emit getTrainingImages(trainingImages);
+    emit getClassifyImages(classifyImages);
+
+    m_trainingImageNumber = 0;
+    for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = trainingImages.begin(); it != trainingImages.end(); it++)
+    {
+      m_trainingImageNumber += it->second.size();
+    }
+
+    m_classifyImageNumber = 0;
+    for(std::map<std::string, std::vector<SamaelImage*>>::iterator it = classifyImages.begin(); it != classifyImages.end(); it++)
+    {
+      m_classifyImageNumber += it->second.size();
+    }
+
     confusionMatrix = cv::Mat::zeros(int(m_classNames.size()), int(m_classNames.size()), CV_32FC1);//reset the confusion matrix
 
     m_histograms.clear();
