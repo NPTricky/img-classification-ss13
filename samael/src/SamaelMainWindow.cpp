@@ -41,7 +41,35 @@ void SamaelMainWindow::initialize(TerminalWidget* terminal)
 
     m_imageDataBase = ImageDataBase::getInstance();
 
-    m_computationManager = ComputationManagerBOW::getInstance(1000);
+	// default test
+	// SIFT DETECTOR + SIFT EXTRACTOR
+	// sift detector <- usually good fit for sift extractor
+	//
+	  m_computationManager = ComputationManagerBOW::getInstance(
+		1000,
+		SAM::FEATURE_ALGORITHM_SIFT, // doesnt do anything but required
+		SAM::DETECTOR_ADAPTER_NONE,
+		SAM::DETECTOR_SIFT,
+		SAM::EXTRACTOR_ADAPTER_NONE,
+		SAM::EXTRACTOR_SIFT,
+		SAM::MATCHER_FLANNBASED
+		);
+
+	// other test 1 - 
+	// FAST DETECTOR + FREAK EXTRACTOR
+	// fast <- fast performance
+	//      <- many keypoints
+	//      <- usually good fit for freak
+	//
+  //  m_computationManager = ComputationManagerBOW::getInstance(
+		//1000,
+		//SAM::FEATURE_ALGORITHM_SIFT, // doesn't do anything but required
+		//SAM::DETECTOR_ADAPTER_NONE,
+		//SAM::DETECTOR_FAST,
+		//SAM::EXTRACTOR_ADAPTER_NONE,
+		//SAM::EXTRACTOR_FREAK,
+		//SAM::MATCHER_FLANNBASED
+		//);
 
     this->setMinimumSize(640, 480);
 

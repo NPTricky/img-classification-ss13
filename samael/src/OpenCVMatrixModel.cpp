@@ -108,6 +108,8 @@ void OpenCVMatrixModel::setConfusionMatrixHeaderData(std::vector<std::string> &c
     {
         setHeaderData(i,QString::fromStdString(classNames[i]));
     }
+
+	emit layoutChanged();
 }
 
 void OpenCVMatrixModel::clearHeader()
