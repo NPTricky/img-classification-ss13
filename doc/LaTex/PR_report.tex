@@ -124,68 +124,46 @@ Kurs: \>Advanced Topics in Image Understanding\\
 \normalsize \mdseries
 \addcontentsline{toc}{section}{Abstrakt}
 \normalfont
-\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Das Ziel der Arbeit ist es, mehrere tausend Bilder einzulesen, zu verarbeiten und als Ergebnis eine korrekte Einteilung in verschiedene Klassen zu erhalten. Für die Umsetzung wurde mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 gearbeitet. In dem entwickelten Verfahren kommen Methoden wie zum Beispiel 'Bag of Words', 'K-Mean Clustering' und 'Support Vector Machine' zum Einsatz. %vielleicht schon genauer?
+\\Im Rahmen von Projekt Samael wurde sich mit der Klassifizierung von Bildern auseinander gesetzt. Das Ziel der Arbeit ist es, mehrere tausend Bilder einzulesen, zu verarbeiten und als Ergebnis eine korrekte Einteilung in verschiedene Klassen zu erhalten. Für die Umsetzung wurde mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 gearbeitet. In dem entwickelten Verfahren kommen Methoden wie zum Beispiel 'Bag of Words', 'SIFT' und 'Support Vector Machine' zum Einsatz. %vielleicht schon genauer?
 Grundlage für die Evaluierung der Arbeit ist der Datensatz der Caltech101. 
 
 \section{Einleitung}
-In dem Kurs 'Advanced Topics in Image Understanding' an der Universität Magdeburg stand im Sommersemester 2013 das Thema der Bildklassifikation im Mittelpunkt. Dazu gab es ein studentisches Projekt, zu dem sich aufgeteilte Teams mit dem nicht-trivialen Analyseproblem beschäftigen sollten. Die Aufgabe bestand darin, die Bilder eines vorgegebenen Datensatzes mit mindestens zehnprozentiger Korrektheit zu klassifizieren. 
+In dem Kurs 'Advanced Topics in Image Understanding' an der Universität Magdeburg stand im Sommersemester 2013 das Thema der Bildklassifikation im Mittelpunkt. Dazu gab es ein studentisches Projekt, in dem Bilder verschiedener Objekte gruppiert werden sollten. Dazu haben sich aufgeteilte Teams mit dem nicht-trivialen Analyseproblem beschäftigt. Die Aufgabe bestand darin, die Bilder eines vorgegebenen Datensatzes mit mindestens zehnprozentiger Korrektheit zu klassifizieren. 
 Um das zu erreichen, muss ein sinnvoller feature-Descriptor und eine geeignete Klassifikationsmethode ausgewählt und implementiert werden. 50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden.
 
 \section{Verfahren}
-Für die Umsetzung wurde ein Algorithmus mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 implementiert. Qt eignet sich gut für die Erstellung eines User Interface und OpenCV bietet viele hilfreiche Funktionen für die Bildverarbeitung.\\Um die Bedienung zu erleichtern, wurde ein Bedienoberfläche, wie in Abbildung 1 zu sehen, erstellt.
+Für die Umsetzung wurde ein Algorithmus mit Visual Studio 2010 bzw. 2012 in Verbindung mit den Bibliotheken Qt 5.0.1 und OpenCV 2.4.5 implementiert. Qt eignet sich gut für die Erstellung eines User Interface und OpenCV bietet viele hilfreiche Funktionen für die Bildverarbeitung.\\Um die Bedienung zu erleichtern, wurde eine Bedienoberfläche, wie in Abbildung 1 zu sehen, erstellt.
 
 % Abbildung 1 User Interface
 
-Auf der linken Seite können die Bilder über einen Filebrowser geladen werden. Die mittlere Anzeige bringt Aufschluss darüber, wie die Bilder nach Start der Klassifizierung aufgeteilt wurden. Rechts besteht die Möglichkeit zwischen drei Keypoint Detektoren zu wählen, um anschließend den Verarbeitungsprozess zu starten. % to do: besser, mehr 
+Auf der linken Seite können die Bilder über einen Filebrowser geladen werden. Die mittlere Anzeige bringt Aufschluss darüber, wie die Bilder nach Start der Klassifizierung aufgeteilt wurden. Rechts besteht die Möglichkeit zwischen drei Keypoint Detektoren zu wählen, um anschließend den Verarbeitungsprozess zu starten. % to do: besser, mehr ?
 
 \subsection{Algorithmus}
 
+Die folgende Abbildung zeigt den Aufbau des Verfahrens zur Lösung des Klassifizierungsproblems.
+
 % bild pipeline --> tim
 
-Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. 
-- indem man KP detektiert
-- desciptoren (für jeden KP) die daraus entstehen, sind features
-- clustering --> clusterzentren
-- für alle klassen
-- speicherung in einem Vokabular (BoW Steurung des Vokabulary -- Wörterbuch)
-- für jede einzelne klasse svm trainiert --> trainingsbilder ---> KP --> D --> features --> clusterzentren zugeordnet --> histogramm über clusterzentren 
-histogramme an svm zum trainieren --> traininge fertig (svm pro klasse)
-- klassifizierung : KP berechnen --> D berechnen --> histogramm --> response aller svms wird angeschaut 1-vs-all --> welches am besten passt
+Nachdem die Bilder über das User Interface eingeladen wurden, müssen zuerst die Features extrahiert werden. Dafür werden für jedes Bild Keypoints detektiert, die widerum für Descriptoren stehen. Der User bekommt zur Auswahl, ob die Methode von SIFT, SURF oder MSER angewendet werden soll. Dadurch konnten Vergleiche zwischen den verschiedenen Verfahren aufgestellt werden. (Mehrere Informationen dazu in Abschnitt 'Evaluation')
+Sobald die Features berechnet sind, geht es an das Clustering. Die Cluster samt Clusterzentren werden in einem Wörterbuch gespeichert, welches von der Bag-of-Words - Klasse in OpenCV gesteuert wird. Für jedes Bild wird der SVM (Support Vector Machine) mit den berechneten Daten trainiert. Dazu bekommt er ein Histogramm über die Clusterzentren. Für die Klassifizierung durchläuft das Bild die gleiche Pipeline wie die Trainingsdaten. Anschließend wird das Response aller SVMs betrachtet. Dabei gilt das Prinzip 1-versus-all, das bedeutet, dass das aktuelle Bild allen anderen Datensätzen gegenüber gestellt wird. Somit wird herausgefunden, welches das nächstliegende Cluster im Wörterbuch ist.
+
 
 vorteile der algos raussuchen
-BOW: sonst untersch dimensionen... jedes bild une´tersch # KP, um limitierung aufzuheben, dass man unterschiedliche # hat
 
-
-- BOW Trainer, -KMeansTrainer in OpenCV\\
-In dieser Klasse werden die Keypoints anhand, SIFT, SURF oder MSER detektiert. \\
-- Es wird ein Vokabular von Features erstellt...\\ %anderes Wort für Vokabular?
-- BOW-Descriptor Extraktor in OpenCV\\
-- Clustering der Key-Points\\
-- Histogramm für alle Bilder mit 1000er Feature-Vektor\\
-
-- SVM überprüft die Feature der Bilder auf das nächstliegende Cluster im Vokabular.\\
 
 %•Decision on features (justification, the measure itself)
 %•Classification details
 
 \subsection{Probleme}
-one word - OpenGL
-
-- lange rechenzeit - bilder laden QtdirnetryList ist langsam --> Q Filesystem Modell gelöst, testen
-- ein Durchlauf mit 20 Testläufen ~ 48h 
-- sonst vielleicht pca mit drin
-- kleine tests mit Surf/Sift...
-- OpenGL: Idee: Descriptoren als Koordinatenvisualisierung anschauen, und Histogramme... alle multivariate Daten
-zu komplex einzubauen.. mit Gui verbinden, Scrolling, scalierung.... 
-Lösung: komplett drauf verzichtet
-- Qt 5.0.1: directory & performance..., qt-opengl wird komplett neu gemacht... also inkompatibel zu normalen opengl,
+Alles in Allem, war dieses Projekt frei von größeren Problemen. Trotzdem funktionierte nicht alles perfekt. Eine Schwierigkeit war die lange Rechenzeit. Ein Durchlauf mit 20 Testläufen benötigte rund 48 Stunden.%todo genaue Zahl von Tim
+Dadurch wurde im Projekt auf größere Optimierungen, wie zum Beispiel eine Principal Component Analyse, verzichtet. Ebenso wurde der Testlauf mit nur einem der drei zur Wahl stehenden Algorithmen komplett durchgeführt. Die Entscheidung viel auf das SIFT-Verfahren, da dabei die beste Keypointdetektion stattfand. (Zum Vergleich, SURF hat die dreifache Anzahl an Keypoints geliefert.) MSER und SURF wurden nur in kleinere Tests zum Vergleich einbezogen. 
+\\Außerdem gab es Probleme mit OpenGL. Die Idee war verschiedene multivariate Daten, wie zum Beispiel Descriptoren oder Histogramme, als Koordinatenvisualisierungen darzustellen. Das stellte sich jedoch als zu komplex für den Zeitrahmen der Lehrveranstaltung heraus und deshalb wurde darauf verzichtet.
+Zuletzt sind noch Beschränkungen durch Qt 5.0.1 zu erwähnen. Zum Einen gab es Performanceprobleme sobald die Bilder über ein Directory geladen wurden. Zum Anderen wird derzeit OpenGL in Qt neu aufgesetzt, wodurch es zu Problemen beim üblichen OpenGL gab. Qt war inkompatibel zu der Bibliothek.
 
 \section{Evaluierung}
 Für die Validierung des Programmes wurden die xxx Bilder des vorgegebenen Datensatzes Caltech101 eingelesen. Dabei handelt es sich um eine Referenz, für das Testen von Bildklassifikationsmethoden. Alle Bilder haben die gleiche Größe von 300x200 Pixel, zeigen ein Objekt zentriert und sind Fotos, Zeichnungen oder Skizzen. Alle Eingabebilder sind in 101 verschiedene Klassen einzuteilen. Jede einzelne Klasse behinhaltet 30 bis 80 Samplebilder. 
 50 Prozent des Datensatzes soll für das Training des Klassifizierers genutzt werden. Das Verfahren wird 20-mal mit einer zufälligen Einteilung in Trainings- und Testdaten wiederholt.
 
-sift für daten--- beste kp-detektion --> dauert lang
-surf hat 3-fache anzahl descriptoren geliefert
 
 %Tabelle mit Vergleichwerten??? zB zwischen SIFT/SURF/MSER 
 
@@ -200,16 +178,11 @@ surf hat 3-fache anzahl descriptoren geliefert
 
 \section{Zusammenfassung}
 %•Conclusions (how would you rate your approach)
-Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. 
-- pca, ica
-- threading einbauen --> schneller
-- opengl einbinden, auswerten welche klassen woran scheitern und um das dann auszugleichen
- und dann eben andere features einbauen
+Zusammenfassend ist zu sagen, dass die erreichten Ergebnisse die Anforderungen erfüllen. Es gibt jedoch noch viel Raum für Optimierungen. Threading könnte die Performance verbessern und die gesamte Anwendung beschleunigen. Dadurch könnte man wiederum die Principal Component Analyse oder die Independent Component Analyse. 
+Wird zusätzlich OpenGL eingebunden, kann einfach ausgewertet werden, welche Klassen woran scheitern und zum Ausgleich könnten andere Features eingebaut werden.
+Als Hilfe wurde ein Paper von Gabriella Csurka, Christopher R. Dance, Lixin Fan, Jutta Willamowski und Cédric Bray gelesen.\cite{pizza}
+Als Fazit lässt sich sagen, dass es erstaunlich ist, mit welch hoher Korrektheit Bilder klassifiziert werden können, mithilfe nur weniger Algoithmen.
 
-erstaunlich wie viel man mit nur sift erreichen kann.. 
-
-
-% Paper von Pizza als Quelle....
 
 %------------------------------Literaturverzeichnis-----------------------------------------------------------------------
 \newpage
