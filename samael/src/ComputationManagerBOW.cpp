@@ -46,7 +46,8 @@ ComputationManagerBOW::ComputationManagerBOW(
     setDetector(detectorType,detectorAdapterType);
     setExtractor(extractorType,extractorAdapterType);
     setMatcher(matcherType);
-    setTrainer(clusterCount, 0.0001, 1, cv::KMEANS_RANDOM_CENTERS);
+    setTrainer(clusterCount);//SLOW CLUSTERING
+    //setTrainer(clusterCount, 0.0001, 1, cv::KMEANS_RANDOM_CENTERS);//FAST CLUSTERING
 
     QLOG_INFO() << "ComputationManagerBOW - Ready!";
 }

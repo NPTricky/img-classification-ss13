@@ -97,7 +97,7 @@ signals:
   void detectorChanged();
   void extractorChanged();
   void matcherChanged();
-  void displayMatrix(cv::Mat &matrix);
+  void displayMatrix(cv::Mat matrix);
   void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 };
 

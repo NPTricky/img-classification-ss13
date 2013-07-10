@@ -92,9 +92,12 @@ void DataViewerWidget::displayMatrix(int i /* = 0 */)
     m_ColumnSpinBox->setMaximum(matrix.cols);
 }
 
-void DataViewerWidget::displayMatrix(cv::Mat& matrix)
+void DataViewerWidget::displayMatrix(cv::Mat matrix)
 {
-	m_confusionMatrices.push_back(matrix);
+  cv::Mat tmpMatrix;
+  tmpMatrix.create(matrix.rows, matrix.cols, matrix.type());
+  matrix.copyTo(tmpMatrix);
+	m_confusionMatrices.push_back(tmpMatrix);
     m_MatrixComboBox->addItem(QString("Matrix %1").arg(m_confusionMatrices.size()));
     displayMatrix(m_confusionMatrices.size()-1);
 

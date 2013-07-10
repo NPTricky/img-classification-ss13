@@ -50,7 +50,7 @@ public slots:
 
     void copyToClipboard();
 
-	void displayMatrix(cv::Mat &matrix);
+	void displayMatrix(cv::Mat matrix);
 	void setConfusionMatrixHeaderData(std::vector<std::string> &classNames);
 
 	void saveConfusionMatrices();

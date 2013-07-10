@@ -92,7 +92,7 @@ void SamaelMainWindow::createWidgets()
 
   // Viewer Widget
   this->setCentralWidget(m_CentralWidget);
-  QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat&)), m_CentralWidget->getDataViewerWidget(), SLOT(displayMatrix(cv::Mat&)));
+  QObject::connect(m_computationManager, SIGNAL(displayMatrix(cv::Mat)), m_CentralWidget->getDataViewerWidget(), SLOT(displayMatrix(cv::Mat)));
   QObject::connect(m_computationManager, SIGNAL(setConfusionMatrixHeaderData(std::vector<std::string>&)), m_CentralWidget->getDataViewerWidget(), SLOT(setConfusionMatrixHeaderData(std::vector<std::string>&)));
 
   // Terminal Widget
